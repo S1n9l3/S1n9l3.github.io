@@ -16,25 +16,35 @@
   <meta name="author" content="YY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="670-最大交换给定一个非负整数，你至多可以交换一次数字中的任意两位。返回你能得到的最大值。 示例 1 : 123输入: 2736输出: 7236解释: 交换数字2和数字7。  示例 2 : 123输入: 9973输出: 9973解释: 不需要交换。  注意:  给定数字的范围是 [0, 10^8]  题解既然要得到最大值，那么就尽量把最大值放到前面。如何交换？需要将数字从大到小排列，然后依次将原">
+    <meta name="description" content="使用picGo和腾讯云COS搭建图床以前都是本地写文章自己看，所以图片都是保存在本地的。自从搭建了网站，图片的保存成了问题，用网上的图床担心失联，所以就想搭建自己的图床。 开始使用的是Gridea，可以将图片同步到Github仓库，但是经过使用后发现不太好用，老是失败。然后选择了picGo，相较于Gridea，picGo提供了更多的选项，可以选择Github、腾讯云COS、阿里云OSS、七牛图床等">
 <meta property="og:type" content="article">
-<meta property="og:title" content="[算法] LeetCode-670-最大交换">
-<meta property="og:url" content="https://s1n9l3.github.io/2022/10/02/[%E7%AE%97%E6%B3%95]%20LeetCode-670-%E6%9C%80%E5%A4%A7%E4%BA%A4%E6%8D%A2/index.html">
+<meta property="og:title" content="[杂项] 使用picGo和腾讯云COS搭建图床">
+<meta property="og:url" content="https://s1n9l3.github.io/2022/10/03/[%E6%9D%82%E9%A1%B9]%20%E4%BD%BF%E7%94%A8picGo%E5%92%8C%E8%85%BE%E8%AE%AF%E4%BA%91COS%E6%90%AD%E5%BB%BA%E5%9B%BE%E5%BA%8A/index.html">
 <meta property="og:site_name" content="S1n9l3">
-<meta property="og:description" content="670-最大交换给定一个非负整数，你至多可以交换一次数字中的任意两位。返回你能得到的最大值。 示例 1 : 123输入: 2736输出: 7236解释: 交换数字2和数字7。  示例 2 : 123输入: 9973输出: 9973解释: 不需要交换。  注意:  给定数字的范围是 [0, 10^8]  题解既然要得到最大值，那么就尽量把最大值放到前面。如何交换？需要将数字从大到小排列，然后依次将原">
+<meta property="og:description" content="使用picGo和腾讯云COS搭建图床以前都是本地写文章自己看，所以图片都是保存在本地的。自从搭建了网站，图片的保存成了问题，用网上的图床担心失联，所以就想搭建自己的图床。 开始使用的是Gridea，可以将图片同步到Github仓库，但是经过使用后发现不太好用，老是失败。然后选择了picGo，相较于Gridea，picGo提供了更多的选项，可以选择Github、腾讯云COS、阿里云OSS、七牛图床等">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-10-01T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-10-03T03:19:00.080Z">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221003165321277.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221003165608660.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221003170750753.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221003165839573.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221003170039435.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221003170852260.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221003171110471.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221003171716992.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221003172137516.png">
+<meta property="article:published_time" content="2022-10-03T03:27:26.309Z">
+<meta property="article:modified_time" content="2022-10-03T09:26:05.367Z">
 <meta property="article:author" content="YY">
-<meta property="article:tag" content="leetcode">
-<meta property="article:tag" content="python">
-<meta property="article:tag" content="java">
-<meta property="article:tag" content="数组">
+<meta property="article:tag" content="博客">
+<meta property="article:tag" content="typora">
+<meta property="article:tag" content="picGo">
+<meta property="article:tag" content="腾讯云">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221003165321277.png">
   
   
   
-  <title>[算法] LeetCode-670-最大交换 - S1n9l3</title>
+  <title>[杂项] 使用picGo和腾讯云COS搭建图床 - S1n9l3</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -199,7 +209,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="[算法] LeetCode-670-最大交换"></span>
+            <span id="subtitle" data-typed-text="[杂项] 使用picGo和腾讯云COS搭建图床"></span>
           
         </div>
 
@@ -210,8 +220,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-10-02 00:00" pubdate>
-          2022年10月2日 凌晨
+        <time datetime="2022-10-03 11:27" pubdate>
+          2022年10月3日 上午
         </time>
       </span>
     
@@ -222,7 +232,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.5k 字
+          694 字
         
       </span>
     
@@ -233,7 +243,7 @@
         
         
         
-          13 分钟
+          6 分钟
         
       </span>
     
@@ -271,44 +281,34 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">[算法] LeetCode-670-最大交换</h1>
+            <h1 style="display: none">[杂项] 使用picGo和腾讯云COS搭建图床</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="670-最大交换"><a href="#670-最大交换" class="headerlink" title="670-最大交换"></a>670-最大交换</h1><p>给定一个非负整数，你<strong>至多</strong>可以交换一次数字中的任意两位。返回你能得到的<strong>最大值</strong>。</p>
-<p><strong>示例 1 :</strong></p>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-section">输入: 2736</span><br><span class="hljs-section">输出: 7236</span><br><span class="hljs-section">解释: 交换数字2和数字7。</span><br></code></pre></td></tr></table></figure>
-
-<p><strong>示例 2 :</strong></p>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-section">输入: 9973</span><br><span class="hljs-section">输出: 9973</span><br><span class="hljs-section">解释: 不需要交换。</span><br></code></pre></td></tr></table></figure>
-
-<p><strong>注意:</strong></p>
-<ol>
-<li>给定数字的范围是 <code>[0, 10^8]</code></li>
-</ol>
-<h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>既然要得到最大值，那么就尽量把最大值放到前面。如何交换？需要将数字从大到小排列，然后依次将原来的数字与排列好的数字比较，如果相等就比较下一个；如果原来的数字小，那么就把这个数设置为相比较的那个大数，然后在原来的数字从后向前寻找替换的大数，找到后将其设置为小数。</p>
-<p>为什么第二次要从后向前的查找？是为了尽量得到更大的数。如果前面或中间的大数被替换了，得到的不是最大的数。</p>
-<p>python实现。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span>:<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">maximumSwap</span>(<span class="hljs-params">self, num: <span class="hljs-built_in">int</span></span>) -&gt; <span class="hljs-built_in">int</span>:<br>        ts = <span class="hljs-built_in">list</span>(<span class="hljs-built_in">str</span>(num))<br>        tmp = <span class="hljs-built_in">sorted</span>(ts, reverse=<span class="hljs-literal">True</span>)<br>        c = <span class="hljs-number">0</span><br>        k = -<span class="hljs-number">1</span><br><br>        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(ts)):<br>            <span class="hljs-keyword">if</span> ts[i] == tmp[c]:<br>                c += <span class="hljs-number">1</span><br>                <span class="hljs-keyword">continue</span><br>            <span class="hljs-keyword">elif</span> ts[i] &lt; tmp[c]:<br>                k = ts[i]<br>                ts[i] = tmp[c]<br>                <span class="hljs-keyword">break</span><br>        <span class="hljs-keyword">if</span> k != -<span class="hljs-number">1</span>:<br>            <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(ts)-<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>):<br>                <span class="hljs-keyword">if</span> ts[i] == tmp[c]:<br>                    ts[i] = k<br>                    <span class="hljs-keyword">break</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">int</span>(<span class="hljs-string">&quot;&quot;</span>.join(ts))<br><br></code></pre></td></tr></table></figure>
-
-
-
-<p>执行结果</p>
-<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs gcode">执行用时：<span class="hljs-number">36</span> ms, 在所有 Pytho<span class="hljs-symbol">n3</span> 提交中击败了<span class="hljs-number">68.71</span><span class="hljs-meta">%</span>的用户<br>内存消耗：<span class="hljs-number">14.9</span> MB, 在所有 Pytho<span class="hljs-symbol">n3</span> 提交中击败了<span class="hljs-number">42.18</span><span class="hljs-meta">%</span>的用户<br>通过测试用例：<span class="hljs-number">111</span> / <span class="hljs-number">111</span><br></code></pre></td></tr></table></figure>
-
-
-
-<hr>
-<hr>
-<p>Java的解法。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">maximumSwap</span><span class="hljs-params">(<span class="hljs-type">int</span> num)</span> &#123;<br>        <span class="hljs-keyword">if</span> (num == <span class="hljs-number">0</span>)&#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>        &#125;<br>        <span class="hljs-type">char</span>[] chars = String.valueOf(num).toCharArray();<br>        <span class="hljs-type">int</span>[] maxIndex = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[chars.length];<br>        <span class="hljs-type">int</span> <span class="hljs-variable">max</span> <span class="hljs-operator">=</span> chars.length-<span class="hljs-number">1</span>;<br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">j</span> <span class="hljs-operator">=</span> chars.length-<span class="hljs-number">1</span>; j &gt;= <span class="hljs-number">0</span>; j--)&#123;<br>            <span class="hljs-keyword">if</span> (chars[j] - <span class="hljs-string">&#x27;0&#x27;</span> &gt; chars[max] - <span class="hljs-string">&#x27;0&#x27;</span>)&#123;<br>                max = j;<br>            &#125;<br>            maxIndex[j] = max;<br>        &#125;<br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; chars.length; i++)&#123;<br>            <span class="hljs-type">int</span> <span class="hljs-variable">iValue</span> <span class="hljs-operator">=</span> chars[i] - <span class="hljs-string">&#x27;0&#x27;</span>;<br>            <span class="hljs-type">int</span> <span class="hljs-variable">maxValue</span> <span class="hljs-operator">=</span> chars[maxIndex[i]] - <span class="hljs-string">&#x27;0&#x27;</span>;<br>            <span class="hljs-keyword">if</span> (maxValue != iValue)&#123;<br>                chars[i] = (<span class="hljs-type">char</span>) (maxValue + <span class="hljs-string">&#x27;0&#x27;</span>);<br>                chars[maxIndex[i]] = (<span class="hljs-type">char</span>) (iValue + <span class="hljs-string">&#x27;0&#x27;</span>);<br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> Integer.parseInt(<span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(chars));<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-
-
-<p>运行结果</p>
-<figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs erlang-repl">执行用时：<span class="hljs-number">0</span> ms, 在所有 Java 提交中击败了<span class="hljs-number">100.00</span><span class="hljs-comment">%的用户</span><br>内存消耗：<span class="hljs-number">38.1</span> MB, 在所有 Java 提交中击败了<span class="hljs-number">86.13</span><span class="hljs-comment">%的用户</span><br>通过测试用例：<span class="hljs-number">111</span> / <span class="hljs-number">111</span><br></code></pre></td></tr></table></figure>
-
+                <h1 id="使用picGo和腾讯云COS搭建图床"><a href="#使用picGo和腾讯云COS搭建图床" class="headerlink" title="使用picGo和腾讯云COS搭建图床"></a>使用picGo和腾讯云COS搭建图床</h1><p>以前都是本地写文章自己看，所以图片都是保存在本地的。自从搭建了网站，图片的保存成了问题，用网上的图床担心失联，所以就想搭建自己的图床。</p>
+<p>开始使用的是<a target="_blank" rel="noopener" href="https://gridea.dev/docs/">Gridea</a>，可以将图片同步到Github仓库，但是经过使用后发现不太好用，老是失败。然后选择了<code>picGo</code>，相较于<code>Gridea</code>，<code>picGo</code>提供了更多的选项，可以选择<code>Github</code>、<code>腾讯云COS</code>、<code>阿里云OSS</code>、<code>七牛图床</code>等，首先选择的是<code>Github图床</code>，实践后发现总是连接失败，挂的梯子也没有用，所以最后选择了<code>腾讯云COS</code>。</p>
+<h2 id="腾讯云COS"><a href="#腾讯云COS" class="headerlink" title="腾讯云COS"></a>腾讯云COS</h2><p>腾讯云COS，即对象存储，首次使用有50G存储的六个月免费期限，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221003165321277.png" srcset="/img/loading.gif" lazyload alt="image-20221003165321277"></p>
+<p>开通后<strong>创建存储桶</strong>，访问权限要设置<strong>公有读私有写</strong>，其他默认就行，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221003165608660.png" srcset="/img/loading.gif" lazyload alt="image-20221003165608660"></p>
+<p>然后在<strong>存储桶列表</strong>选择新建的桶，进入后在<strong>文件列表</strong>中<strong>创建文件夹</strong>用于保存图片，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221003170750753.png" srcset="/img/loading.gif" lazyload alt="image-20221003170750753"></p>
+<p>接着选择<strong>密钥管理</strong>，在<strong>API密钥管理</strong>生成密钥，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221003165839573.png" srcset="/img/loading.gif" lazyload alt="image-20221003165839573"></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221003170039435.png" srcset="/img/loading.gif" lazyload alt="image-20221003170039435"></p>
+<p>到这里腾讯云COS就配置好了，密钥要保密，不要泄露。</p>
+<h2 id="PicGo配置"><a href="#PicGo配置" class="headerlink" title="PicGo配置"></a>PicGo配置</h2><p>首先在<a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/PicGo/releases">PicGo-Github</a>下载客户端。</p>
+<p>下载安装后进行配置，主要配置的就是桶名称和API密钥，根据自己的配置就行了，存储路径设置为创建的文件夹，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221003170852260.png" srcset="/img/loading.gif" lazyload alt="image-20221003170852260"></p>
+<p>配置好之 后，就可以上传图片了，上传后可以在相册看到，同时腾讯云COS文件夹中也可以看到，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221003171110471.png" srcset="/img/loading.gif" lazyload alt="image-20221003171110471"></p>
+<h2 id="Typora配置"><a href="#Typora配置" class="headerlink" title="Typora配置"></a>Typora配置</h2><p>写文档用的最多的就是Typora，Typora提供了图床同步的功能，在设置中选择图像，上传服务选择<code>PicGo(app)</code>，路径是PicGo的安装路径，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221003171716992.png" srcset="/img/loading.gif" lazyload alt="image-20221003171716992"></p>
+<p>设置好之后点击<strong>验证图片上传功能</strong>就可以测试上床是否正常，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221003172137516.png" srcset="/img/loading.gif" lazyload alt="image-20221003172137516"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>到这里图床就搭建好了，国庆几天都在折腾这些，网上工具很多，教程也很多，找到一个合适的不容易。</p>
+<p>国庆快乐:happy:</p>
 
                 
               </div>
@@ -327,17 +327,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
-  
-  
-
-      </span>
-    
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%8A%80%E8%83%BD/" class="category-chain-item">技能</a>
+  <a href="/categories/%E6%9D%82%E9%A1%B9/" class="category-chain-item">杂项</a>
   
   
 
@@ -352,13 +342,13 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/leetcode/">#leetcode</a>
+        <a href="/tags/%E5%8D%9A%E5%AE%A2/">#博客</a>
       
-        <a href="/tags/python/">#python</a>
+        <a href="/tags/typora/">#typora</a>
       
-        <a href="/tags/java/">#java</a>
+        <a href="/tags/picGo/">#picGo</a>
       
-        <a href="/tags/%E6%95%B0%E7%BB%84/">#数组</a>
+        <a href="/tags/%E8%85%BE%E8%AE%AF%E4%BA%91/">#腾讯云</a>
       
     </div>
   
@@ -370,8 +360,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>[算法] LeetCode-670-最大交换</div>
-      <div>https://s1n9l3.github.io/2022/10/02/[算法] LeetCode-670-最大交换/</div>
+      <div>[杂项] 使用picGo和腾讯云COS搭建图床</div>
+      <div>https://s1n9l3.github.io/2022/10/03/[杂项] 使用picGo和腾讯云COS搭建图床/</div>
     </div>
     <div class="license-meta">
       
@@ -383,7 +373,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年10月2日</div>
+          <div>2022年10月3日</div>
         </div>
       
       
@@ -415,18 +405,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/10/02/%5B%E6%9D%82%E9%A1%B9%5D%20%E4%BD%BF%E7%94%A8Hexo%E6%90%AD%E5%BB%BAGithub%20Page/" title="[杂项] 使用hexo搭建Github Page">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">[杂项] 使用hexo搭建Github Page</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/10/01/%5B%E7%AE%97%E6%B3%95%5D%20LeetCode-349-%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86/" title="[算法] LeetCode-349-两个数组的交集">
-                        <span class="hidden-mobile">[算法] LeetCode-349-两个数组的交集</span>
+                      <a href="/2022/10/03/%5B%E7%AE%97%E6%B3%95%5D%20LeetCode-1608-%E7%89%B9%E6%AE%8A%E6%95%B0%E7%BB%84%E7%9A%84%E7%89%B9%E5%BE%81%E5%80%BC/" title="[算法] LeetCode-1608-特殊数组的特征值">
+                        <span class="hidden-mobile">[算法] LeetCode-1608-特殊数组的特征值</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
