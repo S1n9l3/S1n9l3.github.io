@@ -1,0 +1,698 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/Aries.ico">
+  <link rel="icon" href="/img/Aries.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="YY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="复制组件及通过反射创建组件通过clone方法复制组件java中有clone方法，可以进行浅拷贝。 定义一个MyButton类，继承Button并实现Cloneable接口，构造方法与Button一样，可以查看源码，然后重写clone方法，返回类型修改为Node， 12345678910111213141516171819class MyButton extends Button implement">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[javafx] 复制组件及通过反射创建组件">
+<meta property="og:url" content="https://s1n9l3.github.io/2022/10/04/[javafx]%20%E5%A4%8D%E5%88%B6%E7%BB%84%E4%BB%B6%E5%8F%8A%E9%80%9A%E8%BF%87%E5%8F%8D%E5%B0%84%E5%88%9B%E5%BB%BA%E7%BB%84%E4%BB%B6/index.html">
+<meta property="og:site_name" content="S1n9l3">
+<meta property="og:description" content="复制组件及通过反射创建组件通过clone方法复制组件java中有clone方法，可以进行浅拷贝。 定义一个MyButton类，继承Button并实现Cloneable接口，构造方法与Button一样，可以查看源码，然后重写clone方法，返回类型修改为Node， 12345678910111213141516171819class MyButton extends Button implement">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221004231804489.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221004231813362.png">
+<meta property="article:published_time" content="2022-10-04T14:16:09.219Z">
+<meta property="article:modified_time" content="2022-10-04T15:19:43.581Z">
+<meta property="article:author" content="YY">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="javafx">
+<meta property="article:tag" content="gui">
+<meta property="article:tag" content="java反射">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221004231804489.png">
+  
+  
+  
+  <title>[javafx] 复制组件及通过反射创建组件 - S1n9l3</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"s1n9l3.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>WXYY</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="[javafx] 复制组件及通过反射创建组件"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-10-04 22:16" pubdate>
+          2022年10月4日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          39 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">[javafx] 复制组件及通过反射创建组件</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="复制组件及通过反射创建组件"><a href="#复制组件及通过反射创建组件" class="headerlink" title="复制组件及通过反射创建组件"></a>复制组件及通过反射创建组件</h1><h2 id="通过clone方法复制组件"><a href="#通过clone方法复制组件" class="headerlink" title="通过clone方法复制组件"></a>通过<code>clone</code>方法复制组件</h2><p>java中有<code>clone</code>方法，可以进行<strong>浅拷贝</strong>。</p>
+<p>定义一个<code>MyButton</code>类，继承<code>Button</code>并实现<code>Cloneable</code>接口，构造方法与<code>Button</code>一样，可以查看源码，然后重写<code>clone</code>方法，返回类型修改为<code>Node</code>，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MyButton</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Button</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Cloneable</span>&#123;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">MyButton</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-built_in">super</span>();<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">MyButton</span><span class="hljs-params">(String text)</span>&#123;<br>        <span class="hljs-built_in">super</span>(text);<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">MyButton</span><span class="hljs-params">(String text, Node node)</span>&#123;<br>        <span class="hljs-built_in">super</span>(text, node);<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> Node <span class="hljs-title function_">clone</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> CloneNotSupportedException &#123;<br>        <span class="hljs-keyword">return</span> (Node) <span class="hljs-built_in">super</span>.clone();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>然后实例化<code>MyButton</code>按钮，设置属性，并绑定点击事件，并进行<code>clone</code>，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">start</span><span class="hljs-params">(Stage primaryStage)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>    <span class="hljs-type">MyButton</span> <span class="hljs-variable">myButton</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyButton</span>(<span class="hljs-string">&quot;按钮1&quot;</span>);<br>    myButton.setPrefHeight(<span class="hljs-number">200</span>);<br>    myButton.setPrefWidth(<span class="hljs-number">200</span>);<br>    myButton.setOnAction(<span class="hljs-keyword">new</span> <span class="hljs-title class_">EventHandler</span>&lt;ActionEvent&gt;() &#123;<br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">handle</span><span class="hljs-params">(ActionEvent event)</span> &#123;<br>            System.out.println(<span class="hljs-string">&quot;button&quot;</span>);<br>        &#125;<br>    &#125;);<br><br>    <span class="hljs-type">MyButton</span> <span class="hljs-variable">node</span> <span class="hljs-operator">=</span> (MyButton) myButton.clone();<br><br>    System.out.println(<span class="hljs-string">&quot;mybutton  &quot;</span> + myButton);<br>    System.out.println(<span class="hljs-string">&quot;node      &quot;</span> + node);<br><br>    <span class="hljs-type">HBox</span> <span class="hljs-variable">hBox</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">HBox</span>(<span class="hljs-number">20</span>);<br>    hBox.getChildren().addAll(myButton, node);<br><br>    <span class="hljs-type">AnchorPane</span> <span class="hljs-variable">anchorPane</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">AnchorPane</span>();<br>    anchorPane.getChildren().add(hBox);<br><br>    <span class="hljs-type">Scene</span> <span class="hljs-variable">scene</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Scene</span>(anchorPane);<br>    primaryStage.setScene(scene);<br>    primaryStage.setHeight(<span class="hljs-number">500</span>);<br>    primaryStage.setWidth(<span class="hljs-number">500</span>);<br>    primaryStage.show();<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>运行后发现<code>node</code>与<code>myButton</code>是完全相同的按钮，包括属性以及点击事件，即使两者是两个不同的实例。上面的打印结果为：</p>
+<figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mel">mybutton  MyButton@dc558b[styleClass=<span class="hljs-keyword">button</span>]<span class="hljs-string">&#x27;按钮1&#x27;</span><br>node      MyButton@6be1b7[styleClass=<span class="hljs-keyword">button</span>]<span class="hljs-string">&#x27;按钮1&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>现在设置<code>node</code>的名称：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">node.setText(<span class="hljs-string">&quot;按钮2&quot;</span>);<br></code></pre></td></tr></table></figure>
+
+<p>运行后发现<code>myButton</code>的名称也改变了。</p>
+<p>所以通过这种方法复制组件是很危险的，很可能造成牵一发而动全身的后果。慎用。</p>
+<hr>
+<hr>
+<p>另外举一个例子，想要通过点击复制一个布局，实现这样的一个类，继承了<code>HBox</code>，其中包括了两个组件，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MyPane</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">HBox</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Cloneable</span>&#123;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">TextArea</span> <span class="hljs-variable">textArea</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TextArea</span>();<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">Button</span> <span class="hljs-variable">button</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Button</span>(<span class="hljs-string">&quot;按钮&quot;</span>);<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">MyPane</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-built_in">super</span>(textArea, button);<br>    &#125;<br><br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> MyPane <span class="hljs-title function_">clone</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> CloneNotSupportedException &#123;<br>        <span class="hljs-keyword">return</span> (MyPane) <span class="hljs-built_in">super</span>.clone();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p>在主函数中这样写，主要是通过点击来复制节点，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">start</span><span class="hljs-params">(Stage primaryStage)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br><br>    <span class="hljs-type">MyPane</span> <span class="hljs-variable">myPane</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyPane</span>();<br>    System.out.println(myPane);<br>    System.out.println(myPane.getChildren().get(<span class="hljs-number">0</span>));<br>    System.out.println(myPane.getChildren().get(<span class="hljs-number">1</span>));<br>    <span class="hljs-type">VBox</span> <span class="hljs-variable">vBox</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">VBox</span>();<br>    vBox.getChildren().add(myPane);<br>    System.out.println(vBox.getChildren().size());<br><br>    <span class="hljs-type">AnchorPane</span> <span class="hljs-variable">anchorPane</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">AnchorPane</span>();<br>    anchorPane.getChildren().add(vBox);<br><br>    <span class="hljs-type">Scene</span> <span class="hljs-variable">scene</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Scene</span>(anchorPane);<br>    primaryStage.setScene(scene);<br>    primaryStage.setHeight(<span class="hljs-number">500</span>);<br>    primaryStage.setWidth(<span class="hljs-number">500</span>);<br>    primaryStage.show();<br><br>    <span class="hljs-type">Button</span> <span class="hljs-variable">button</span> <span class="hljs-operator">=</span> (Button) myPane.getChildren().get(<span class="hljs-number">1</span>);<br>    button.setOnAction(<span class="hljs-keyword">new</span> <span class="hljs-title class_">EventHandler</span>&lt;ActionEvent&gt;() &#123;<br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">handle</span><span class="hljs-params">(ActionEvent event)</span> &#123;<br><br>            <span class="hljs-keyword">try</span> &#123;<br>                <span class="hljs-type">MyPane</span> <span class="hljs-variable">clone</span> <span class="hljs-operator">=</span> myPane.clone();<br>                System.out.println(clone);<br>                vBox.getChildren().add(clone);<br>                System.out.println(myPane.getChildren().get(<span class="hljs-number">0</span>));<br>                System.out.println(myPane.getChildren().get(<span class="hljs-number">1</span>));<br>                System.out.println(vBox.getChildren().size());<br>            &#125; <span class="hljs-keyword">catch</span> (CloneNotSupportedException e) &#123;<br>                e.printStackTrace();<br>            &#125;<br><br>        &#125;<br>    &#125;);<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>最后实现效果为：</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221004231804489.png" srcset="/img/loading.gif" lazyload alt="image-20221004231804489"></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221004231813362.png" srcset="/img/loading.gif" lazyload alt="image-20221004231813362"></p>
+<p>打印结果为：</p>
+<figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs mel">MyPane@1e38b09<br>TextArea@d95460[styleClass=<span class="hljs-keyword">text</span>-input <span class="hljs-keyword">text</span>-area]<br>Button@b07401[styleClass=<span class="hljs-keyword">button</span>]<span class="hljs-string">&#x27;按钮&#x27;</span><br><span class="hljs-number">1</span><br>MyPane@d5192<br>TextArea@d95460[styleClass=<span class="hljs-keyword">text</span>-input <span class="hljs-keyword">text</span>-area]<br>Button@b07401[styleClass=<span class="hljs-keyword">button</span>]<span class="hljs-string">&#x27;按钮&#x27;</span><br><span class="hljs-number">2</span><br>MyPane@74617d<br>TextArea@d95460[styleClass=<span class="hljs-keyword">text</span>-input <span class="hljs-keyword">text</span>-area]<br>Button@b07401[styleClass=<span class="hljs-keyword">button</span>]<span class="hljs-string">&#x27;按钮&#x27;</span><br><span class="hljs-number">3</span><br><br></code></pre></td></tr></table></figure>
+
+<p>可以看到确实增<code>MyPane</code>布局，但是<code>TextArea</code>和<code>Button</code>并没有复制，每次都被“拿到“了下一个布局中。</p>
+<h2 id="通过java反射创建节点组件"><a href="#通过java反射创建节点组件" class="headerlink" title="通过java反射创建节点组件"></a>通过<code>java</code>反射创建节点组件</h2><p>通过反射得到类名，然后利用类名创建对象，并进行实例化。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">start</span><span class="hljs-params">(Stage primaryStage)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>    <span class="hljs-type">Node</span> <span class="hljs-variable">node</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Button</span>(<span class="hljs-string">&quot;按钮&quot;</span>);<br>    <span class="hljs-comment">// 得到节点类完整名称，javafx.scene.control.Button</span><br>    <span class="hljs-type">String</span> <span class="hljs-variable">name</span> <span class="hljs-operator">=</span> node.getClass().getName();<br>    System.out.println(name);<br>    <span class="hljs-comment">// 根据类名创建对象</span><br>    Class&lt;?&gt; classtype = Class.forName(name);<br>    <span class="hljs-comment">// 通过构造方法实例化</span><br>    <span class="hljs-type">Node</span> <span class="hljs-variable">node2</span> <span class="hljs-operator">=</span> (Node) classtype.getConstructor(<span class="hljs-literal">null</span>).newInstance(<span class="hljs-literal">null</span>);<br>    <br>    <span class="hljs-type">HBox</span> <span class="hljs-variable">hBox</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">HBox</span>(<span class="hljs-number">20</span>);<br>    hBox.getChildren().addAll(node, node2);<br><br>    <span class="hljs-type">AnchorPane</span> <span class="hljs-variable">anchorPane</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">AnchorPane</span>();<br>    anchorPane.getChildren().add(hBox);<br><br>    <span class="hljs-type">Scene</span> <span class="hljs-variable">scene</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Scene</span>(anchorPane);<br>    primaryStage.setScene(scene);<br>    primaryStage.setHeight(<span class="hljs-number">500</span>);<br>    primaryStage.setWidth(<span class="hljs-number">500</span>);<br>    primaryStage.show();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这样会创建和<code>node</code>完全相同的对象。<code>node2</code>是根据<code>node</code>的类名创建的。</p>
+<p>如果想要修改组件，比如将<code>Button</code>修改为<code>Label</code>，只需要修改<code>node</code>的组件就行了。</p>
+<p>这里并没有指定参数，即<code>Button</code>的名称，如果想要指定参数，可以通过构造方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">Node</span> <span class="hljs-variable">node2</span> <span class="hljs-operator">=</span> (Node) classtype.getConstructor(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Class</span>[]&#123;String.class&#125;).newInstance(<span class="hljs-string">&quot;按钮2&quot;</span>);<br></code></pre></td></tr></table></figure>
+
+<p>这句话的意思是找到一个构造方法，这个构造方法需要一个<code>String</code>类型的参数，然后在实例化时设置参数为<code>按钮2</code>。</p>
+<p>或者可以通过方法来修改，<code>Button</code>设置名称的方法是<code>setText</code>，既然已经得到对象并实例化了，那么就可以找到这个方法，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 找到一个方法setText，参数为String类型</span><br><span class="hljs-type">Method</span> <span class="hljs-variable">method</span> <span class="hljs-operator">=</span> classtype.getMethod(<span class="hljs-string">&quot;setText&quot;</span>, String.class);<br><span class="hljs-comment">// 调用node2的setText方法，并设置参数为 按钮2</span><br>method.invoke(node2, <span class="hljs-string">&quot;按钮2&quot;</span>);<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/javafx/" class="category-chain-item">javafx</a>
+  
+  
+
+      </span>
+    
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/java/" class="category-chain-item">java</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/java/">#java</a>
+      
+        <a href="/tags/javafx/">#javafx</a>
+      
+        <a href="/tags/gui/">#gui</a>
+      
+        <a href="/tags/java%E5%8F%8D%E5%B0%84/">#java反射</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>[javafx] 复制组件及通过反射创建组件</div>
+      <div>https://s1n9l3.github.io/2022/10/04/[javafx] 复制组件及通过反射创建组件/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>YY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年10月4日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/10/04/%5Bjavafx%5D%20%E5%88%A9%E7%94%A8Builder%E5%92%8CBuilderFactory%E6%8E%A5%E5%8F%A3%E8%AF%BB%E5%8F%96%E8%87%AA%E5%AE%9A%E4%B9%89FXML%E6%A0%87%E7%AD%BE/" title="[javafx] 利用Builder和BuilderFactory接口读取自定义FXML标签">
+                        <span class="hidden-mobile">[javafx] 利用Builder和BuilderFactory接口读取自定义FXML标签</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
