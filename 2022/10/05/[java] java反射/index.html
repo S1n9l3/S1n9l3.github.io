@@ -24,7 +24,7 @@
 <meta property="og:description" content="java反射Java反射就是在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能够调用它的任意方法和属性；并且能改变它的属性。 反射机制允许程序在运行时取得任何一个已知名称的class的内部信息，包括包括其modifiers(修饰符)，fields(属性)，methods(方法)等，并可于运行时改变fields内容或调用methods。那么便可以更灵活的编写代码，">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-10-05T13:29:16.568Z">
-<meta property="article:modified_time" content="2022-10-05T15:06:56.669Z">
+<meta property="article:modified_time" content="2022-10-06T02:12:03.028Z">
 <meta property="article:author" content="YY">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="java反射">
@@ -220,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.8k 字
+          4.2k 字
         
       </span>
     
@@ -231,7 +231,7 @@
         
         
         
-          33 分钟
+          36 分钟
         
       </span>
     
@@ -319,6 +319,12 @@
 
 
 
+<h2 id="获取类的父类及其实现的接口"><a href="#获取类的父类及其实现的接口" class="headerlink" title="获取类的父类及其实现的接口"></a>获取类的父类及其实现的接口</h2><p>直接通过反射获取子类的对象是不能得到父类的属性值的，必须根据反射获得的子类 Class 对象在调用 <code>getSuperclass</code> 方法获取父类对象，然后在通过父类对象去获取父类的属性值。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><br><span class="hljs-type">Class</span> <span class="hljs-variable">subClass</span> <span class="hljs-operator">=</span> Class.forName(<span class="hljs-string">&quot;java.lang.String&quot;</span>);<br><span class="hljs-comment">// 获取父类</span><br><span class="hljs-type">Class</span> <span class="hljs-variable">superClass</span> <span class="hljs-operator">=</span> subClass.getSuperclass();<br><span class="hljs-comment">// 获取实现的接口</span><br>Class[] interfaces = subClass.getInterfaces();<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>灵活使用反射能让代码更加灵活，这里比如JDBC原生代码注册驱动，hibernate 的实体类，Spring 的 AOP等等都有反射的实现。但是凡事都有两面性，反射也会消耗系统的性能，增加复杂性等，合理使用才是真！</p>
 
                 
               </div>
@@ -410,6 +416,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2022/10/07/%5Bjava%5D%20java%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6/" title="[java] java读取文件">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">[java] java读取文件</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
