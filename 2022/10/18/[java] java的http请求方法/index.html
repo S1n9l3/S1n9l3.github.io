@@ -1,0 +1,655 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/Aries.ico">
+  <link rel="icon" href="/img/Aries.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="YY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="java的http请求方法java实现http请求的三种方式：  HttpURLConnection，java标准类 org.apache.commons.httpclient org.apache.http.client  还是更习惯用HttpURLConnection。 HttpURLConnectionHttpURLConnection是java标准类，使用时需要注意，传入的url必须带协议">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[java] java的http请求方法">
+<meta property="og:url" content="https://s1n9l3.github.io/2022/10/18/[java]%20java%E7%9A%84http%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="S1n9l3">
+<meta property="og:description" content="java的http请求方法java实现http请求的三种方式：  HttpURLConnection，java标准类 org.apache.commons.httpclient org.apache.http.client  还是更习惯用HttpURLConnection。 HttpURLConnectionHttpURLConnection是java标准类，使用时需要注意，传入的url必须带协议">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-10-18T12:29:20.044Z">
+<meta property="article:modified_time" content="2022-10-19T13:50:18.115Z">
+<meta property="article:author" content="YY">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="http">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>[java] java的http请求方法 - S1n9l3</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"s1n9l3.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>WXYY</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="[java] java的http请求方法"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-10-18 20:29" pubdate>
+          2022年10月18日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          10k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          87 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">[java] java的http请求方法</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="java的http请求方法"><a href="#java的http请求方法" class="headerlink" title="java的http请求方法"></a>java的http请求方法</h1><p>java实现http请求的三种方式：</p>
+<ol>
+<li><code>HttpURLConnection</code>，java标准类</li>
+<li><code>org.apache.commons.httpclient</code></li>
+<li><code>org.apache.http.client</code></li>
+</ol>
+<p>还是更习惯用<code>HttpURLConnection</code>。</p>
+<h2 id="HttpURLConnection"><a href="#HttpURLConnection" class="headerlink" title="HttpURLConnection"></a><code>HttpURLConnection</code></h2><p><code>HttpURLConnection</code>是java标准类，使用时需要注意，传入的url必须带协议的，比如<code>http://wxyy.one/</code>，而不能<code>wxyy.one</code>。</p>
+<p>如果需要跟随跳转的话，就需要得到重定向地址，再次发送请求。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> javax.net.ssl.*;<br><span class="hljs-keyword">import</span> java.io.*;<br><span class="hljs-keyword">import</span> java.net.HttpURLConnection;<br><span class="hljs-keyword">import</span> java.net.MalformedURLException;<br><span class="hljs-keyword">import</span> java.net.URL;<br><span class="hljs-keyword">import</span> java.nio.charset.StandardCharsets;<br><span class="hljs-keyword">import</span> java.security.cert.CertificateException;<br><span class="hljs-keyword">import</span> java.security.cert.X509Certificate;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">HttpFirst</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br><br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title function_">queryGet</span><span class="hljs-params">(String uri)</span>&#123;<br>        <span class="hljs-type">HttpURLConnection</span> <span class="hljs-variable">connection</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>        <span class="hljs-type">InputStream</span> <span class="hljs-variable">inputStream</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>        <span class="hljs-type">BufferedReader</span> <span class="hljs-variable">bufferedReader</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>        <span class="hljs-type">String</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br><br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-comment">// 创建远程url连接对象</span><br>            <span class="hljs-type">URL</span> <span class="hljs-variable">url</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">URL</span>(uri);<br>            <span class="hljs-comment">// 通过远程url连接对象打开一个连接</span><br>            <span class="hljs-keyword">if</span>(url.getProtocol().toLowerCase().equals(<span class="hljs-string">&quot;https&quot;</span>))&#123;<br>                <span class="hljs-comment">// 忽略证书安全性</span><br>                <span class="hljs-type">HttpsURLConnection</span> <span class="hljs-variable">https</span> <span class="hljs-operator">=</span> (HttpsURLConnection)url.openConnection();<br>                https.setHostnameVerifier(Do_NOT_VERIFY);<br>                connection = https;<br>            &#125;<span class="hljs-keyword">else</span>&#123;<br>                connection = (HttpURLConnection)url.openConnection();<br>            &#125;<br>            <span class="hljs-comment">// 设置请求头</span><br>             connection.setRequestProperty(<span class="hljs-string">&quot;Content-Type&quot;</span>,<span class="hljs-string">&quot;application/x-www-form-urlencoded;charset=UTF-8&quot;</span>);<br>            <span class="hljs-comment">// 设置连接方式</span><br>            connection.setRequestMethod(<span class="hljs-string">&quot;GET&quot;</span>);<br>            <span class="hljs-comment">// 当向远程服务器传送数据/写数据时，需要设置为true，默认false</span><br>            connection.setDoOutput(<span class="hljs-literal">true</span>);<br>            <span class="hljs-comment">// 设置超时事件，单位 ms</span><br>            connection.setConnectTimeout(<span class="hljs-number">10000</span>);<br>            <span class="hljs-comment">// 设置读取远程返回数据时间</span><br>            connection.setReadTimeout(<span class="hljs-number">10000</span>);<br>            <span class="hljs-comment">// 发送请求</span><br>            connection.connect();<br>            <span class="hljs-comment">// 判断连接状态码</span><br>            <span class="hljs-keyword">if</span> (connection.getResponseCode() == HttpURLConnection.HTTP_OK)&#123;<br>                <span class="hljs-comment">// 获取输入流</span><br>                inputStream = connection.getInputStream();<br>                <span class="hljs-comment">// 封装输入流，指定字符集</span><br>                bufferedReader = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BufferedReader</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">InputStreamReader</span>(inputStream, StandardCharsets.UTF_8));<br>                <span class="hljs-comment">// 存放数据</span><br>                <span class="hljs-type">StringBuffer</span> <span class="hljs-variable">stringBuffer</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringBuffer</span>();<br>                <span class="hljs-type">String</span> <span class="hljs-variable">tmp</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>                <span class="hljs-keyword">while</span> ((tmp = bufferedReader.readLine()) != <span class="hljs-literal">null</span>)&#123;<br>                    stringBuffer.append(tmp);<br>                    stringBuffer.append(<span class="hljs-string">&quot;\r\n&quot;</span>);<br>                &#125;<br>                result = stringBuffer.toString();<br>            &#125;<br>        &#125; <span class="hljs-keyword">catch</span> (MalformedURLException e) &#123;<br>            e.printStackTrace();<br>        &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>            e.printStackTrace();<br>        &#125; <span class="hljs-keyword">finally</span> &#123;<br>            <span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span> != bufferedReader)&#123;<br>                <span class="hljs-keyword">try</span> &#123;<br>                    bufferedReader.close();<br>                &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>                    e.printStackTrace();<br>                &#125;<br>            &#125;<br><br>            <span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span> != inputStream)&#123;<br>                <span class="hljs-keyword">try</span> &#123;<br>                    inputStream.close();<br>                &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>                    e.printStackTrace();<br>                &#125;<br>            &#125;<br>            <span class="hljs-comment">// 关闭远程连接</span><br>            <span class="hljs-keyword">if</span> (connection != <span class="hljs-literal">null</span>) &#123;<br>                connection.disconnect();<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title function_">queryPost</span><span class="hljs-params">(String uri, String param)</span>&#123;<br>        <span class="hljs-type">HttpURLConnection</span> <span class="hljs-variable">connection</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>        <span class="hljs-type">InputStream</span> <span class="hljs-variable">inputStream</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>        <span class="hljs-type">BufferedReader</span> <span class="hljs-variable">bufferedReader</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>        <span class="hljs-type">String</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br><br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-comment">// 创建远程url连接对象</span><br>            <span class="hljs-type">URL</span> <span class="hljs-variable">url</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">URL</span>(uri);<br>            <span class="hljs-comment">// 通过远程url连接对象打开一个连接</span><br>            <span class="hljs-keyword">if</span>(url.getProtocol().toLowerCase().equals(<span class="hljs-string">&quot;https&quot;</span>))&#123;<br>                <span class="hljs-comment">// 忽略证书安全性</span><br>                <span class="hljs-type">HttpsURLConnection</span> <span class="hljs-variable">https</span> <span class="hljs-operator">=</span> (HttpsURLConnection)url.openConnection();<br>                https.setHostnameVerifier(Do_NOT_VERIFY);<br>                connection = https;<br>            &#125;<span class="hljs-keyword">else</span>&#123;<br>                connection = (HttpURLConnection)url.openConnection();<br>            &#125;<br>            <span class="hljs-comment">// 设置请求头</span><br>             connection.setRequestProperty(<span class="hljs-string">&quot;Content-Type&quot;</span>,<span class="hljs-string">&quot;application/x-www-form-urlencoded;charset=UTF-8&quot;</span>);<br>            <span class="hljs-comment">// 设置连接方式</span><br>            connection.setRequestMethod(<span class="hljs-string">&quot;POST&quot;</span>);<br>            <span class="hljs-comment">// 当向远程服务器传送数据/写数据时，需要设置为true，默认false</span><br>            connection.setDoOutput(<span class="hljs-literal">true</span>);<br>            <span class="hljs-comment">// 设置超时事件，单位 ms</span><br>            connection.setConnectTimeout(<span class="hljs-number">10000</span>);<br>            <span class="hljs-comment">// 设置读取远程返回数据时间</span><br>            connection.setReadTimeout(<span class="hljs-number">10000</span>);<br>            <span class="hljs-comment">// 写参数，参数形式为：name1=value1&amp;name2=value2</span><br>            <span class="hljs-type">PrintWriter</span> <span class="hljs-variable">printWriter</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">PrintWriter</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">BufferedOutputStream</span>(connection.getOutputStream()));<br>            printWriter.write(param);<br>            printWriter.flush();<br>            printWriter.close();<br>            <span class="hljs-comment">// 发送请求</span><br>            connection.connect();<br>            <span class="hljs-comment">// 判断连接状态码</span><br>            <span class="hljs-keyword">if</span> (connection.getResponseCode() == HttpURLConnection.HTTP_OK)&#123;<br>                <span class="hljs-comment">// 获取输入流</span><br>                inputStream = connection.getInputStream();<br>                <span class="hljs-comment">// 封装输入流，指定字符集</span><br>                bufferedReader = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BufferedReader</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">InputStreamReader</span>(inputStream, StandardCharsets.UTF_8));<br>                <span class="hljs-comment">// 存放数据</span><br>                <span class="hljs-type">StringBuffer</span> <span class="hljs-variable">stringBuffer</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringBuffer</span>();<br>                <span class="hljs-type">String</span> <span class="hljs-variable">tmp</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>                <span class="hljs-keyword">while</span> ((tmp = bufferedReader.readLine()) != <span class="hljs-literal">null</span>)&#123;<br>                    stringBuffer.append(tmp);<br>                    stringBuffer.append(<span class="hljs-string">&quot;\r\n&quot;</span>);<br>                &#125;<br>                result = stringBuffer.toString();<br>            &#125;<br>        &#125; <span class="hljs-keyword">catch</span> (MalformedURLException e) &#123;<br>            e.printStackTrace();<br>        &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>            e.printStackTrace();<br>        &#125; <span class="hljs-keyword">finally</span> &#123;<br>            <span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span> != bufferedReader)&#123;<br>                <span class="hljs-keyword">try</span> &#123;<br>                    bufferedReader.close();<br>                &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>                    e.printStackTrace();<br>                &#125;<br>            &#125;<br><br>            <span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span> != inputStream)&#123;<br>                <span class="hljs-keyword">try</span> &#123;<br>                    inputStream.close();<br>                &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>                    e.printStackTrace();<br>                &#125;<br>            &#125;<br>            <span class="hljs-comment">// 关闭远程连接</span><br>            <span class="hljs-keyword">if</span> (connection != <span class="hljs-literal">null</span>) &#123;<br>                connection.disconnect();<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br><br>    <span class="hljs-comment">// 忽略证书安全性</span><br>    <span class="hljs-keyword">static</span> &#123;<br>        TrustManager[] trustManagers = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TrustManager</span>[]&#123;<span class="hljs-keyword">new</span> <span class="hljs-title class_">X509TrustManager</span>() &#123;<br>            <span class="hljs-meta">@Override</span><br>            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">checkClientTrusted</span><span class="hljs-params">(X509Certificate[] x509Certificates, String s)</span> <span class="hljs-keyword">throws</span> CertificateException &#123;<br><br>            &#125;<br><br>            <span class="hljs-meta">@Override</span><br>            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">checkServerTrusted</span><span class="hljs-params">(X509Certificate[] x509Certificates, String s)</span> <span class="hljs-keyword">throws</span> CertificateException &#123;<br><br>            &#125;<br><br>            <span class="hljs-meta">@Override</span><br>            <span class="hljs-keyword">public</span> X509Certificate[] getAcceptedIssuers() &#123;<br>                <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">X509Certificate</span>[<span class="hljs-number">0</span>];<br>            &#125;<br>        &#125;&#125;;<br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-type">SSLContext</span> <span class="hljs-variable">sslContext</span> <span class="hljs-operator">=</span> SSLContext.getInstance(<span class="hljs-string">&quot;TLS&quot;</span>);<br>            sslContext.init(<span class="hljs-literal">null</span>,trustManagers,<span class="hljs-keyword">new</span> <span class="hljs-title class_">java</span>.security.SecureRandom());<br>            HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());<br>        &#125;<span class="hljs-keyword">catch</span> (Exception e)&#123;<br>            e.printStackTrace();<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">static</span> <span class="hljs-type">HostnameVerifier</span> <span class="hljs-variable">Do_NOT_VERIFY</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">HostnameVerifier</span>() &#123;<br>        <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">verify</span> <span class="hljs-params">(String hostname, SSLSession session)</span>&#123;<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;&#125;<br>    &#125;;<br><br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="org-apache-commons-httpclient"><a href="#org-apache-commons-httpclient" class="headerlink" title="org.apache.commons.httpclient"></a><code>org.apache.commons.httpclient</code></h2><p>注意这个是包：<a target="_blank" rel="noopener" href="https://mvnrepository.com/artifact/at.bestsolution.efxclipse.eclipse/org.apache.commons.httpclient/3.1.0">Maven Repository: at.bestsolution.efxclipse.eclipse » org.apache.commons.httpclient » 3.1.0 (mvnrepository.com)</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;<br><span class="hljs-keyword">import</span> org.apache.commons.httpclient.HttpClient;<br><span class="hljs-keyword">import</span> org.apache.commons.httpclient.HttpStatus;<br><span class="hljs-keyword">import</span> org.apache.commons.httpclient.NameValuePair;<br><span class="hljs-keyword">import</span> org.apache.commons.httpclient.methods.GetMethod;<br><span class="hljs-keyword">import</span> org.apache.commons.httpclient.methods.PostMethod;<br><span class="hljs-keyword">import</span> org.apache.commons.httpclient.params.HttpMethodParams;<br><br><span class="hljs-keyword">import</span> java.io.*;<br><span class="hljs-keyword">import</span> java.nio.charset.StandardCharsets;<br><span class="hljs-keyword">import</span> java.util.Iterator;<br><span class="hljs-keyword">import</span> java.util.Map;<br><span class="hljs-keyword">import</span> java.util.Set;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">HttpSecond</span> &#123;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title function_">queryGet</span><span class="hljs-params">(String uri)</span>&#123;<br>        <span class="hljs-comment">// 输入流</span><br>        <span class="hljs-type">InputStream</span> <span class="hljs-variable">inputStream</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>        <span class="hljs-type">BufferedReader</span> <span class="hljs-variable">bufferedReader</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>        <span class="hljs-type">String</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>        <span class="hljs-comment">// 创建HttpClient实例</span><br>        <span class="hljs-type">HttpClient</span> <span class="hljs-variable">httpClient</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">HttpClient</span>();<br>        <span class="hljs-comment">// 设置http连接主机服务超时时间</span><br>        <span class="hljs-comment">// 先获取连接管理器对象，再获取参数对象,再进行参数的赋值</span><br>        httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(<span class="hljs-number">10000</span>);<br>        <span class="hljs-comment">// 创建GET方法</span><br>        <span class="hljs-type">GetMethod</span> <span class="hljs-variable">getMethod</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">GetMethod</span>(uri);<br>        <span class="hljs-comment">// 设置get请求超时时间</span><br>        getMethod.getParams().setParameter(HttpMethodParams.SO_TIMEOUT, <span class="hljs-number">10000</span>);<br>        <span class="hljs-comment">// 设置重试机制</span><br>        getMethod.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, <span class="hljs-keyword">new</span> <span class="hljs-title class_">DefaultHttpMethodRetryHandler</span>(<span class="hljs-number">3</span>, <span class="hljs-literal">true</span>));<br><br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-comment">// 发送请求</span><br>            <span class="hljs-type">int</span> <span class="hljs-variable">statusCode</span> <span class="hljs-operator">=</span> httpClient.executeMethod(getMethod);<br>            <span class="hljs-comment">// 判断状态码</span><br>            <span class="hljs-keyword">if</span> (statusCode == HttpStatus.SC_OK)&#123;<br>                <span class="hljs-comment">// 响应流</span><br>                inputStream = getMethod.getResponseBodyAsStream();<br>                <span class="hljs-comment">//</span><br>                bufferedReader = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BufferedReader</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">InputStreamReader</span>(inputStream, StandardCharsets.UTF_8));<br><br>                <span class="hljs-type">StringBuilder</span> <span class="hljs-variable">stringBuffer</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringBuilder</span>();<br>                <span class="hljs-type">String</span> <span class="hljs-variable">tmp</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>                <span class="hljs-keyword">while</span> ((tmp = bufferedReader.readLine()) != <span class="hljs-literal">null</span>)&#123;<br>                    stringBuffer.append(tmp).append(<span class="hljs-string">&quot;\r\n&quot;</span>);<br>                &#125;<br><br>                result = stringBuffer.toString();<br>            &#125;<br>        &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>            e.printStackTrace();<br>        &#125; <span class="hljs-keyword">finally</span> &#123;<br>            <span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span> != bufferedReader)&#123;<br>                <span class="hljs-keyword">try</span> &#123;<br>                    bufferedReader.close();<br>                &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>                    e.printStackTrace();<br>                &#125;<br>            &#125;<br>            <span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span> != inputStream)&#123;<br>                <span class="hljs-keyword">try</span> &#123;<br>                    inputStream.close();<br>                &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>                    e.printStackTrace();<br>                &#125;<br>            &#125;<br>            <span class="hljs-comment">// 释放连接</span><br>            getMethod.releaseConnection();<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title function_">queryPost</span><span class="hljs-params">(String uri, Map&lt;String, Object&gt; paramMap)</span>&#123;<br>        <span class="hljs-comment">// 输入流</span><br>        <span class="hljs-type">InputStream</span> <span class="hljs-variable">inputStream</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>        <span class="hljs-type">BufferedReader</span> <span class="hljs-variable">bufferedReader</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>        <span class="hljs-type">String</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>        <span class="hljs-comment">// 创建HttpClient实例</span><br>        <span class="hljs-type">HttpClient</span> <span class="hljs-variable">httpClient</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">HttpClient</span>();<br>        <span class="hljs-comment">// 设置http连接主机服务超时时间</span><br>        <span class="hljs-comment">// 先获取连接管理器对象，再获取参数对象,再进行参数的赋值</span><br>        httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(<span class="hljs-number">10000</span>);<br>        <span class="hljs-comment">// 创建GET方法</span><br>        <span class="hljs-type">PostMethod</span> <span class="hljs-variable">postMethod</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">PostMethod</span>(uri);<br>        <span class="hljs-comment">// 设置get请求超时时间</span><br>        postMethod.getParams().setParameter(HttpMethodParams.SO_TIMEOUT, <span class="hljs-number">10000</span>);<br>        <span class="hljs-comment">// 设置参数</span><br>        NameValuePair[] nvp = <span class="hljs-literal">null</span>;<br>        <span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span> != paramMap &amp;&amp; paramMap.size() &gt; <span class="hljs-number">0</span>)&#123;<br>            <span class="hljs-comment">// 创建键值参数对象数组，大小为参数的个数</span><br>            nvp = <span class="hljs-keyword">new</span> <span class="hljs-title class_">NameValuePair</span>[paramMap.size()];<br>            <span class="hljs-comment">// 循环遍历参数集合map</span><br>            Set&lt;Map.Entry&lt;String, Object&gt;&gt; entrySet = paramMap.entrySet();<br>            <span class="hljs-comment">// 获取迭代器</span><br>            Iterator&lt;Map.Entry&lt;String, Object&gt;&gt; iterator = entrySet.iterator();<br><br>            <span class="hljs-type">int</span> <span class="hljs-variable">index</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>            <span class="hljs-keyword">while</span> (iterator.hasNext()) &#123;<br>                Map.Entry&lt;String, Object&gt; mapEntry = iterator.next();<br>                <span class="hljs-comment">// 从mapEntry中获取key和value创建键值对象存放到数组中</span><br>                <span class="hljs-keyword">try</span> &#123;<br>                    nvp[index] = <span class="hljs-keyword">new</span> <span class="hljs-title class_">NameValuePair</span>(mapEntry.getKey(),<br>                            <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(mapEntry.getValue().toString().getBytes(<span class="hljs-string">&quot;UTF-8&quot;</span>), <span class="hljs-string">&quot;UTF-8&quot;</span>));<br>                &#125; <span class="hljs-keyword">catch</span> (UnsupportedEncodingException e) &#123;<br>                    e.printStackTrace();<br>                &#125;<br>                index++;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-comment">// 判断nvp数组是否为空</span><br>        <span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span> != nvp) &#123;<br>            <span class="hljs-comment">// 将参数存放到requestBody对象中</span><br>            postMethod.setRequestBody(nvp);<br>        &#125;<br><br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-type">int</span> <span class="hljs-variable">statusCode</span> <span class="hljs-operator">=</span> httpClient.executeMethod(postMethod);<br>            <span class="hljs-keyword">if</span> (statusCode == HttpStatus.SC_OK)&#123;<br>                inputStream = postMethod.getResponseBodyAsStream();<br>                bufferedReader = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BufferedReader</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">InputStreamReader</span>(inputStream, StandardCharsets.UTF_8));<br>                <span class="hljs-type">StringBuilder</span> <span class="hljs-variable">stringBuffer</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringBuilder</span>();<br>                <span class="hljs-type">String</span> <span class="hljs-variable">tmp</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>                <span class="hljs-keyword">while</span> ((tmp = bufferedReader.readLine()) != <span class="hljs-literal">null</span>)&#123;<br>                    stringBuffer.append(tmp).append(<span class="hljs-string">&quot;\r\n&quot;</span>);<br>                &#125;<br><br>                result = stringBuffer.toString();<br>            &#125;<br>        &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>            e.printStackTrace();<br>        &#125; <span class="hljs-keyword">finally</span> &#123;<br>            <span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span> != bufferedReader)&#123;<br>                <span class="hljs-keyword">try</span> &#123;<br>                    bufferedReader.close();<br>                &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>                    e.printStackTrace();<br>                &#125;<br>            &#125;<br>            <span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span> != inputStream)&#123;<br>                <span class="hljs-keyword">try</span> &#123;<br>                    inputStream.close();<br>                &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>                    e.printStackTrace();<br>                &#125;<br>            &#125;<br>            <span class="hljs-comment">// 释放连接</span><br>            postMethod.releaseConnection();<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> result;<br><br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="org-apache-http-client"><a href="#org-apache-http-client" class="headerlink" title="org.apache.http.client"></a><code>org.apache.http.client</code></h2><p>[org.apache.http.client.HttpClient使用方法 - 江期玉 - 博客园 (cnblogs.com)](<a target="_blank" rel="noopener" href="https://www.cnblogs.com/jiangfeilong/p/11109223.html#:~:text=org.apache.http.client%E5%9C%A8%E5%8F%91%E8%B5%B7%E8%AF%B7%E6%B1%82%E5%89%8D%EF%BC%8C%E5%81%87%E5%A6%82%E5%AF%B9%E6%9F%90%E4%B8%AA%E5%8F%82%E6%95%B0a">https://www.cnblogs.com/jiangfeilong/p/11109223.html#:~:text=org.apache.http.client在发起请求前，假如对某个参数a</a> 进行url encode编码。,服务端必须进行url decode。 %2F%2F客户端编码)</p>
+<p>这个的版本搞不清楚。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/java/" class="category-chain-item">java</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/java/">#java</a>
+      
+        <a href="/tags/http/">#http</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>[java] java的http请求方法</div>
+      <div>https://s1n9l3.github.io/2022/10/18/[java] java的http请求方法/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>YY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年10月18日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/10/15/%5Bcisp-pte%5D%20sqlmap%E6%95%99%E7%A8%8B/" title="[cisp-pte] sqlmap教程">
+                        <span class="hidden-mobile">[cisp-pte] sqlmap教程</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
