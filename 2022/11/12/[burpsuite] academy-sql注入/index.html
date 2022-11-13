@@ -1,0 +1,772 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/Aries.ico">
+  <link rel="icon" href="/img/Aries.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="YY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="SQL注入在burpsuite中有一个Web Security Academy，其中可以学习常见漏洞，现在开始学习其中的内容。 这一章会介绍什么是SQL注入，其中有一些例子来解释怎么检查和利用不同种类的SQL注入漏洞，最后总结如何预防SQL注入。  什么是SQL注入SQL注入（SQLi）是一个web安全漏洞，允许攻击者干扰应用程序对其数据库的查询。它通常允许攻击者查看通常无法检索的数据。这可能包括">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[burpsuite] academy-sql注入">
+<meta property="og:url" content="https://s1n9l3.github.io/2022/11/12/[burpsuite]%20academy-sql%E6%B3%A8%E5%85%A5/index.html">
+<meta property="og:site_name" content="S1n9l3">
+<meta property="og:description" content="SQL注入在burpsuite中有一个Web Security Academy，其中可以学习常见漏洞，现在开始学习其中的内容。 这一章会介绍什么是SQL注入，其中有一些例子来解释怎么检查和利用不同种类的SQL注入漏洞，最后总结如何预防SQL注入。  什么是SQL注入SQL注入（SQLi）是一个web安全漏洞，允许攻击者干扰应用程序对其数据库的查询。它通常允许攻击者查看通常无法检索的数据。这可能包括">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/sql-injection.svg">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/second-order-sql-injection.svg">
+<meta property="article:published_time" content="2022-11-12T07:08:01.886Z">
+<meta property="article:modified_time" content="2022-11-12T08:47:16.037Z">
+<meta property="article:author" content="YY">
+<meta property="article:tag" content="渗透测试">
+<meta property="article:tag" content="sql注入">
+<meta property="article:tag" content="burpsuite">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/sql-injection.svg">
+  
+  
+  
+  <title>[burpsuite] academy-sql注入 - S1n9l3</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"s1n9l3.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>WXYY</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="[burpsuite] academy-sql注入"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-12 15:08" pubdate>
+          2022年11月12日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          43 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">[burpsuite] academy-sql注入</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a>SQL注入</h1><p>在burpsuite中有一个<code>Web Security Academy</code>，其中可以学习常见漏洞，现在开始学习其中的内容。</p>
+<p>这一章会介绍什么是SQL注入，其中有一些例子来解释怎么检查和利用不同种类的SQL注入漏洞，最后总结如何预防SQL注入。</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/sql-injection.svg" srcset="/img/loading.gif" lazyload alt="SQL injection"></p>
+<h2 id="什么是SQL注入"><a href="#什么是SQL注入" class="headerlink" title="什么是SQL注入"></a>什么是SQL注入</h2><p>SQL注入（SQLi）是一个web安全漏洞，允许攻击者干扰应用程序对其数据库的查询。它通常允许攻击者查看通常无法检索的数据。这可能包括属于其他用户的数据，或应用程序本身能够访问的任何其他数据。在许多情况下，攻击者可以修改或删除此数据，从而对应用程序的内容或行为造成永久性更改。</p>
+<p>在某些情况下，攻击者可以升级SQL注入攻击以破坏底层服务器或其他后端基础设施，或执行拒绝服务攻击。</p>
+<h2 id="SQL注入的危害"><a href="#SQL注入的危害" class="headerlink" title="SQL注入的危害"></a>SQL注入的危害</h2><p>成功的SQL注入攻击可能导致未经授权访问敏感数据，如密码、信用卡详细信息或个人用户信息。近年来，许多引人注目的数据泄露都是SQL注入攻击的结果，导致声誉受损和监管罚款。在某些情况下，攻击者可以获得进入组织系统的持久后门，从而导致长期威胁，并可能在很长一段时间内被忽视。</p>
+<h2 id="查看隐藏数据"><a href="#查看隐藏数据" class="headerlink" title="查看隐藏数据"></a>查看隐藏数据</h2><p>考虑一个显示不同类别产品的购物应用程序。当用户单击<code>Gifts</code>类别时，他们的浏览器会请求URL：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">https:<span class="hljs-regexp">//i</span>nsecure-website.com/products?category=Gifts<br></code></pre></td></tr></table></figure>
+
+<p>这会导致应用程序进行SQL查询，以从数据库中检索相关产品的详细信息：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> products <span class="hljs-keyword">WHERE</span> category <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Gifts&#x27;</span> <span class="hljs-keyword">AND</span> released <span class="hljs-operator">=</span> <span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+
+<p>这里的限制条件<code>released=1</code>被用来隐藏未发布的产品，如果要查看未发布的产品，大概<code>released=0</code>。</p>
+<p>该应用程序没有实现任何针对SQL注入攻击的防御，因此攻击者可以构造如下攻击：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">https:<span class="hljs-regexp">//i</span>nsecure-website.com/products?category=Gifts<span class="hljs-string">&#x27;--</span><br></code></pre></td></tr></table></figure>
+
+<p>这样的SQL查询语句为：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> products <span class="hljs-keyword">WHERE</span> category <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Gifts&#x27;</span><span class="hljs-comment">--&#x27; AND released = 1</span><br></code></pre></td></tr></table></figure>
+
+<p>在SQL中<code>--</code>为注释符号，这意味着后面的语句会被注释。在这里后面的<code>AND released=1</code>会被注释，所以所有的产品都会显示，包括未发布的产品。</p>
+<p>更进一步，攻击者可以使应用程序显示任何类别的所有产品，包括他们不知道的类别：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">https</span>://insecure-website.com/products?category=Gifts&#x27;+OR+<span class="hljs-number">1</span>=<span class="hljs-number">1</span>--<br></code></pre></td></tr></table></figure>
+
+<p>这样的SQL查询语句为：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> products <span class="hljs-keyword">WHERE</span> category <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Gifts&#x27;</span> <span class="hljs-keyword">OR</span> <span class="hljs-number">1</span><span class="hljs-operator">=</span><span class="hljs-number">1</span><span class="hljs-comment">--&#x27; AND released = 1</span><br></code></pre></td></tr></table></figure>
+
+<p>修改后的查询语句查询的类别为<code>Gifts</code>或者<code>1=1</code>，而<code>1=1</code>返回为True，所以会显示所有种类的产品。</p>
+<blockquote>
+<p>对应LAB：<code>SQL injection vulnerability in WHERE clause allowing retrieval of hidden data</code></p>
+</blockquote>
+<h2 id="绕过应用逻辑"><a href="#绕过应用逻辑" class="headerlink" title="绕过应用逻辑"></a>绕过应用逻辑</h2><p>有的应用可以通过用户名和密码登录，如果用户提交用户名为<code>wiener</code>以及密码为<code>bluecheese</code>，那么应用会以下面的语句进行查询：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> users <span class="hljs-keyword">WHERE</span> username <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;wiener&#x27;</span> <span class="hljs-keyword">AND</span> password <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;bluecheese&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>如果查询语句返回了用户的信息，说明登录成功；否则就被拒绝登录。</p>
+<p>现在攻击者可以登录任何用户而不用进行密码验证，只需要使用<code>--</code>来绕过<code>WHERE</code>条件中对<code>password</code>的检查。比如，提交的用户名为<code>administrator&#39;--</code>，而不用输入密码，那么会进行这样的SQL查询：</p>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs n1ql"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> users <span class="hljs-keyword">WHERE</span> username = <span class="hljs-string">&#x27;administrator&#x27;</span>--<span class="hljs-string">&#x27; AND password = &#x27;</span><span class="hljs-string">&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>这条语句使得攻击者成功的以<code>administrator</code>的身份登录。</p>
+<blockquote>
+<p>对应LAB：<code>SQL injection vulnerability allowing login bypass</code></p>
+</blockquote>
+<h2 id="查询其他表的数据"><a href="#查询其他表的数据" class="headerlink" title="查询其他表的数据"></a>查询其他表的数据</h2><p>在应用程序响应中返回SQL查询结果的情况下，攻击者可以利用SQL注入漏洞从数据库中的其他表中检索数据。这种操作使用的是<code>UNION</code>关键字，这个关键字会执行另外的<code>SELECT</code>查询，然后添加到原来的查询结果中。</p>
+<p>比如有这样的查询语句包含了用户输入<code>Gifts</code>：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> name, description <span class="hljs-keyword">FROM</span> products <span class="hljs-keyword">WHERE</span> category <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Gifts&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>攻击者可以提交这样的输入：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-string">&#x27; UNION SELECT username, password FROM users--</span><br></code></pre></td></tr></table></figure>
+
+<p>这会使得应用返回所有<code>username</code>和<code>password</code>以及产品的名字和描述。</p>
+<h2 id="检查数据库"><a href="#检查数据库" class="headerlink" title="检查数据库"></a>检查数据库</h2><p>在初始识别SQL注入漏洞之后，通常可以获得有关数据库本身的一些信息。利用这些信息可以进行更深入的攻击。</p>
+<p>比如可以查询数据库的版本详细信息。这样做的方式取决于数据库类型，因此可以从任何有效的技术推断数据库类型。例如，在Oracle上，可以执行：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> v$version<br></code></pre></td></tr></table></figure>
+
+<p>还可以确定存在哪些数据库表以及它们包含哪些列。例如，在大多数数据库上，可以执行以下查询以列出表：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> information_schema.tables<br></code></pre></td></tr></table></figure>
+
+<h2 id="SQL盲注"><a href="#SQL盲注" class="headerlink" title="SQL盲注"></a>SQL盲注</h2><p>许多SQL注入实例都是盲漏洞。这意味着应用程序不会返回SQL查询的结果或其响应中任何数据库错误的详细信息。仍然可以利用盲漏洞访问未经授权的数据，但所涉及的技术通常更复杂且难以执行。</p>
+<p>根据漏洞的性质和所涉及的数据库，可以使用以下技术来利用盲SQL注入漏洞：</p>
+<ul>
+<li>可以更改查询的逻辑，以根据单个条件的真实性触发应用程序响应中的可检测差异。这可能涉及将一个新条件注入一些布尔逻辑，或者有条件地触发一个错误，例如<code>divide-by-zero</code>。</li>
+<li>可以有条件地触发查询处理中的时间延迟，允许根据应用程序响应所需的时间推断条件的真实性。</li>
+<li>可以使用<a target="_blank" rel="noopener" href="https://portswigger.net/burp/application-security-testing/oast">OAST</a>技术触发带外网络交互。这种技术非常强大，适用于其他技术不具备的情况。通常，可以通过带外通道直接过滤数据，例如，通过将数据放入控制的域的DNS查找中。</li>
+</ul>
+<h2 id="怎么检测SQL注入"><a href="#怎么检测SQL注入" class="headerlink" title="怎么检测SQL注入"></a>怎么检测SQL注入</h2><p>通过<code>BurpSuite</code>的<code>web vulnerability scanner</code>功能可以快速的发现大部分SQL注入漏洞。:thinking:</p>
+<p>通过对应用程序中的每个入口点使用一组系统测试，可以手动检测SQL注入。这通常包括：</p>
+<ul>
+<li>在参数后面添加<code>&#39;</code>后体检，查看错误或异常信息。</li>
+<li>提交一些特定于SQL的语法，该语法的计算结果为入口点的基本（原始）值和不同的值，并在生成的应用程序响应中查找系统差异。</li>
+<li>提交布尔条件，比如<code>OR 1=1</code>以及<code>OR 1=2</code>，查看响应的不同。</li>
+<li>提交设计用于在SQL查询中执行时触发时间延迟的有效负载，并查找响应所需时间的差异。</li>
+<li>提交OAST有效负载，用于在SQL查询中执行时触发带外网络交互，并监控任何结果交互。</li>
+</ul>
+<h2 id="不同查询语句的SQL注入"><a href="#不同查询语句的SQL注入" class="headerlink" title="不同查询语句的SQL注入"></a>不同查询语句的SQL注入</h2><p>大多数SQL注入漏洞都出现在<code>SELECT</code>查询的<code>WHERE</code>子句中。经验丰富的测试人员通常很好地理解这种类型的SQL注入。</p>
+<p>但是SQL注入漏洞原则上可以发生在查询中的任何位置，以及不同的查询类型中。SQL注入最常见的其他位置是：</p>
+<ul>
+<li>在<code>UPDATE</code>语句的更新值或者<code>WHERE</code>条件中；</li>
+<li>在<code>INSERT</code>语句的插入值中；</li>
+<li>在<code>SELECT</code>语句的表名或列名中；</li>
+<li>在<code>SELECT</code>语句的<code>ORDER BY</code>语句中；</li>
+</ul>
+<h2 id="不同语境中的SQL注入"><a href="#不同语境中的SQL注入" class="headerlink" title="不同语境中的SQL注入"></a>不同语境中的SQL注入</h2><p>之前介绍的注入中使用了查询字符串来注入恶意SQL负载。但是，需要注意的是，可以使用应用程序作为SQL查询处理的任何可控输入来执行SQL注入攻击。例如，一些网站接受JSON或XML格式的输入，并使用它来查询数据库。</p>
+<p>这些不同的格式甚至可以为提供其他方法来混淆（<a target="_blank" rel="noopener" href="https://portswigger.net/web-security/essential-skills/obfuscating-attacks-using-encodings#obfuscation-via-xml-encoding">onfuscate attacks</a>）由于WAF和其他防御机制而被阻止的攻击。弱实现（Weak implementations）通常只在请求中查找常见的SQL注入关键字，因此您可以通过简单地对禁止的关键字中的字符进行编码或转义来绕过这些过滤器。例如，以下基于XML的SQL注入使用XML转义序列对<code>SELECT</code>中的<code>S</code>字符进行编码：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">stockCheck</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">productId</span>&gt;</span><br>        123<br>    <span class="hljs-tag">&lt;/<span class="hljs-name">productId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">storeId</span>&gt;</span><br>        999 <span class="hljs-symbol">&amp;#x53;</span>ELECT * FROM information_schema.tables<br>    <span class="hljs-tag">&lt;/<span class="hljs-name">storeId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">stockCheck</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>这将在传递给SQL解释器之前在服务器端进行解码。</p>
+<blockquote>
+<p>对应LAB：<code>SQL injection with filter bypass via XML encoding</code></p>
+<p>这个需要重点看一些。</p>
+</blockquote>
+<h2 id="二次注入"><a href="#二次注入" class="headerlink" title="二次注入"></a>二次注入</h2><p>当应用程序从HTTP请求中获取用户输入，并且在处理该请求的过程中，以不安全的方式将输入合并到SQL查询中时，就会出现一阶SQL注入（First-order SQL injection）。</p>
+<p>在二阶SQL注入（也称为存储SQL注入）中，应用程序从HTTP请求中获取用户输入，并将其存储以供将来使用。这通常是通过将输入放入数据库来完成的，但在数据存储点不会出现漏洞。稍后，当处理不同的HTTP请求时，应用程序会检索存储的数据，并以不安全的方式将其合并到SQL查询中。</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/second-order-sql-injection.svg" srcset="/img/loading.gif" lazyload alt="Second-order SQL injection"></p>
+<p>二阶SQL注入通常出现在开发人员意识到SQL注入漏洞的情况下，因此可以安全地处理输入到数据库中的初始位置。当数据稍后被处理时，它被认为是安全的，因为它以前被安全地放置在数据库中。此时，数据以不安全的方式处理，因为开发人员错误地认为它是可信的。</p>
+<h2 id="数据库特定因素"><a href="#数据库特定因素" class="headerlink" title="数据库特定因素"></a>数据库特定因素</h2><p>SQL语言的一些核心功能在流行的数据库平台上以相同的方式实现，因此许多检测和利用SQL注入漏洞的方法在不同类型的数据库上同样有效。</p>
+<p>然而，常见数据库之间也存在许多差异。这意味着一些检测和利用SQL注入的技术在不同平台上的工作方式不同。例如：</p>
+<ul>
+<li>字符串连接语法（Syntax for string concatenation）</li>
+<li>注释（Comments）</li>
+<li>堆叠查询（Batched (or stacked) queries）</li>
+<li>特定平台的API（Platform-specific APIs）</li>
+<li>错误信息（Error messages）</li>
+</ul>
+<h2 id="怎么防御SQL注入"><a href="#怎么防御SQL注入" class="headerlink" title="怎么防御SQL注入"></a>怎么防御SQL注入</h2><p>大多数SQL注入实例可以通过使用参数化查询（也称为预编译）而不是查询中的字符串连接来防止。</p>
+<p>以下代码容易受到SQL注入的攻击，因为用户输入直接连接到查询中：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">query</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;SELECT * FROM products WHERE category = &#x27;&quot;</span>+ input + <span class="hljs-string">&quot;&#x27;&quot;</span>;<br><span class="hljs-type">Statement</span> <span class="hljs-variable">statement</span> <span class="hljs-operator">=</span> connection.createStatement();<br><span class="hljs-type">ResultSet</span> <span class="hljs-variable">resultSet</span> <span class="hljs-operator">=</span> statement.executeQuery(query);<br></code></pre></td></tr></table></figure>
+
+<p>此代码可以以防止用户输入干扰查询结构的方式轻松重写：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">PreparedStatement</span> <span class="hljs-variable">statement</span> <span class="hljs-operator">=</span> connection.prepareStatement(<span class="hljs-string">&quot;SELECT * FROM products WHERE category = ?&quot;</span>);<br>statement.setString(<span class="hljs-number">1</span>, input);<br><span class="hljs-type">ResultSet</span> <span class="hljs-variable">resultSet</span> <span class="hljs-operator">=</span> statement.executeQuery();<br></code></pre></td></tr></table></figure>
+
+<p>参数化查询可以用于任何不受信任的输入在查询中显示为数据的情况，包括<code>WHERE</code>子句和<code>INSERT</code>或<code>UPDATE</code>语句中的值。它们不能用于处理查询的其他部分中不受信任的输入，例如表或列名，或<code>ORDER BY</code>子句。将不受信任的数据放入查询的那些部分的应用程序功能需要采取不同的方法，例如白名单允许的输入值，或者使用不同的逻辑来提供所需的行为。</p>
+<p>要使参数化查询有效地防止SQL注入，查询中使用的字符串必须始终是硬编码常量，并且决不能包含任何来源的变量数据。不要试图逐个决定一个数据项是否可信，并继续在查询中使用字符串连接来确定被认为安全的情况。很容易在数据的可能来源上出错，或者在其他代码中的更改违反了关于数据被污染的假设。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" class="category-chain-item">渗透测试</a>
+  
+  
+
+      </span>
+    
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/sql%E6%B3%A8%E5%85%A5/" class="category-chain-item">sql注入</a>
+  
+  
+
+      </span>
+    
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/burpsuite/" class="category-chain-item">burpsuite</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">#渗透测试</a>
+      
+        <a href="/tags/sql%E6%B3%A8%E5%85%A5/">#sql注入</a>
+      
+        <a href="/tags/burpsuite/">#burpsuite</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>[burpsuite] academy-sql注入</div>
+      <div>https://s1n9l3.github.io/2022/11/12/[burpsuite] academy-sql注入/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>YY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年11月12日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/10/21/%5Bjava%5D%20java%E5%A4%9A%E7%BA%BF%E7%A8%8B/" title="[java] java多线程">
+                        <span class="hidden-mobile">[java] java多线程</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -23,13 +23,36 @@
 <meta property="og:site_name" content="S1n9l3">
 <meta property="og:description" content="SQL注入SQL 注入（SQL Injection）是发生在 Web 程序中数据库层的安全漏洞，是网站存在最多也是最简单的漏洞。主要原因是程序对用户输入数据的合法性没有判断和处理，导致攻击者可以在 Web 应用程序中事先定义好的 SQL 语句中添加额外的 SQL 语句，在管理员不知情的情况下实现非法操作，以此来实现欺骗数据库服务器执行非授权的任意查询，从而进一步获取到数据信息。 简而言之，SQL">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133109802.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133136105.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133148296.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133205130.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133227139.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133240172.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133301739.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133311221.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133325819.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133422838.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133531156.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133642226.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133934039.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133951959.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029134033471.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029134056313.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029135116736.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029135201280.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029135227809.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029135249714.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029135317739.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029135350515.png">
 <meta property="article:published_time" content="2022-10-10T13:05:26.009Z">
-<meta property="article:modified_time" content="2022-10-11T14:01:17.491Z">
+<meta property="article:modified_time" content="2022-10-29T05:55:14.458Z">
 <meta property="article:author" content="YY">
 <meta property="article:tag" content="渗透测试">
 <meta property="article:tag" content="cisp-pte">
 <meta property="article:tag" content="sql注入">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133109802.png">
   
   
   
@@ -221,7 +244,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          291 字
+          410 字
         
       </span>
     
@@ -232,7 +255,7 @@
         
         
         
-          3 分钟
+          4 分钟
         
       </span>
     
@@ -277,6 +300,34 @@
                 
                 <h1 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a>SQL注入</h1><p>SQL 注入（SQL Injection）是发生在 Web 程序中数据库层的安全漏洞，是网站存在最多也是最简单的漏洞。主要原因是程序对用户输入数据的合法性没有判断和处理，导致攻击者可以在 Web 应用程序中事先定义好的 SQL 语句中添加额外的 SQL 语句，在管理员不知情的情况下实现非法操作，以此来实现欺骗数据库服务器执行非授权的任意查询，从而进一步获取到数据信息。</p>
 <p>简而言之，SQL 注入就是在用户输入的字符串中加入 SQL 语句，如果在设计不良的程序中忽略了检查，那么这些注入进去的 SQL 语句就会被数据库服务器误认为是正常的 SQL 语句而运行，攻击者就可以执行计划外的命令或访问未被授权的数据。</p>
+<h2 id="手工注入-sqli-labs-1"><a href="#手工注入-sqli-labs-1" class="headerlink" title="手工注入-sqli-labs-1"></a>手工注入-sqli-labs-1</h2><p>手工注入流程。</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133109802.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133136105.png" srcset="/img/loading.gif" lazyload alt="image-20221029133136105"></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133148296.png" srcset="/img/loading.gif" lazyload alt="image-20221029133148296"></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133205130.png" srcset="/img/loading.gif" lazyload alt="image-20221029133205130"></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133227139.png" srcset="/img/loading.gif" lazyload alt="image-20221029133227139"></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133240172.png" srcset="/img/loading.gif" lazyload alt="image-20221029133240172"></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133301739.png" srcset="/img/loading.gif" lazyload alt="image-20221029133301739"></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133311221.png" srcset="/img/loading.gif" lazyload alt="image-20221029133311221"></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133325819.png" srcset="/img/loading.gif" lazyload alt="image-20221029133325819"></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133422838.png" srcset="/img/loading.gif" lazyload alt="image-20221029133422838"></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133531156.png" srcset="/img/loading.gif" lazyload alt="image-20221029133531156"></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133642226.png" srcset="/img/loading.gif" lazyload alt="image-20221029133642226"></p>
+<h2 id="万能密码"><a href="#万能密码" class="headerlink" title="万能密码"></a>万能密码</h2><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133934039.png" srcset="/img/loading.gif" lazyload alt="image-20221029133934039"></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029133951959.png" srcset="/img/loading.gif" lazyload alt="image-20221029133951959"></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029134033471.png" srcset="/img/loading.gif" lazyload alt="image-20221029134033471"></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029134056313.png" srcset="/img/loading.gif" lazyload alt="image-20221029134056313"></p>
+<h2 id="二次注入"><a href="#二次注入" class="headerlink" title="二次注入"></a>二次注入</h2><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029135116736.png" srcset="/img/loading.gif" lazyload alt="image-20221029135116736"></p>
+<p>注册账号：<code>admin&#39;#123</code>，密码：<code>123</code></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029135201280.png" srcset="/img/loading.gif" lazyload alt="image-20221029135201280"></p>
+<p>使用账号：<code>admin&#39;#123</code>登录</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029135227809.png" srcset="/img/loading.gif" lazyload alt="image-20221029135227809"></p>
+<p>登录成功后修改密码为：<code>321</code></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029135249714.png" srcset="/img/loading.gif" lazyload alt="image-20221029135249714"></p>
+<p>这时可以使用账号：<code>admin</code>，密码：<code>321</code>登录</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029135317739.png" srcset="/img/loading.gif" lazyload alt="image-20221029135317739"></p>
+<p>登录成功</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221029135350515.png" srcset="/img/loading.gif" lazyload alt="image-20221029135350515"></p>
 
                 
               </div>
