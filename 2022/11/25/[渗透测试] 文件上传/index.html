@@ -16,26 +16,23 @@
   <meta name="author" content="YY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="[RoarCTF 2019]Easy Calc进入后是一个计算机，  查看源码发现文件calc.php， 123456789101112131415&lt;?phperror_reporting(0);if(!isset($_GET[&amp;#x27;num&amp;#x27;]))&amp;#123;    show_source(__FILE__);&amp;#125;else&amp;#123;        $str &#x3D; $_">
+    <meta name="description" content="文件上传文件上传通常需要结合免杀，上传的文件被其他人触发或者主动连接。这里主要介绍上传的方法。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="[ctf-web] RoarCTF2019-EasyCalc">
-<meta property="og:url" content="https://s1n9l3.github.io/2022/11/24/[ctf-web]%20RoarCTF2019-EasyCalc/index.html">
+<meta property="og:title" content="[渗透测试] 文件上传">
+<meta property="og:url" content="https://s1n9l3.github.io/2022/11/25/[%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95]%20%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/index.html">
 <meta property="og:site_name" content="S1n9l3">
-<meta property="og:description" content="[RoarCTF 2019]Easy Calc进入后是一个计算机，  查看源码发现文件calc.php， 123456789101112131415&lt;?phperror_reporting(0);if(!isset($_GET[&amp;#x27;num&amp;#x27;]))&amp;#123;    show_source(__FILE__);&amp;#125;else&amp;#123;        $str &#x3D; $_">
+<meta property="og:description" content="文件上传文件上传通常需要结合免杀，上传的文件被其他人触发或者主动连接。这里主要介绍上传的方法。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221124192733066.png">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221124194044373.png">
-<meta property="article:published_time" content="2022-11-24T11:25:14.212Z">
-<meta property="article:modified_time" content="2022-11-24T11:42:44.613Z">
+<meta property="article:published_time" content="2022-11-25T03:18:29.214Z">
+<meta property="article:modified_time" content="2022-11-25T10:25:33.938Z">
 <meta property="article:author" content="YY">
-<meta property="article:tag" content="ctf">
-<meta property="article:tag" content="ctf-web">
+<meta property="article:tag" content="渗透测试">
+<meta property="article:tag" content="文件上传">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221124192733066.png">
   
   
   
-  <title>[ctf-web] RoarCTF2019-EasyCalc - S1n9l3</title>
+  <title>[渗透测试] 文件上传 - S1n9l3</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -200,7 +197,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="[ctf-web] RoarCTF2019-EasyCalc"></span>
+            <span id="subtitle" data-typed-text="[渗透测试] 文件上传"></span>
           
         </div>
 
@@ -211,8 +208,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-11-24 19:25" pubdate>
-          2022年11月24日 晚上
+        <time datetime="2022-11-25 11:18" pubdate>
+          2022年11月25日 上午
         </time>
       </span>
     
@@ -223,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.1k 字
+          47 字
         
       </span>
     
@@ -234,7 +231,7 @@
         
         
         
-          10 分钟
+          1 分钟
         
       </span>
     
@@ -272,23 +269,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">[ctf-web] RoarCTF2019-EasyCalc</h1>
+            <h1 style="display: none">[渗透测试] 文件上传</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="RoarCTF-2019-Easy-Calc"><a href="#RoarCTF-2019-Easy-Calc" class="headerlink" title="[RoarCTF 2019]Easy Calc"></a>[RoarCTF 2019]Easy Calc</h1><p>进入后是一个计算机，</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221124192733066.png" srcset="/img/loading.gif" lazyload alt="image-20221124192733066"></p>
-<p>查看源码发现文件<code>calc.php</code>，</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-title function_ invoke__">error_reporting</span>(<span class="hljs-number">0</span>);<br><span class="hljs-keyword">if</span>(!<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;num&#x27;</span>]))&#123;<br>    <span class="hljs-title function_ invoke__">show_source</span>(<span class="hljs-keyword">__FILE__</span>);<br>&#125;<span class="hljs-keyword">else</span>&#123;<br>        <span class="hljs-variable">$str</span> = <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;num&#x27;</span>];<br>        <span class="hljs-variable">$blacklist</span> = [<span class="hljs-string">&#x27; &#x27;</span>, <span class="hljs-string">&#x27;\t&#x27;</span>, <span class="hljs-string">&#x27;\r&#x27;</span>, <span class="hljs-string">&#x27;\n&#x27;</span>,<span class="hljs-string">&#x27;\&#x27;&#x27;</span>, <span class="hljs-string">&#x27;&quot;&#x27;</span>, <span class="hljs-string">&#x27;`&#x27;</span>, <span class="hljs-string">&#x27;\[&#x27;</span>, <span class="hljs-string">&#x27;\]&#x27;</span>,<span class="hljs-string">&#x27;\$&#x27;</span>,<span class="hljs-string">&#x27;\\&#x27;</span>,<span class="hljs-string">&#x27;\^&#x27;</span>];<br>        <span class="hljs-keyword">foreach</span> (<span class="hljs-variable">$blacklist</span> <span class="hljs-keyword">as</span> <span class="hljs-variable">$blackitem</span>) &#123;<br>                <span class="hljs-keyword">if</span> (<span class="hljs-title function_ invoke__">preg_match</span>(<span class="hljs-string">&#x27;/&#x27;</span> . <span class="hljs-variable">$blackitem</span> . <span class="hljs-string">&#x27;/m&#x27;</span>, <span class="hljs-variable">$str</span>)) &#123;<br>                        <span class="hljs-keyword">die</span>(<span class="hljs-string">&quot;what are you want to do?&quot;</span>);<br>                &#125;<br>        &#125;<br>        <span class="hljs-keyword">eval</span>(<span class="hljs-string">&#x27;echo &#x27;</span>.<span class="hljs-variable">$str</span>.<span class="hljs-string">&#x27;;&#x27;</span>);<br>&#125;<br><span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
-
-<p>这里需要出入参数<code>num</code>，尝试后发现只能传入数字，看来是被WAF过滤了。</p>
-<p>知识点来了。</p>
-<p>在PHP中，<code>$_GET</code>或<code>$_POST</code>的参数会保存到数组中，比如<code>/?foo=bar</code>，保存为<code>Array([foo]=&gt;&#39;bar&#39;)</code>，但是在解析过程中，会将某些字符删除或用下划线代替，比如<code>/?%20news[id%00=42</code>会转换为<code>Array([news_id] =&gt; 42</code>，所以如果WAF中的某条规则是不允许输入参数<code>news_id</code>时，可以使用上面的语句绕过。</p>
-<p>在这道题中，对参数<code>num</code>进行了各种检查，但如果传入的参数是<code> num</code>，注意前面有个空格，在传入参数是就是一个新的变量<code> num</code>（前面有空格），而不是<code>num</code>了（没有空格）；但在PHP解析时，会先把空格去掉，这样就绕过了WAF。</p>
-<p>这样就可以继续了，由于过滤了一些符号，所以使用<code>chr()</code>绕过，使用<code>calc.php? num=print_r(scandir(chr(47)))</code>，就是查看<code>/</code>下的文件，</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221124194044373.png" srcset="/img/loading.gif" lazyload alt="image-20221124194044373"></p>
-<p>发现了<code>f1agg</code>，然后使用<code>calc.php? num=print_r(file_get_contents(chr(47).chr(102).chr(49).chr(97).chr(103).chr(103)));</code>，得到flag。</p>
+                <h1 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h1><p>文件上传通常需要结合免杀，上传的文件被其他人触发或者主动连接。这里主要介绍上传的方法。</p>
 
                 
               </div>
@@ -307,7 +293,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/ctf/" class="category-chain-item">ctf</a>
+  <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" class="category-chain-item">渗透测试</a>
   
   
 
@@ -322,9 +308,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/ctf/">#ctf</a>
+        <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">#渗透测试</a>
       
-        <a href="/tags/ctf-web/">#ctf-web</a>
+        <a href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">#文件上传</a>
       
     </div>
   
@@ -336,8 +322,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>[ctf-web] RoarCTF2019-EasyCalc</div>
-      <div>https://s1n9l3.github.io/2022/11/24/[ctf-web] RoarCTF2019-EasyCalc/</div>
+      <div>[渗透测试] 文件上传</div>
+      <div>https://s1n9l3.github.io/2022/11/25/[渗透测试] 文件上传/</div>
     </div>
     <div class="license-meta">
       
@@ -349,7 +335,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年11月24日</div>
+          <div>2022年11月25日</div>
         </div>
       
       
@@ -381,9 +367,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/11/25/%5B%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%5D%20%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" title="[渗透测试] 文件上传">
+                      <a href="/2022/11/26/%5B%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%5D%20codeql%E8%AF%AD%E6%B3%95-01-ql%E5%9F%BA%E7%A1%80/" title="[代码审计] codeql语法-01-ql基础">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">[渗透测试] 文件上传</span>
+                        <span class="hidden-mobile">[代码审计] codeql语法-01-ql基础</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -391,8 +377,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/11/23/%5B%E5%B7%A5%E5%85%B7%5D%20%E7%9B%AE%E5%BD%95%E7%88%86%E7%A0%B4-dirb/" title="[工具] 目录爆破-dirb">
-                        <span class="hidden-mobile">[工具] 目录爆破-dirb</span>
+                      <a href="/2022/11/24/%5Bctf-web%5D%20RoarCTF2019-EasyCalc/" title="[ctf-web] RoarCTF2019-EasyCalc">
+                        <span class="hidden-mobile">[ctf-web] RoarCTF2019-EasyCalc</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

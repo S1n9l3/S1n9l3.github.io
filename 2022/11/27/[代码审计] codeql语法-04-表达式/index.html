@@ -1,0 +1,744 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/Aries.ico">
+  <link rel="icon" href="/img/Aries.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="YY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="codeql语法-表达式表达式的计算结果为⼀组值并具有⼀个类型。例如，表达式 1+2 计算结果为整数3，表达式”QL” 的计算结果为字符串类型输出”QL” ,1 + 2 这个表达式的类型为int，⽽”QL”的表达式类型为string 括号表达式（Parenthesized expressions）带括号的表达式是⽤括号 ( 和括起来的表达式 ) 。此表达式的类型和值与原始表达式完全相同。括号可⽤于">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[代码审计] codeql语法-04-表达式">
+<meta property="og:url" content="https://s1n9l3.github.io/2022/11/27/[%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1]%20codeql%E8%AF%AD%E6%B3%95-04-%E8%A1%A8%E8%BE%BE%E5%BC%8F/index.html">
+<meta property="og:site_name" content="S1n9l3">
+<meta property="og:description" content="codeql语法-表达式表达式的计算结果为⼀组值并具有⼀个类型。例如，表达式 1+2 计算结果为整数3，表达式”QL” 的计算结果为字符串类型输出”QL” ,1 + 2 这个表达式的类型为int，⽽”QL”的表达式类型为string 括号表达式（Parenthesized expressions）带括号的表达式是⽤括号 ( 和括起来的表达式 ) 。此表达式的类型和值与原始表达式完全相同。括号可⽤于">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221127200937406.png">
+<meta property="article:published_time" content="2022-11-27T09:14:12.340Z">
+<meta property="article:modified_time" content="2022-11-27T12:13:33.677Z">
+<meta property="article:author" content="YY">
+<meta property="article:tag" content="代码审计">
+<meta property="article:tag" content="codeql">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221127200937406.png">
+  
+  
+  
+  <title>[代码审计] codeql语法-04-表达式 - S1n9l3</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"s1n9l3.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>WXYY</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="[代码审计] codeql语法-04-表达式"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-27 17:14" pubdate>
+          2022年11月27日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          45 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">[代码审计] codeql语法-04-表达式</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="codeql语法-表达式"><a href="#codeql语法-表达式" class="headerlink" title="codeql语法-表达式"></a>codeql语法-表达式</h1><p>表达式的计算结果为⼀组值并具有⼀个类型。<br>例如，表达式 1+2 计算结果为整数3，表达式”QL” 的计算结果为字符串类型输出”QL” ,1 + 2 这个表达式的类型为int，⽽”QL”的表达式类型为string</p>
+<h2 id="括号表达式（Parenthesized-expressions）"><a href="#括号表达式（Parenthesized-expressions）" class="headerlink" title="括号表达式（Parenthesized expressions）"></a>括号表达式（Parenthesized expressions）</h2><p>带括号的表达式是⽤括号 ( 和括起来的表达式 ) 。此表达式的类型和值与原始表达式完全相同。括号可⽤于将表达式分组在⼀起以消除歧义并提⾼可读性。</p>
+<h2 id="范围表达式-Ranges"><a href="#范围表达式-Ranges" class="headerlink" title="范围表达式(Ranges)"></a>范围表达式(Ranges)</h2><p>范围表达式表示在两个表达式之间排序的值的范围。它由<code>..</code>将两个表达式分隔， 并⽤⽅括号（ <code>[</code> 和 <code>]</code> ）括起来。例如，是有效的范围表达式。它的值是和之间（包括和本身）之间的任何整数 。 <code>[3 .. 7]</code> 表示3和7内所有的整数在有效范围内，开始和结束表达式是整数，浮点数或⽇期。如果其中之⼀是⽇期，则两个都必须是⽇期。如果其中⼀个是整数，另⼀个是浮点数，则两者都将被视为浮点数。</p>
+<h2 id="常量范围表达式-Set-literal-expressions"><a href="#常量范围表达式-Set-literal-expressions" class="headerlink" title="常量范围表达式(Set literal expressions)"></a>常量范围表达式(Set literal expressions)</h2><p>可以设置⼀个常量范围表达式，例如： <code>[2, 3, 5, 7, 11, 13, 17, 19, 23, 29]</code> 它表示30以内的质数。</p>
+<h2 id="超级表达式（Super-expressions）"><a href="#超级表达式（Super-expressions）" class="headerlink" title="超级表达式（Super expressions）"></a>超级表达式（Super expressions）</h2><p>QL中的超级表达式类似于其他编程语⾔（例如Java）中的超级表达式。当您要使⽤超类型的谓词定义时，可以在谓词调⽤中使⽤它们。实际上，当谓词从其超类型继承两个定义时，这很有⽤。在这种情况下，谓词必须覆盖 这些定义以避免歧义。但是，如果要使⽤特定超类型的定义⽽不是编写新定义，则可以使⽤超级表达式。</p>
+<p>在下⾯的示例中，该类 <code>C</code> 继承了谓词的两个定义 <code>getANumber()</code> - ⼀个来⾃<code>A</code> 和⼀个来⾃ <code>B</code> 。它使⽤中的定义 B，不是覆盖两个定义，</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">A</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">int</span></span>&#123;<br>    <span class="hljs-type">A</span>()&#123;<span class="hljs-keyword">this</span>=<span class="hljs-number">1</span>&#125;<br>    int getANumber()&#123;result=<span class="hljs-number">2</span>&#125;<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">B</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">int</span></span>&#123;<br>    <span class="hljs-type">B</span>()&#123;<span class="hljs-keyword">this</span>=<span class="hljs-number">1</span>&#125;<br>    int getANumber()&#123;result=<span class="hljs-number">3</span>&#125;<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">A</span>,<span class="hljs-title">B</span></span>&#123;<br>    int getANumber()&#123;<br>        result = <span class="hljs-type">B</span>.<span class="hljs-keyword">super</span>.getANumber()<br>    &#125;<br>&#125;<br><br>from <span class="hljs-type">C</span> c<br>select c, c.getANumber()<br></code></pre></td></tr></table></figure>
+
+<p>输出结果为<code>1,3</code></p>
+<h2 id="聚合（Aggregations）"><a href="#聚合（Aggregations）" class="headerlink" title="聚合（Aggregations）"></a>聚合（Aggregations）</h2><p>聚合是⼀种映射，它根据公式指定的⼀组输⼊值来计算结果值。<br>通⽤语法为：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">aggregate</span>&gt;</span>(<span class="hljs-tag">&lt;<span class="hljs-name">variable</span> <span class="hljs-attr">declarations</span>&gt;</span> | <span class="hljs-tag">&lt;<span class="hljs-name">formula</span>&gt;</span> | <span class="hljs-tag">&lt;<span class="hljs-name">expression</span>&gt;</span>)<br></code></pre></td></tr></table></figure>
+
+<h3 id="count"><a href="#count" class="headerlink" title="count"></a>count</h3><p>定汇总变量每个可能分配的的不同值的数量。</p>
+<figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs coq">count(<span class="hljs-keyword">File</span> f | <span class="hljs-type">f</span>.getTotalNumberOfLines() &gt; <span class="hljs-number">500</span> | <span class="hljs-type">f</span>)<br></code></pre></td></tr></table></figure>
+
+<p>合返回的⽂件数多于 500⾏数。</p>
+<p>如果没有满⾜公式的聚合变量的可能赋值，例如 ，则默认为value 。 <code>count(int i | i = 1 and i= 2 | i)</code> ，结果是 0</p>
+<h3 id="min和max"><a href="#min和max" class="headerlink" title="min和max"></a>min和max</h3><p>确定聚合变量可能分配中的最⼩（min）或最⼤（max）值。在这种情况下，必须为数字类型或类型string。</p>
+<p>聚合返回 <code>.js</code> ⾏数最多的⼀个或多个⽂件的名称：</p>
+<figure class="highlight sas"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sas"><span class="hljs-meta">max</span>(<span class="hljs-keyword">File</span> f | f.getExtensio<span class="hljs-meta">n</span>() = <span class="hljs-string">&quot;js&quot;</span> | f.getBaseName() <span class="hljs-keyword">order</span> <span class="hljs-keyword">by</span> f.getTotalNumberOfLines())<br></code></pre></td></tr></table></figure>
+
+<p>以下汇总返回 s 下⾯提到的三个字符串中的最⼩字符串，即，按的所有可能值的字典顺序排列的第⼀个字<br>符串 s 。在这种情况下，它返回 “De Morgan”</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">min</span><span class="hljs-params">(string s | s = <span class="hljs-string">&quot;Tarski&quot;</span> or s = <span class="hljs-string">&quot;Dedekind&quot;</span> or s = <span class="hljs-string">&quot;De Morgan&quot;</span> |s)</span></span><br></code></pre></td></tr></table></figure>
+
+<h3 id="avg"><a href="#avg" class="headerlink" title="avg"></a>avg</h3><p>确定 <code>&lt;expression&gt;</code> 汇总变量所有可能分配的平均值。<code>&lt;expression&gt;</code> 必须为数字。如果没有满⾜公式的聚合变量的可能赋值，则聚合将失败并且不返回任何值。</p>
+<p>下⾯的聚合返回平均整数的 0 ， 1 ， 2 ，和 3 ：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">avg</span><span class="hljs-params">(int i | i = [<span class="hljs-number">0</span> .. <span class="hljs-number">3</span>] | i)</span></span><br></code></pre></td></tr></table></figure>
+
+<h3 id="sum"><a href="#sum" class="headerlink" title="sum"></a>sum</h3><p>确定 <code>&lt;expression&gt;</code> 汇总变量所有可能分配的值之和。<code>&lt;expression&gt;</code> 必须为数字。如果没有满⾜公式的聚合变量的可能赋值，则总和为 0 。</p>
+<p>以下聚合返回和的所有可能值的和： <code>i * j</code></p>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs axapta"><span class="hljs-keyword">sum</span>(<span class="hljs-built_in">int</span> i, <span class="hljs-built_in">int</span> j | i = [<span class="hljs-number">0</span> .. <span class="hljs-number">2</span>] and j = [<span class="hljs-number">3</span> .. <span class="hljs-number">5</span>] | i * j)<br></code></pre></td></tr></table></figure>
+
+<h3 id="concat"><a href="#concat" class="headerlink" title="concat"></a>concat</h3><p>将 <code>&lt;expression&gt;</code> 所有可能赋值的值连接到聚合变量。该<code>&lt;expression&gt;</code> 类型必须为 string 。如果没有满⾜公式的聚合变量的可能赋值，则 concat 默认为空字符串。</p>
+<p>下⾯的聚合返回字符串 “3210” </p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">concat(<span class="hljs-type">int</span> i | i = [<span class="hljs-number">0</span> .. <span class="hljs-number">3</span>] | i.toString() <span class="hljs-keyword">order</span> <span class="hljs-keyword">by</span> i <span class="hljs-keyword">desc</span>)<br></code></pre></td></tr></table></figure>
+
+<p><code>concat</code> 聚集体还可以采取的第⼆表达，从⽤逗号的第⼀个分离。将第⼆个表达式作为分隔符插⼊每个串联值之间。</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs lisp">concat(<span class="hljs-name">int</span> i | i = [0 .. 3] | i.toString(), <span class="hljs-string">&quot;|&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>聚合返回 “0|1|2|3” </p>
+<h3 id="rank"><a href="#rank" class="headerlink" title="rank"></a>rank</h3><p>对<code>&lt;expression&gt;</code>排序。<code>&lt;expression&gt;</code>必须为数字类型或类型 string 。聚合返回在rank表达式指定的位置中排名的值。您必须在关键字后⾯的⽅括号中包括该等级表达式 rank 。</p>
+<p>以下聚合返回在所有可能值中排名第四的值</p>
+<figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs coq">rank[<span class="hljs-number">4</span>](int i | <span class="hljs-type">i</span> = [<span class="hljs-number">5</span> .. <span class="hljs-number">15</span>] | <span class="hljs-type">i</span><br></code></pre></td></tr></table></figure>
+
+<p>请注意，排名索引从开始 1 ，因此不 rank<a href="...">0</a> 返回任何结果。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p><code>strictconcat</code> ， <code>strictcount</code> 和 <code>strictsum</code> ：这些聚集的⼯作⼀样 <code>concat</code> ， <code>count</code> 和<code>sum</code> 分别，除了他们是<strong>严格的</strong>。也就是说，如果没有满⾜公式的聚合变量的可能赋值，则整个聚合将失败并计算为空集（⽽不是默认为 0 或空字符串）。如果您只对聚合主体不重要的结果感兴趣，这将很有⽤。</p>
+<p><code>unique</code> ：此聚合取决于 <code>&lt;expression&gt;</code> 聚合变量的所有可能分配的值。如果 <code>&lt;expression&gt;</code> 在聚合变量中有⼀个唯⼀的值，则聚合将求值到该值。否则，合计没有价值。</p>
+<h2 id="如何检查评估聚合（Evaluation-of-aggregates）"><a href="#如何检查评估聚合（Evaluation-of-aggregates）" class="headerlink" title="如何检查评估聚合（Evaluation of aggregates）"></a>如何检查评估聚合（Evaluation of aggregates）</h2><p>总的来说，综合评估涉及以下步骤：</p>
+<ol>
+<li>确定输⼊变量：这些是在聚合中声明的聚合变量，以及在聚合的某些组件中使⽤的在聚合外部声明的变量。 <code>&lt;variable declarations&gt;</code></li>
+<li>⽣成输⼊变量的值的所有可能的不同元组（组合），使 <code>&lt;formula&gt;</code> 成⽴。请注意，聚合变量的相同值可能会出现在多个不同的元组中。处理元组时，具有相同值的所有此类出现均被视为不同的出现。</li>
+<li><code>&lt;expression&gt;</code> 在每个元组上应⽤并收集⽣成的（不同的）值。 <expression> 在元组上应⽤可能会导致⽣成多个值。</li>
+<li>将聚合函数应⽤于步骤3中⽣成的值以计算最终结果。</li>
+</ol>
+<p>将这些步骤应⽤于 <code>sum</code> 以下查询中的汇总：</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">select sum(<span class="hljs-built_in">int</span> i, <span class="hljs-built_in">int</span> j <span class="hljs-pattern-match">| exists(<span class="hljs-built_in">string</span> s | s = &quot;hello&quot;.<span class="hljs-built_in">char</span><span class="hljs-constructor">At(<span class="hljs-params">i</span>)</span>) <span class="hljs-keyword">and</span> exists(<span class="hljs-built_in">string</span> s | s = &quot;world!&quot;.<span class="hljs-built_in">char</span><span class="hljs-constructor">At(<span class="hljs-params">j</span>)</span>) | i)</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>输⼊变量i.j</li>
+<li>满⾜给定条件的所有可能元组：（<code>&lt;value of i&gt;&lt;value of j&gt;</code>) (0, 0), (0, 1), (0, 2), (0,3), (0, 4), (0, 5), (1, 0), (1, 1), …, (4, 5) .在此步骤中将⽣成30个元组</li>
+<li>将<code>&lt;expression&gt;</code>应⽤在所有元组的值中，这意味着筛选出所有符合条件i和j的值0, 0, 0, 0, 0, 0, 1, 1,1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4,4, 4</li>
+<li>将使⽤sum公式聚合搜索出来的值，总额为60</li>
+</ul>
+<p>如果我们改变表达式为<code>i+j</code>，这个查询的结果将是135，<code>i+j</code> 在所有的元组内的值是：0, 1, 2, 3, 4, 5, 1, 2,<br>3, 4, 5, 6, 2, 3, 4, 5, 6, 7, 3, 4, 5, 6, 7, 8, 4, 5, 6, 7, 8, 9</p>
+<h2 id="省略聚合的⼀部分（Omitting-parts-of-an-aggregation）"><a href="#省略聚合的⼀部分（Omitting-parts-of-an-aggregation）" class="headerlink" title="省略聚合的⼀部分（Omitting parts of an aggregation）"></a>省略聚合的⼀部分（Omitting parts of an aggregation）</h2><p>聚合的三个部分并不总是必需的，因此您通常可以以更简单的形式编写聚合。</p>
+<p>如果要编写形式的集合，则可以省略和部分，并按如下⽅式编写：<code>&lt;aggregate&gt;(&lt;type&gt; v |&lt;expression&gt; = v | v)&lt;variable declarations&gt;&lt;formula&gt;</code></p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs arcade"><span class="hljs-built_in">count</span>(int i | i = <span class="hljs-string">&quot;hello&quot;</span>.<span class="hljs-built_in">indexOf</span>(<span class="hljs-string">&quot;l&quot;</span>) | i)<br>ount(<span class="hljs-string">&quot;hello&quot;</span>.<span class="hljs-built_in">indexOf</span>(<span class="hljs-string">&quot;l&quot;</span>))<br></code></pre></td></tr></table></figure>
+
+<p>如果只有⼀个聚合变量，则可以省略该 <code>&lt;expression&gt;</code> 部分。在这种情况下，表达式被视为聚合变量本身。例如，以下聚合是等效的：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">avg</span><span class="hljs-params">(int i | i = [<span class="hljs-number">0</span> .. <span class="hljs-number">3</span>] | i)</span></span><br><span class="hljs-function"><span class="hljs-title">avg</span><span class="hljs-params">(int i | i = [<span class="hljs-number">0</span> .. <span class="hljs-number">3</span>])</span></span><br></code></pre></td></tr></table></figure>
+
+<p>作为⼀种特殊情况，即使存在多个聚集变量，也可以省略count的 <code>&lt;expression&gt;</code> 部分。</p>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs axapta"><span class="hljs-keyword">count</span>(<span class="hljs-built_in">int</span> i, <span class="hljs-built_in">int</span> j | i <span class="hljs-keyword">in</span> [<span class="hljs-number">1</span> .. <span class="hljs-number">3</span>] and j <span class="hljs-keyword">in</span> [<span class="hljs-number">1</span> .. <span class="hljs-number">3</span>] | <span class="hljs-number">1</span>)<br><span class="hljs-keyword">count</span>(<span class="hljs-built_in">int</span> i, <span class="hljs-built_in">int</span> j | i <span class="hljs-keyword">in</span> [<span class="hljs-number">1</span> .. <span class="hljs-number">3</span>] and j <span class="hljs-keyword">in</span> [<span class="hljs-number">1</span> .. <span class="hljs-number">3</span>])<br></code></pre></td></tr></table></figure>
+
+<p>可以省略 <code>&lt;formula&gt;</code> 部分。</p>
+<p>也可以同时省略 <code>&lt;formula&gt;</code> 和 <code>&lt;expression&gt;</code> 部分。</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs fortran"><span class="hljs-built_in">count</span>(<span class="hljs-keyword">File</span> f | <span class="hljs-built_in">any</span>() | <span class="hljs-number">1</span>)<br><span class="hljs-built_in">count</span>(<span class="hljs-keyword">File</span> f | | <span class="hljs-number">1</span>)<br><span class="hljs-built_in">count</span>(<span class="hljs-keyword">File</span> f)<br></code></pre></td></tr></table></figure>
+
+<h2 id="递归单调聚合（Recursive-monotonic-aggregates）"><a href="#递归单调聚合（Recursive-monotonic-aggregates）" class="headerlink" title="递归单调聚合（Recursive monotonic aggregates）"></a>递归单调聚合（Recursive monotonic aggregates）</h2><p>可以递归使⽤单调聚合，但是递归调⽤只能出现在表达式中，⽽不能出现在范围内。聚合的递归语义与其余QL的递归语义相同。例如，我们可以定义⼀个谓词来计算图中⼀个节点到叶⼦的距离，如下所示：</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">int depth(<span class="hljs-keyword">Node</span> <span class="hljs-title">n</span>) &#123;<br>    if not exists(n.getAChild())<br>    then result = <span class="hljs-number">0</span><br>    else result = <span class="hljs-number">1</span> + max(<span class="hljs-keyword">Node</span> <span class="hljs-title">child</span> | child = n.getAChild() | depth(child))<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="Any表达式（Any）"><a href="#Any表达式（Any）" class="headerlink" title="Any表达式（Any）"></a>Any表达式（Any）</h2><p><code>any</code> 表达式的⼀般语法类似于聚合的语法 ，即：</p>
+<figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pf"><span class="hljs-literal">any</span>(<span class="hljs-variable">&lt;variable declarations&gt;</span> | <span class="hljs-variable">&lt;formula&gt;</span> | <span class="hljs-variable">&lt;expression&gt;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>该 any 表达式表示具有特定形式并满⾜特定条件的任何值。更准确地说， <code>any</code> 表达式是：</p>
+<ol>
+<li>介绍临时变量。</li>
+<li>将其值限制为满⾜该 <code>&lt;formula&gt;</code> 部分的值（如果存在）。</li>
+<li><code>&lt;expression&gt;</code> 为每个变量返回。如果没有任何 <code>&lt;expression&gt;</code> 部分，那么它将返回变量本身。</li>
+</ol>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221127200937406.png" srcset="/img/loading.gif" lazyload alt="image-20221127200937406"></p>
+<h2 id="⼀元运算（Unary-operations）"><a href="#⼀元运算（Unary-operations）" class="headerlink" title="⼀元运算（Unary operations）"></a>⼀元运算（Unary operations）</h2><p>⼀元运算是减号（ - ）或加号（ + ），后跟类型 int 或的表达式 float 。例如：</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs scss">-<span class="hljs-number">6.28</span><br>+(<span class="hljs-number">10</span> - <span class="hljs-number">4</span>)<br>+<span class="hljs-built_in">avg</span>(float f | f = <span class="hljs-number">3.4</span> or f = -<span class="hljs-number">9.8</span>)<br><span class="hljs-built_in">-sum</span>(int i | i in [<span class="hljs-number">0</span> .. <span class="hljs-number">9</span>] | i * i)<br></code></pre></td></tr></table></figure>
+
+<p>加号使表达式的值保持不变，⽽减号使值的算术求反。</p>
+<h2 id="⼆元运算（Binary-operations）"><a href="#⼆元运算（Binary-operations）" class="headerlink" title="⼆元运算（Binary operations）"></a>⼆元运算（Binary operations）</h2><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs matlab"><span class="hljs-number">5</span> <span class="hljs-comment">% 2</span><br>(<span class="hljs-number">9</span> + <span class="hljs-number">1</span>) / (<span class="hljs-number">-2</span>)<br><span class="hljs-string">&quot;Q&quot;</span> + <span class="hljs-string">&quot;L&quot;</span><br><span class="hljs-number">2</span> * <span class="hljs-built_in">min</span>(float f | f in [<span class="hljs-number">-3</span> .. <span class="hljs-number">3</span>]) <br></code></pre></td></tr></table></figure>
+
+<p>如果两个表达式都是数字，则这些运算符将充当标准算术运算符。例如:10.6 - 3.2 结果值为7.4，123.456 * 0 值为0，9%4 值为1（取余数）。如果两个操作数均为整数，则结果为整数。否则，结果为浮点数。</p>
+<p>还可以将其 + ⽤作字符串连接运算符。在这种情况下，⾄少⼀个表达式必须是字符串，⽽另⼀个表达式将使⽤ toString() 谓词隐式转换为字符串 。这两个表达式是连接在⼀起的，结果是⼀个字符串。例如，表达式具有value 。 221 + “B” 的结果为 “221B”</p>
+<h2 id="强制转换（Casts）"><a href="#强制转换（Casts）" class="headerlink" title="强制转换（Casts）"></a>强制转换（Casts）</h2><p>强制转换可让您限制表达式的类型。这类似于使⽤其他语⾔（例如Java）进⾏转换。</p>
+<p>两种方式：</p>
+<ul>
+<li>作为“后缀”强制转换：在圆括号后加点号和类型名称。例如， <code>x.(Foo)</code> 将类型限制 x 为 Foo 。</li>
+<li>作为“前缀”强制转换：括号中的类型，后跟另⼀个表达式。例如， <code>(Foo)x</code> 还将的类型限制 x 为Foo 。</li>
+</ul>
+<p>请注意，后缀强制转换等同于⽤括号括起来的前缀强制转换- <code>x.(Foo)</code> 完全等同于 <code>((Foo)x)</code> 。</p>
+<h2 id="“不在乎”表达式-Don’t-care-expressions"><a href="#“不在乎”表达式-Don’t-care-expressions" class="headerlink" title="“不在乎”表达式(Don’t-care expressions)"></a>“不在乎”表达式(Don’t-care expressions)</h2><p>这是写为单个下划线的表达式 <code>_</code> 。它代表任何值。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" class="category-chain-item">代码审计</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">#代码审计</a>
+      
+        <a href="/tags/codeql/">#codeql</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>[代码审计] codeql语法-04-表达式</div>
+      <div>https://s1n9l3.github.io/2022/11/27/[代码审计] codeql语法-04-表达式/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>YY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年11月27日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/11/27/%5B%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%5D%20codeql%E8%AF%AD%E6%B3%95-03-%E5%8F%98%E9%87%8F/" title="[代码审计] codeql语法-03-变量">
+                        <span class="hidden-mobile">[代码审计] codeql语法-03-变量</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

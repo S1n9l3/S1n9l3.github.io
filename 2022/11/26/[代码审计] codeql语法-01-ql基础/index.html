@@ -16,26 +16,23 @@
   <meta name="author" content="YY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="[RoarCTF 2019]Easy Calc进入后是一个计算机，  查看源码发现文件calc.php， 123456789101112131415&lt;?phperror_reporting(0);if(!isset($_GET[&amp;#x27;num&amp;#x27;]))&amp;#123;    show_source(__FILE__);&amp;#125;else&amp;#123;        $str &#x3D; $_">
+    <meta name="description" content="codeql语法-ql基础QL是⼀种声明性的，⾯向对象的查询语⾔，经过优化可实现对分层数据结构（尤其是表示软件⼯件的数据库）的⾼效分析。 数据库是有组织的数据集合。最常⽤的数据库模型是将数据存储在表中的关系模型，⽽SQL（结构化查询语⾔）是关系数据库最常⽤的查询语⾔。 查询语⾔的⽬的是提供⼀个编程平台，您可以在其中询问有关存储在数据库中的信息的问题。数据库管理系统管理数据的存储和管理并提供查询机制">
 <meta property="og:type" content="article">
-<meta property="og:title" content="[ctf-web] RoarCTF2019-EasyCalc">
-<meta property="og:url" content="https://s1n9l3.github.io/2022/11/24/[ctf-web]%20RoarCTF2019-EasyCalc/index.html">
+<meta property="og:title" content="[代码审计] codeql语法-01-ql基础">
+<meta property="og:url" content="https://s1n9l3.github.io/2022/11/26/[%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1]%20codeql%E8%AF%AD%E6%B3%95-01-ql%E5%9F%BA%E7%A1%80/index.html">
 <meta property="og:site_name" content="S1n9l3">
-<meta property="og:description" content="[RoarCTF 2019]Easy Calc进入后是一个计算机，  查看源码发现文件calc.php， 123456789101112131415&lt;?phperror_reporting(0);if(!isset($_GET[&amp;#x27;num&amp;#x27;]))&amp;#123;    show_source(__FILE__);&amp;#125;else&amp;#123;        $str &#x3D; $_">
+<meta property="og:description" content="codeql语法-ql基础QL是⼀种声明性的，⾯向对象的查询语⾔，经过优化可实现对分层数据结构（尤其是表示软件⼯件的数据库）的⾼效分析。 数据库是有组织的数据集合。最常⽤的数据库模型是将数据存储在表中的关系模型，⽽SQL（结构化查询语⾔）是关系数据库最常⽤的查询语⾔。 查询语⾔的⽬的是提供⼀个编程平台，您可以在其中询问有关存储在数据库中的信息的问题。数据库管理系统管理数据的存储和管理并提供查询机制">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221124192733066.png">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221124194044373.png">
-<meta property="article:published_time" content="2022-11-24T11:25:14.212Z">
-<meta property="article:modified_time" content="2022-11-24T11:42:44.613Z">
+<meta property="article:published_time" content="2022-11-26T12:05:00.477Z">
+<meta property="article:modified_time" content="2022-11-27T08:38:20.949Z">
 <meta property="article:author" content="YY">
-<meta property="article:tag" content="ctf">
-<meta property="article:tag" content="ctf-web">
+<meta property="article:tag" content="代码审计">
+<meta property="article:tag" content="codeql">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221124192733066.png">
   
   
   
-  <title>[ctf-web] RoarCTF2019-EasyCalc - S1n9l3</title>
+  <title>[代码审计] codeql语法-01-ql基础 - S1n9l3</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -200,7 +197,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="[ctf-web] RoarCTF2019-EasyCalc"></span>
+            <span id="subtitle" data-typed-text="[代码审计] codeql语法-01-ql基础"></span>
           
         </div>
 
@@ -211,8 +208,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-11-24 19:25" pubdate>
-          2022年11月24日 晚上
+        <time datetime="2022-11-26 20:05" pubdate>
+          2022年11月26日 晚上
         </time>
       </span>
     
@@ -223,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.1k 字
+          1.3k 字
         
       </span>
     
@@ -234,7 +231,7 @@
         
         
         
-          10 分钟
+          12 分钟
         
       </span>
     
@@ -272,23 +269,35 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">[ctf-web] RoarCTF2019-EasyCalc</h1>
+            <h1 style="display: none">[代码审计] codeql语法-01-ql基础</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="RoarCTF-2019-Easy-Calc"><a href="#RoarCTF-2019-Easy-Calc" class="headerlink" title="[RoarCTF 2019]Easy Calc"></a>[RoarCTF 2019]Easy Calc</h1><p>进入后是一个计算机，</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221124192733066.png" srcset="/img/loading.gif" lazyload alt="image-20221124192733066"></p>
-<p>查看源码发现文件<code>calc.php</code>，</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-title function_ invoke__">error_reporting</span>(<span class="hljs-number">0</span>);<br><span class="hljs-keyword">if</span>(!<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;num&#x27;</span>]))&#123;<br>    <span class="hljs-title function_ invoke__">show_source</span>(<span class="hljs-keyword">__FILE__</span>);<br>&#125;<span class="hljs-keyword">else</span>&#123;<br>        <span class="hljs-variable">$str</span> = <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;num&#x27;</span>];<br>        <span class="hljs-variable">$blacklist</span> = [<span class="hljs-string">&#x27; &#x27;</span>, <span class="hljs-string">&#x27;\t&#x27;</span>, <span class="hljs-string">&#x27;\r&#x27;</span>, <span class="hljs-string">&#x27;\n&#x27;</span>,<span class="hljs-string">&#x27;\&#x27;&#x27;</span>, <span class="hljs-string">&#x27;&quot;&#x27;</span>, <span class="hljs-string">&#x27;`&#x27;</span>, <span class="hljs-string">&#x27;\[&#x27;</span>, <span class="hljs-string">&#x27;\]&#x27;</span>,<span class="hljs-string">&#x27;\$&#x27;</span>,<span class="hljs-string">&#x27;\\&#x27;</span>,<span class="hljs-string">&#x27;\^&#x27;</span>];<br>        <span class="hljs-keyword">foreach</span> (<span class="hljs-variable">$blacklist</span> <span class="hljs-keyword">as</span> <span class="hljs-variable">$blackitem</span>) &#123;<br>                <span class="hljs-keyword">if</span> (<span class="hljs-title function_ invoke__">preg_match</span>(<span class="hljs-string">&#x27;/&#x27;</span> . <span class="hljs-variable">$blackitem</span> . <span class="hljs-string">&#x27;/m&#x27;</span>, <span class="hljs-variable">$str</span>)) &#123;<br>                        <span class="hljs-keyword">die</span>(<span class="hljs-string">&quot;what are you want to do?&quot;</span>);<br>                &#125;<br>        &#125;<br>        <span class="hljs-keyword">eval</span>(<span class="hljs-string">&#x27;echo &#x27;</span>.<span class="hljs-variable">$str</span>.<span class="hljs-string">&#x27;;&#x27;</span>);<br>&#125;<br><span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
+                <h1 id="codeql语法-ql基础"><a href="#codeql语法-ql基础" class="headerlink" title="codeql语法-ql基础"></a>codeql语法-ql基础</h1><p>QL是⼀种声明性的，⾯向对象的查询语⾔，经过优化可实现对分层数据结构（尤其是表示软件⼯件的数据库）的⾼效分析。</p>
+<p>数据库是有组织的数据集合。最常⽤的数据库模型是将数据存储在表中的关系模型，⽽SQL（结构化查询语⾔）是关系数据库最常⽤的查询语⾔。</p>
+<p>查询语⾔的⽬的是提供⼀个编程平台，您可以在其中询问有关存储在数据库中的信息的问题。数据库管理系统管理数据的存储和管理并提供查询机制。查询通常引⽤相关的数据库实体，并指定结果必须满⾜的各种条件（称为谓词）。查询评估涉及检查这些谓词并⽣成结果。好的查询语⾔及其实现的⼀些理想属性包括：</p>
+<ul>
+<li>声明性规范-声明性规范描述了结果必须满⾜的属性，⽽不是提供计算结果的过程。在数据库查询语⾔的上下⽂中，声明性规范抽象了基础数据库管理系统和查询处理技术的详细信息。这⼤⼤简化了查询编写。</li>
+<li>富有表现力-强大的查询语⾔可让您编写复杂的查询。这使得该语⾔⼴泛适⽤。</li>
+<li>⾼效的执⾏-查询可能很复杂，数据库可能⾮常庞⼤，因此对于查询语⾔实现⽽⾔，有效地处理和执⾏查询⾄关重要。</li>
+</ul>
+<h2 id="QL属性"><a href="#QL属性" class="headerlink" title="QL属性"></a>QL属性</h2><p>QL的语法类似于SQL，但是QL的语义基于Datalog，Datalog是⼀种声明性逻辑编程语⾔，通常⽤作查询语⾔。这使得QL主要是⼀种逻辑语⾔，并且QL中的所有操作都是逻辑操作。此外，QL从Datalog继承递归谓词，并增加了对聚合的⽀持，从⽽使复杂的查询也变得简洁明了。例如，考虑⼀个包含⼈与⽗⺟的亲⼦关系的数据库。如果我们想找到⼀个⼈的后代数量，通常我们将：</p>
+<ul>
+<li>查找给定⼈的后代，即⼀个孩⼦或⼀个孩⼦的后代。</li>
+<li>计算使⽤上⼀步找到的后代的数量。</li>
+</ul>
+<p>当您在QL中编写此过程时，它与上述结构⾮常相似。请注意，我们使⽤递归来查找给定⼈员的所有后代，并使⽤总计来计算后代的数量。由于语⾔具有声明性，因此可以将这些步骤转换为最终查询⽽⽆需添加任何过程详细信息。QL代码如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs codeql">Person getADescendant(Person p) &#123;<br>result = p.getAChild() or<br>result = getADescendant(p.getAChild())<br>&#125;<br><br>int getNumberOfDescendants(Person p) &#123;<br>result = count(getADescendant(p))<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p>这里需要出入参数<code>num</code>，尝试后发现只能传入数字，看来是被WAF过滤了。</p>
-<p>知识点来了。</p>
-<p>在PHP中，<code>$_GET</code>或<code>$_POST</code>的参数会保存到数组中，比如<code>/?foo=bar</code>，保存为<code>Array([foo]=&gt;&#39;bar&#39;)</code>，但是在解析过程中，会将某些字符删除或用下划线代替，比如<code>/?%20news[id%00=42</code>会转换为<code>Array([news_id] =&gt; 42</code>，所以如果WAF中的某条规则是不允许输入参数<code>news_id</code>时，可以使用上面的语句绕过。</p>
-<p>在这道题中，对参数<code>num</code>进行了各种检查，但如果传入的参数是<code> num</code>，注意前面有个空格，在传入参数是就是一个新的变量<code> num</code>（前面有空格），而不是<code>num</code>了（没有空格）；但在PHP解析时，会先把空格去掉，这样就绕过了WAF。</p>
-<p>这样就可以继续了，由于过滤了一些符号，所以使用<code>chr()</code>绕过，使用<code>calc.php? num=print_r(scandir(chr(47)))</code>，就是查看<code>/</code>下的文件，</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221124194044373.png" srcset="/img/loading.gif" lazyload alt="image-20221124194044373"></p>
-<p>发现了<code>f1agg</code>，然后使用<code>calc.php? num=print_r(file_get_contents(chr(47).chr(102).chr(49).chr(97).chr(103).chr(103)));</code>，得到flag。</p>
+<h2 id="QL和面向对象"><a href="#QL和面向对象" class="headerlink" title="QL和面向对象"></a>QL和面向对象</h2><p>⾯向对象是QL的重要特征。⾯向对象的好处是众所周知的–它提⾼了模块性，实现了信息隐藏，并允许代码重⽤。QL在不损害其逻辑基础的情况下提供了所有这些好处。这是通过定义⼀个简单的对象模型实现的，其中将类建模为谓词，将继承建模为隐含。可⽤于所有受⽀持语⾔的库⼴泛使⽤了类和继承。</p>
+<h2 id="QL和通用编程语言"><a href="#QL和通用编程语言" class="headerlink" title="QL和通用编程语言"></a>QL和通用编程语言</h2><p>这是通⽤编程语⾔和QL之间的⼀些突出的概念和功能差异： </p>
+<ul>
+<li>QL没有任何命令性功能，例如分配变量或⽂件系统操作。</li>
+<li>QL对元组集合进⾏操作，并且查询可以视为定义查询结果的⼀组复杂的集合操作序列。 </li>
+<li>QL基于集合的语义使处理值的集合变得很⾃然，⽽不必担⼼有效地存储，索引和遍历它们。 </li>
+<li>在⾯向对象的编程语⾔中，实例化⼀个类涉及通过分配物理内存来保存该类实例状态的对象来创建对 象。在QL中，类只是描述已经存在的值的集合的逻辑属性。</li>
+</ul>
 
                 
               </div>
@@ -307,7 +316,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/ctf/" class="category-chain-item">ctf</a>
+  <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" class="category-chain-item">代码审计</a>
   
   
 
@@ -322,9 +331,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/ctf/">#ctf</a>
+        <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">#代码审计</a>
       
-        <a href="/tags/ctf-web/">#ctf-web</a>
+        <a href="/tags/codeql/">#codeql</a>
       
     </div>
   
@@ -336,8 +345,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>[ctf-web] RoarCTF2019-EasyCalc</div>
-      <div>https://s1n9l3.github.io/2022/11/24/[ctf-web] RoarCTF2019-EasyCalc/</div>
+      <div>[代码审计] codeql语法-01-ql基础</div>
+      <div>https://s1n9l3.github.io/2022/11/26/[代码审计] codeql语法-01-ql基础/</div>
     </div>
     <div class="license-meta">
       
@@ -349,7 +358,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年11月24日</div>
+          <div>2022年11月26日</div>
         </div>
       
       
@@ -381,9 +390,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/11/25/%5B%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%5D%20%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" title="[渗透测试] 文件上传">
+                      <a href="/2022/11/27/%5B%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%5D%20codeql%E8%AF%AD%E6%B3%95-02-ql%E8%AF%AD%E8%A8%80%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" title="[代码审计] codeql语法-02-ql语言基本数据类型">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">[渗透测试] 文件上传</span>
+                        <span class="hidden-mobile">[代码审计] codeql语法-02-ql语言基本数据类型</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -391,8 +400,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/11/23/%5B%E5%B7%A5%E5%85%B7%5D%20%E7%9B%AE%E5%BD%95%E7%88%86%E7%A0%B4-dirb/" title="[工具] 目录爆破-dirb">
-                        <span class="hidden-mobile">[工具] 目录爆破-dirb</span>
+                      <a href="/2022/11/25/%5B%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%5D%20%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" title="[渗透测试] 文件上传">
+                        <span class="hidden-mobile">[渗透测试] 文件上传</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

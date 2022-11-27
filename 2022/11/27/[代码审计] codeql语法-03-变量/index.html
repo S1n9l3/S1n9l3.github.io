@@ -16,26 +16,23 @@
   <meta name="author" content="YY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="[RoarCTF 2019]Easy Calc进入后是一个计算机，  查看源码发现文件calc.php， 123456789101112131415&lt;?phperror_reporting(0);if(!isset($_GET[&amp;#x27;num&amp;#x27;]))&amp;#123;    show_source(__FILE__);&amp;#125;else&amp;#123;        $str &#x3D; $_">
+    <meta name="description" content="codeql语法-变量QL中的变量与代数或逻辑中的变量的使⽤⽅式相似。它们表示⼀组值，这些值通常受公式限制。这与某些其他编程语⾔中的变量不同，在其他编程语⾔中，变量表示可能包含数据的内存位置。该数据还可以随着时间变化。例如，在QL中， n &#x3D; n + 1 是⼀个等式公式，仅当 n 等于 n + 1 时才成⽴（因此，实际上它不适⽤于任何数值）。在Java中， n &#x3D; n + 1 不是等式，⽽是通过添">
 <meta property="og:type" content="article">
-<meta property="og:title" content="[ctf-web] RoarCTF2019-EasyCalc">
-<meta property="og:url" content="https://s1n9l3.github.io/2022/11/24/[ctf-web]%20RoarCTF2019-EasyCalc/index.html">
+<meta property="og:title" content="[代码审计] codeql语法-03-变量">
+<meta property="og:url" content="https://s1n9l3.github.io/2022/11/27/[%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1]%20codeql%E8%AF%AD%E6%B3%95-03-%E5%8F%98%E9%87%8F/index.html">
 <meta property="og:site_name" content="S1n9l3">
-<meta property="og:description" content="[RoarCTF 2019]Easy Calc进入后是一个计算机，  查看源码发现文件calc.php， 123456789101112131415&lt;?phperror_reporting(0);if(!isset($_GET[&amp;#x27;num&amp;#x27;]))&amp;#123;    show_source(__FILE__);&amp;#125;else&amp;#123;        $str &#x3D; $_">
+<meta property="og:description" content="codeql语法-变量QL中的变量与代数或逻辑中的变量的使⽤⽅式相似。它们表示⼀组值，这些值通常受公式限制。这与某些其他编程语⾔中的变量不同，在其他编程语⾔中，变量表示可能包含数据的内存位置。该数据还可以随着时间变化。例如，在QL中， n &#x3D; n + 1 是⼀个等式公式，仅当 n 等于 n + 1 时才成⽴（因此，实际上它不适⽤于任何数值）。在Java中， n &#x3D; n + 1 不是等式，⽽是通过添">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221124192733066.png">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221124194044373.png">
-<meta property="article:published_time" content="2022-11-24T11:25:14.212Z">
-<meta property="article:modified_time" content="2022-11-24T11:42:44.613Z">
+<meta property="article:published_time" content="2022-11-27T09:01:53.647Z">
+<meta property="article:modified_time" content="2022-11-27T09:12:16.911Z">
 <meta property="article:author" content="YY">
-<meta property="article:tag" content="ctf">
-<meta property="article:tag" content="ctf-web">
+<meta property="article:tag" content="代码审计">
+<meta property="article:tag" content="codeql">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221124192733066.png">
   
   
   
-  <title>[ctf-web] RoarCTF2019-EasyCalc - S1n9l3</title>
+  <title>[代码审计] codeql语法-03-变量 - S1n9l3</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -200,7 +197,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="[ctf-web] RoarCTF2019-EasyCalc"></span>
+            <span id="subtitle" data-typed-text="[代码审计] codeql语法-03-变量"></span>
           
         </div>
 
@@ -211,8 +208,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-11-24 19:25" pubdate>
-          2022年11月24日 晚上
+        <time datetime="2022-11-27 17:01" pubdate>
+          2022年11月27日 下午
         </time>
       </span>
     
@@ -272,23 +269,26 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">[ctf-web] RoarCTF2019-EasyCalc</h1>
+            <h1 style="display: none">[代码审计] codeql语法-03-变量</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="RoarCTF-2019-Easy-Calc"><a href="#RoarCTF-2019-Easy-Calc" class="headerlink" title="[RoarCTF 2019]Easy Calc"></a>[RoarCTF 2019]Easy Calc</h1><p>进入后是一个计算机，</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221124192733066.png" srcset="/img/loading.gif" lazyload alt="image-20221124192733066"></p>
-<p>查看源码发现文件<code>calc.php</code>，</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-title function_ invoke__">error_reporting</span>(<span class="hljs-number">0</span>);<br><span class="hljs-keyword">if</span>(!<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;num&#x27;</span>]))&#123;<br>    <span class="hljs-title function_ invoke__">show_source</span>(<span class="hljs-keyword">__FILE__</span>);<br>&#125;<span class="hljs-keyword">else</span>&#123;<br>        <span class="hljs-variable">$str</span> = <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;num&#x27;</span>];<br>        <span class="hljs-variable">$blacklist</span> = [<span class="hljs-string">&#x27; &#x27;</span>, <span class="hljs-string">&#x27;\t&#x27;</span>, <span class="hljs-string">&#x27;\r&#x27;</span>, <span class="hljs-string">&#x27;\n&#x27;</span>,<span class="hljs-string">&#x27;\&#x27;&#x27;</span>, <span class="hljs-string">&#x27;&quot;&#x27;</span>, <span class="hljs-string">&#x27;`&#x27;</span>, <span class="hljs-string">&#x27;\[&#x27;</span>, <span class="hljs-string">&#x27;\]&#x27;</span>,<span class="hljs-string">&#x27;\$&#x27;</span>,<span class="hljs-string">&#x27;\\&#x27;</span>,<span class="hljs-string">&#x27;\^&#x27;</span>];<br>        <span class="hljs-keyword">foreach</span> (<span class="hljs-variable">$blacklist</span> <span class="hljs-keyword">as</span> <span class="hljs-variable">$blackitem</span>) &#123;<br>                <span class="hljs-keyword">if</span> (<span class="hljs-title function_ invoke__">preg_match</span>(<span class="hljs-string">&#x27;/&#x27;</span> . <span class="hljs-variable">$blackitem</span> . <span class="hljs-string">&#x27;/m&#x27;</span>, <span class="hljs-variable">$str</span>)) &#123;<br>                        <span class="hljs-keyword">die</span>(<span class="hljs-string">&quot;what are you want to do?&quot;</span>);<br>                &#125;<br>        &#125;<br>        <span class="hljs-keyword">eval</span>(<span class="hljs-string">&#x27;echo &#x27;</span>.<span class="hljs-variable">$str</span>.<span class="hljs-string">&#x27;;&#x27;</span>);<br>&#125;<br><span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
+                <h1 id="codeql语法-变量"><a href="#codeql语法-变量" class="headerlink" title="codeql语法-变量"></a>codeql语法-变量</h1><p>QL中的变量与代数或逻辑中的变量的使⽤⽅式相似。它们表示⼀组值，这些值通常受公式限制。<br>这与某些其他编程语⾔中的变量不同，在其他编程语⾔中，变量表示可能包含数据的内存位置。该数据还可以随着时间变化。例如，在QL中， <code>n = n + 1</code> 是⼀个等式公式，仅当 <code>n</code> 等于 <code>n + 1</code> 时才成⽴（因此，实际上它不适⽤于任何数值）。在Java中， <code>n = n + 1</code> 不是等式，⽽是通过添加 1 到当前的值 <code>n</code> ，并进⾏新的赋值来改变 <code>n</code> 代表的值。</p>
+<p>所有变量声明均由变量的类型和名称组成。名称可以是任何 以⼤写或⼩写字⺟开头的标识符。例如，<code>int i</code>、 <code>SsaDefinitionNode node</code> 和 <code>LocalScopeVariable lsv</code> 声明变量 <code>i</code>、 <code>node</code> 和<code>lsv</code>，它们的类型分别为 <code>int</code>、 <code>SsaDefinitionNode</code>和 <code>LocalScopeVariable</code> 。变量声明出现在不同的上下⽂中，例如在select⼦句，量化公式内，作为谓词的参数等。从概念上讲，您可以将变量视为保留其类型允许的所有值，但要受到其他约束。例如，考虑以下select⼦句：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">from</span> <span class="hljs-type">int</span> i<br><span class="hljs-keyword">where</span> i <span class="hljs-keyword">in</span> [<span class="hljs-number">0</span> .. <span class="hljs-number">9</span>]<br><span class="hljs-keyword">select</span> i<br></code></pre></td></tr></table></figure>
 
-<p>这里需要出入参数<code>num</code>，尝试后发现只能传入数字，看来是被WAF过滤了。</p>
-<p>知识点来了。</p>
-<p>在PHP中，<code>$_GET</code>或<code>$_POST</code>的参数会保存到数组中，比如<code>/?foo=bar</code>，保存为<code>Array([foo]=&gt;&#39;bar&#39;)</code>，但是在解析过程中，会将某些字符删除或用下划线代替，比如<code>/?%20news[id%00=42</code>会转换为<code>Array([news_id] =&gt; 42</code>，所以如果WAF中的某条规则是不允许输入参数<code>news_id</code>时，可以使用上面的语句绕过。</p>
-<p>在这道题中，对参数<code>num</code>进行了各种检查，但如果传入的参数是<code> num</code>，注意前面有个空格，在传入参数是就是一个新的变量<code> num</code>（前面有空格），而不是<code>num</code>了（没有空格）；但在PHP解析时，会先把空格去掉，这样就绕过了WAF。</p>
-<p>这样就可以继续了，由于过滤了一些符号，所以使用<code>chr()</code>绕过，使用<code>calc.php? num=print_r(scandir(chr(47)))</code>，就是查看<code>/</code>下的文件，</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221124194044373.png" srcset="/img/loading.gif" lazyload alt="image-20221124194044373"></p>
-<p>发现了<code>f1agg</code>，然后使用<code>calc.php? num=print_r(file_get_contents(chr(47).chr(102).chr(49).chr(97).chr(103).chr(103)));</code>，得到flag。</p>
+<p>仅根据其类型，变量 <code>i</code> 可以包含所有整数。但是，它受公式 <code>i in [0 .. 9]</code> 约束。因此，select⼦句的结果是介于 0 到 9 之间的数字。</p>
+<p>顺便说⼀句，请注意以下查询会导致编译时错误：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">from</span> <span class="hljs-type">int</span> i<br><span class="hljs-keyword">select</span> i<br></code></pre></td></tr></table></figure>
+
+<p>从理论上讲，它将得到⽆穷多个结果，因为该变量不限 i 于有限数量的可能值。</p>
+<h2 id="⾃由变量和约束变量"><a href="#⾃由变量和约束变量" class="headerlink" title="⾃由变量和约束变量"></a>⾃由变量和约束变量</h2><p>变量可以具有不同的作⽤。有些变量是free，它们的值直接影响使⽤它们的表达式的值，或者使⽤它们的公式是否 成⽴。其他变量（称为绑定变量）仅限于特定的值集。<br>在⼀个示例中，最容易理解这种区别。看⼀下以下表达式：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs sql">&quot;hello&quot;.indexOf(&quot;l&quot;)<br><br><span class="hljs-built_in">min</span>(<span class="hljs-type">float</span> f <span class="hljs-operator">|</span> f <span class="hljs-keyword">in</span> [<span class="hljs-number">-3</span> .. <span class="hljs-number">3</span>])<br><br>(i <span class="hljs-operator">+</span> <span class="hljs-number">7</span>) <span class="hljs-operator">*</span> <span class="hljs-number">3</span><br><br>x.<span class="hljs-built_in">sqrt</span>()<br></code></pre></td></tr></table></figure>
+
+<p>第⼀个表达式没有任何变量。它找到 <code>&quot;l&quot;</code> 字符串中出现位置的（从零开始的）索引 <code>&quot;hello&quot;</code> ，因此它的<br>结果为 <code>2</code> 和 <code>3</code> 。</p>
+<p>第⼆个表达式的计算结果为 <code>[-3 .. 3]</code> 范围内的最⼩值 <code>-3</code> 。尽管此表达式使⽤变量 <code>f</code> ，但它只是⼀个占位符或“虚拟”变量，您不能为其分配任何值。您可以使⽤其他变量替换 <code>f</code> ⽽⽆需更改表达式的含义。例如， <code>min(float f | f in [-3 .. 3])</code> 始终等于 <code>min(float other | other in [-3 .. 3])</code> 。这是<strong>绑定变量</strong>的示例。</p>
+<p>表达式 <code>(i + 7) * 3</code> 和 <code>x.sqrt()</code>又该是怎样的呢 ？在这两种情况下，表达式的值取决于什么值赋值给变量。换句话说，变量的值对表达式的值有影响。这些是<strong>⾃由变量</strong>的示例。</p>
 
                 
               </div>
@@ -307,7 +307,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/ctf/" class="category-chain-item">ctf</a>
+  <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" class="category-chain-item">代码审计</a>
   
   
 
@@ -322,9 +322,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/ctf/">#ctf</a>
+        <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">#代码审计</a>
       
-        <a href="/tags/ctf-web/">#ctf-web</a>
+        <a href="/tags/codeql/">#codeql</a>
       
     </div>
   
@@ -336,8 +336,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>[ctf-web] RoarCTF2019-EasyCalc</div>
-      <div>https://s1n9l3.github.io/2022/11/24/[ctf-web] RoarCTF2019-EasyCalc/</div>
+      <div>[代码审计] codeql语法-03-变量</div>
+      <div>https://s1n9l3.github.io/2022/11/27/[代码审计] codeql语法-03-变量/</div>
     </div>
     <div class="license-meta">
       
@@ -349,7 +349,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年11月24日</div>
+          <div>2022年11月27日</div>
         </div>
       
       
@@ -381,9 +381,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/11/25/%5B%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%5D%20%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" title="[渗透测试] 文件上传">
+                      <a href="/2022/11/27/%5B%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%5D%20codeql%E8%AF%AD%E6%B3%95-04-%E8%A1%A8%E8%BE%BE%E5%BC%8F/" title="[代码审计] codeql语法-04-表达式">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">[渗透测试] 文件上传</span>
+                        <span class="hidden-mobile">[代码审计] codeql语法-04-表达式</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -391,8 +391,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/11/23/%5B%E5%B7%A5%E5%85%B7%5D%20%E7%9B%AE%E5%BD%95%E7%88%86%E7%A0%B4-dirb/" title="[工具] 目录爆破-dirb">
-                        <span class="hidden-mobile">[工具] 目录爆破-dirb</span>
+                      <a href="/2022/11/27/%5B%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%5D%20codeql%E8%AF%AD%E6%B3%95-02-ql%E8%AF%AD%E8%A8%80%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" title="[代码审计] codeql语法-02-ql语言基本数据类型">
+                        <span class="hidden-mobile">[代码审计] codeql语法-02-ql语言基本数据类型</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

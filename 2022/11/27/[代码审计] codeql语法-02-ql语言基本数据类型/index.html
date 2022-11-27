@@ -16,26 +16,29 @@
   <meta name="author" content="YY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="[RoarCTF 2019]Easy Calc进入后是一个计算机，  查看源码发现文件calc.php， 123456789101112131415&lt;?phperror_reporting(0);if(!isset($_GET[&amp;#x27;num&amp;#x27;]))&amp;#123;    show_source(__FILE__);&amp;#125;else&amp;#123;        $str &#x3D; $_">
+    <meta name="description" content="codeql语法-ql语言基本数据类型QL语⾔中的基本数据类型，包括整型、浮点型、⽇期型、布尔型以及字符串类型。需要注意的是，对于QL语⾔来说，其⽀持的数据类型都带有相应的内建函数——通俗来说，就是系统已经为我们写好的函数，我们直接拿来就能⽤了。举例来说，如果我们想求⼀个整数的绝对值，直接调⽤内建函数abs()即可，例如-6.abs()。更⼀般地说，调⽤某种类型的变量的通⽤形式为：直接在变量后⾯加">
 <meta property="og:type" content="article">
-<meta property="og:title" content="[ctf-web] RoarCTF2019-EasyCalc">
-<meta property="og:url" content="https://s1n9l3.github.io/2022/11/24/[ctf-web]%20RoarCTF2019-EasyCalc/index.html">
+<meta property="og:title" content="[代码审计] codeql语法-02-ql语言基本数据类型">
+<meta property="og:url" content="https://s1n9l3.github.io/2022/11/27/[%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1]%20codeql%E8%AF%AD%E6%B3%95-02-ql%E8%AF%AD%E8%A8%80%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">
 <meta property="og:site_name" content="S1n9l3">
-<meta property="og:description" content="[RoarCTF 2019]Easy Calc进入后是一个计算机，  查看源码发现文件calc.php， 123456789101112131415&lt;?phperror_reporting(0);if(!isset($_GET[&amp;#x27;num&amp;#x27;]))&amp;#123;    show_source(__FILE__);&amp;#125;else&amp;#123;        $str &#x3D; $_">
+<meta property="og:description" content="codeql语法-ql语言基本数据类型QL语⾔中的基本数据类型，包括整型、浮点型、⽇期型、布尔型以及字符串类型。需要注意的是，对于QL语⾔来说，其⽀持的数据类型都带有相应的内建函数——通俗来说，就是系统已经为我们写好的函数，我们直接拿来就能⽤了。举例来说，如果我们想求⼀个整数的绝对值，直接调⽤内建函数abs()即可，例如-6.abs()。更⼀般地说，调⽤某种类型的变量的通⽤形式为：直接在变量后⾯加">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221124192733066.png">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221124194044373.png">
-<meta property="article:published_time" content="2022-11-24T11:25:14.212Z">
-<meta property="article:modified_time" content="2022-11-24T11:42:44.613Z">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221127163614761.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221127164047282.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221127164424566.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221127165352688.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221127170000305.png">
+<meta property="article:published_time" content="2022-11-27T08:19:51.723Z">
+<meta property="article:modified_time" content="2022-11-27T09:01:46.049Z">
 <meta property="article:author" content="YY">
-<meta property="article:tag" content="ctf">
-<meta property="article:tag" content="ctf-web">
+<meta property="article:tag" content="代码审计">
+<meta property="article:tag" content="codeql">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221124192733066.png">
+<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221127163614761.png">
   
   
   
-  <title>[ctf-web] RoarCTF2019-EasyCalc - S1n9l3</title>
+  <title>[代码审计] codeql语法-02-ql语言基本数据类型 - S1n9l3</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -200,7 +203,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="[ctf-web] RoarCTF2019-EasyCalc"></span>
+            <span id="subtitle" data-typed-text="[代码审计] codeql语法-02-ql语言基本数据类型"></span>
           
         </div>
 
@@ -211,8 +214,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-11-24 19:25" pubdate>
-          2022年11月24日 晚上
+        <time datetime="2022-11-27 16:19" pubdate>
+          2022年11月27日 下午
         </time>
       </span>
     
@@ -223,7 +226,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.1k 字
+          1.9k 字
         
       </span>
     
@@ -234,7 +237,7 @@
         
         
         
-          10 分钟
+          16 分钟
         
       </span>
     
@@ -272,23 +275,46 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">[ctf-web] RoarCTF2019-EasyCalc</h1>
+            <h1 style="display: none">[代码审计] codeql语法-02-ql语言基本数据类型</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="RoarCTF-2019-Easy-Calc"><a href="#RoarCTF-2019-Easy-Calc" class="headerlink" title="[RoarCTF 2019]Easy Calc"></a>[RoarCTF 2019]Easy Calc</h1><p>进入后是一个计算机，</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221124192733066.png" srcset="/img/loading.gif" lazyload alt="image-20221124192733066"></p>
-<p>查看源码发现文件<code>calc.php</code>，</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-title function_ invoke__">error_reporting</span>(<span class="hljs-number">0</span>);<br><span class="hljs-keyword">if</span>(!<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;num&#x27;</span>]))&#123;<br>    <span class="hljs-title function_ invoke__">show_source</span>(<span class="hljs-keyword">__FILE__</span>);<br>&#125;<span class="hljs-keyword">else</span>&#123;<br>        <span class="hljs-variable">$str</span> = <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;num&#x27;</span>];<br>        <span class="hljs-variable">$blacklist</span> = [<span class="hljs-string">&#x27; &#x27;</span>, <span class="hljs-string">&#x27;\t&#x27;</span>, <span class="hljs-string">&#x27;\r&#x27;</span>, <span class="hljs-string">&#x27;\n&#x27;</span>,<span class="hljs-string">&#x27;\&#x27;&#x27;</span>, <span class="hljs-string">&#x27;&quot;&#x27;</span>, <span class="hljs-string">&#x27;`&#x27;</span>, <span class="hljs-string">&#x27;\[&#x27;</span>, <span class="hljs-string">&#x27;\]&#x27;</span>,<span class="hljs-string">&#x27;\$&#x27;</span>,<span class="hljs-string">&#x27;\\&#x27;</span>,<span class="hljs-string">&#x27;\^&#x27;</span>];<br>        <span class="hljs-keyword">foreach</span> (<span class="hljs-variable">$blacklist</span> <span class="hljs-keyword">as</span> <span class="hljs-variable">$blackitem</span>) &#123;<br>                <span class="hljs-keyword">if</span> (<span class="hljs-title function_ invoke__">preg_match</span>(<span class="hljs-string">&#x27;/&#x27;</span> . <span class="hljs-variable">$blackitem</span> . <span class="hljs-string">&#x27;/m&#x27;</span>, <span class="hljs-variable">$str</span>)) &#123;<br>                        <span class="hljs-keyword">die</span>(<span class="hljs-string">&quot;what are you want to do?&quot;</span>);<br>                &#125;<br>        &#125;<br>        <span class="hljs-keyword">eval</span>(<span class="hljs-string">&#x27;echo &#x27;</span>.<span class="hljs-variable">$str</span>.<span class="hljs-string">&#x27;;&#x27;</span>);<br>&#125;<br><span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
+                <h1 id="codeql语法-ql语言基本数据类型"><a href="#codeql语法-ql语言基本数据类型" class="headerlink" title="codeql语法-ql语言基本数据类型"></a>codeql语法-ql语言基本数据类型</h1><p>QL语⾔中的基本数据类型，包括整型、浮点型、⽇期型、布尔型以及字符串类型。需要注意的是，对于QL语⾔来说，其⽀持的数据类型都带有相应的内建函数——通俗来说，就是系统已经为我们写好的函数，我们直接拿来就能⽤了。举例来说，如果我们想求⼀个整数的绝对值，直接调⽤内建函数abs()即可，例如-6.abs()。更⼀般地说，调⽤某种类型的变量的通⽤形式为：直接在变量后⾯加上⼀个点号，然后加上要调⽤的内建函数即可。同时，我们还可以通过点号将多个函数串联起来，也就是对变量连续进⾏多种处理，例如，对于⼀个整型变量a，先求绝对值，再开平⽅，我们可以将这个处理过程表示为：<code>a.abs().sqrt()</code>。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">from</span> <span class="hljs-type">int</span> i<br><span class="hljs-keyword">where</span> i<span class="hljs-operator">=</span><span class="hljs-number">5</span><br><span class="hljs-keyword">select</span> i.<span class="hljs-built_in">abs</span>().<span class="hljs-built_in">sqrt</span>()<br></code></pre></td></tr></table></figure>
 
-<p>这里需要出入参数<code>num</code>，尝试后发现只能传入数字，看来是被WAF过滤了。</p>
-<p>知识点来了。</p>
-<p>在PHP中，<code>$_GET</code>或<code>$_POST</code>的参数会保存到数组中，比如<code>/?foo=bar</code>，保存为<code>Array([foo]=&gt;&#39;bar&#39;)</code>，但是在解析过程中，会将某些字符删除或用下划线代替，比如<code>/?%20news[id%00=42</code>会转换为<code>Array([news_id] =&gt; 42</code>，所以如果WAF中的某条规则是不允许输入参数<code>news_id</code>时，可以使用上面的语句绕过。</p>
-<p>在这道题中，对参数<code>num</code>进行了各种检查，但如果传入的参数是<code> num</code>，注意前面有个空格，在传入参数是就是一个新的变量<code> num</code>（前面有空格），而不是<code>num</code>了（没有空格）；但在PHP解析时，会先把空格去掉，这样就绕过了WAF。</p>
-<p>这样就可以继续了，由于过滤了一些符号，所以使用<code>chr()</code>绕过，使用<code>calc.php? num=print_r(scandir(chr(47)))</code>，就是查看<code>/</code>下的文件，</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221124194044373.png" srcset="/img/loading.gif" lazyload alt="image-20221124194044373"></p>
-<p>发现了<code>f1agg</code>，然后使用<code>calc.php? num=print_r(file_get_contents(chr(47).chr(102).chr(49).chr(97).chr(103).chr(103)));</code>，得到flag。</p>
+<h2 id="字符串类型"><a href="#字符串类型" class="headerlink" title="字符串类型"></a>字符串类型</h2><p>字符串类型的变量⽤来存放以双引号开头和结尾的字符序列，即字符串。例如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">from</span> string s<br><span class="hljs-keyword">where</span> s <span class="hljs-operator">=</span> &quot;hello&quot;<br><span class="hljs-keyword">select</span> s<br></code></pre></td></tr></table></figure>
+
+<p>其中，在from语句中，我们定义了⼀个字符串类型的变量s，然后，我们在where语句中，将字符串”hello”赋值给了变量s，最后，我们在select语句中返回变量s的值。</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221127163614761.png" srcset="/img/loading.gif" lazyload alt="image-20221127163614761"></p>
+<p>可以看到结果中并没有出现双引号。这是因为，双引号是⼀个特殊字符：字符串通常使⽤双引号”…”来表示开始和结束，所以双引号本身不会显示出来。读到这⾥，读者可能会问：如果字符串本身恰好包含⼀个”字符的话，那该怎么表示呢？这个时候，就该转义字符\上场了。具体来说，只要在双引号前⾯加上⼀个反斜杠，双引号就不再表示字符串的开始或结束位置的指示符，⽽是表示双引号⾃身了，具体如下所示：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">from</span> string s, string b<br><span class="hljs-keyword">where</span> s <span class="hljs-operator">=</span> &quot;hello&quot; <span class="hljs-keyword">and</span> b <span class="hljs-operator">=</span> &quot;hel\&quot;lo&quot;<br>select s, b<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221127164047282.png" srcset="/img/loading.gif" lazyload alt="image-20221127164047282"></p>
+<h2 id="内建函数"><a href="#内建函数" class="headerlink" title="内建函数"></a>内建函数</h2><p>QL语⾔还为字符串类型提供了许多内置的函数，按照官⽅的说法，就是内置谓词，例如<code>charAt()</code>函数，该函数可以接收⼀个表示字符串下标的整型参数，并返回指定下标处的字符。准确来说，该函数的返回值的类型仍然是字符串类型，只不过只包含单个字符⽽已。请看下⾯的示例代码：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">from</span> string s, string b<br><span class="hljs-keyword">where</span> s <span class="hljs-operator">=</span> &quot;hello&quot; <span class="hljs-keyword">and</span> b <span class="hljs-operator">=</span> &quot;hel\&quot;lo&quot;<br>select s, b, s.charAt(0) as CharAt0<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221127164424566.png" srcset="/img/loading.gif" lazyload alt="image-20221127164424566"></p>
+<h2 id="整型以及浮点型"><a href="#整型以及浮点型" class="headerlink" title="整型以及浮点型"></a>整型以及浮点型</h2><p>简单来说，整型变量⽤于保存整数，如306；⽽浮点型变量则⽤于保存浮点数，也就是带⼩数位的数，如3.14。例如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">from</span> <span class="hljs-type">float</span> x, <span class="hljs-type">int</span> y<br><span class="hljs-keyword">where</span> x <span class="hljs-operator">=</span> <span class="hljs-number">3.6</span> <span class="hljs-keyword">and</span> y <span class="hljs-operator">=</span> <span class="hljs-number">3</span><br><span class="hljs-keyword">select</span> x.pow(y), y.<span class="hljs-built_in">abs</span>().<span class="hljs-built_in">sqrt</span>(), x, y<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221127165352688.png" srcset="/img/loading.gif" lazyload alt="image-20221127165352688"></p>
+<p>同样的，整型和浮点型也内建了许多函数，例如，abs()函数等，并且，它们的⼤部分函数的名称和作⽤都是相同的。</p>
+<h2 id="日期型"><a href="#日期型" class="headerlink" title="日期型"></a>日期型</h2><p>⽇期型变量⽤于保存公历表示的时间值和⽇期值，如年、⽉、⽇、时、分、秒以及毫秒等，注意，它们的取值都是整数。其中，表示年的整数的取值范围是从-16777216到16777215，表示⽉的整数的取值范围为从0到11，表示⽇的整数的取值范围是从1到31，表示时的整数的取值范围是从0到23，表示分的整数的取值范围是从0到59，表示秒的整数的取值范围是从0到59，表示毫秒的整数的取值范围是从0到999。</p>
+<p>查询2022年1月1日到2023年1月1日有多少天：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">from</span> <span class="hljs-type">date</span> <span class="hljs-keyword">start</span>, <span class="hljs-type">date</span> <span class="hljs-keyword">end</span><br><span class="hljs-keyword">where</span> <span class="hljs-keyword">start</span> <span class="hljs-operator">=</span> &quot;01/01/2022&quot;.toDate() <span class="hljs-keyword">and</span> <span class="hljs-keyword">end</span> <span class="hljs-operator">=</span> &quot;01/01/2023&quot;.toDate()<br><span class="hljs-keyword">select</span> start.daysTo(<span class="hljs-keyword">end</span>)<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="布尔型"><a href="#布尔型" class="headerlink" title="布尔型"></a>布尔型</h2><p>布尔型变量⽤来存放布尔值，即false（假）或者 true（真）。为了便于读者理解，这⾥举例说明：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">from</span> <span class="hljs-type">boolean</span> b<br><span class="hljs-keyword">where</span> b <span class="hljs-operator">=</span> <span class="hljs-literal">false</span><br><span class="hljs-keyword">select</span> b.booleanNot()<br></code></pre></td></tr></table></figure>
+
+<p>在上⾯的代码中，我们定义了⼀个布尔型变量b，并将其赋值为false，最后返回对变量b进⾏逻辑⾮操作后的值。</p>
+<p>可以对布尔型变量b进⾏取反、以及and、or、Xor的逻辑运算，也可以将布尔型变量通过toString转换成String类型变量：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">from</span> <span class="hljs-type">boolean</span> b<br><span class="hljs-keyword">where</span> b <span class="hljs-operator">=</span> <span class="hljs-literal">false</span><br><span class="hljs-keyword">select</span> b.booleanNot(), b.booleanAnd(<span class="hljs-literal">true</span>), b.booleanOr(<span class="hljs-literal">true</span>), b.booleanXor(<span class="hljs-literal">true</span>), b.toString()<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221127170000305.png" srcset="/img/loading.gif" lazyload alt="image-20221127170000305"></p>
 
                 
               </div>
@@ -307,7 +333,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/ctf/" class="category-chain-item">ctf</a>
+  <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" class="category-chain-item">代码审计</a>
   
   
 
@@ -322,9 +348,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/ctf/">#ctf</a>
+        <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">#代码审计</a>
       
-        <a href="/tags/ctf-web/">#ctf-web</a>
+        <a href="/tags/codeql/">#codeql</a>
       
     </div>
   
@@ -336,8 +362,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>[ctf-web] RoarCTF2019-EasyCalc</div>
-      <div>https://s1n9l3.github.io/2022/11/24/[ctf-web] RoarCTF2019-EasyCalc/</div>
+      <div>[代码审计] codeql语法-02-ql语言基本数据类型</div>
+      <div>https://s1n9l3.github.io/2022/11/27/[代码审计] codeql语法-02-ql语言基本数据类型/</div>
     </div>
     <div class="license-meta">
       
@@ -349,7 +375,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年11月24日</div>
+          <div>2022年11月27日</div>
         </div>
       
       
@@ -381,9 +407,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/11/25/%5B%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%5D%20%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" title="[渗透测试] 文件上传">
+                      <a href="/2022/11/27/%5B%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%5D%20codeql%E8%AF%AD%E6%B3%95-03-%E5%8F%98%E9%87%8F/" title="[代码审计] codeql语法-03-变量">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">[渗透测试] 文件上传</span>
+                        <span class="hidden-mobile">[代码审计] codeql语法-03-变量</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -391,8 +417,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/11/23/%5B%E5%B7%A5%E5%85%B7%5D%20%E7%9B%AE%E5%BD%95%E7%88%86%E7%A0%B4-dirb/" title="[工具] 目录爆破-dirb">
-                        <span class="hidden-mobile">[工具] 目录爆破-dirb</span>
+                      <a href="/2022/11/26/%5B%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%5D%20codeql%E8%AF%AD%E6%B3%95-01-ql%E5%9F%BA%E7%A1%80/" title="[代码审计] codeql语法-01-ql基础">
+                        <span class="hidden-mobile">[代码审计] codeql语法-01-ql基础</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
