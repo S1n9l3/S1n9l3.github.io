@@ -16,16 +16,16 @@
   <meta name="author" content="YY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="codeql语法-表达式表达式的计算结果为⼀组值并具有⼀个类型。例如，表达式 1+2 计算结果为整数3，表达式”QL” 的计算结果为字符串类型输出”QL” ,1 + 2 这个表达式的类型为int，⽽”QL”的表达式类型为string 括号表达式（Parenthesized expressions）带括号的表达式是⽤括号 ( 和括起来的表达式 ) 。此表达式的类型和值与原始表达式完全相同。括号可⽤于">
+    <meta name="description" content="codeql语法–表达式（Expressions）表达式的计算结果为⼀组值并具有⼀个类型。例如，表达式 1+2 计算结果为整数3，表达式”QL” 的计算结果为字符串类型输出”QL” ,1 + 2 这个表达式的类型为int，⽽”QL”的表达式类型为string 括号表达式（Parenthesized expressions）带括号的表达式是⽤括号 ( 和括起来的表达式 ) 。此表达式的类型和值与原始">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[代码审计] codeql语法-04-表达式">
 <meta property="og:url" content="https://s1n9l3.github.io/2022/11/27/[%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1]%20codeql%E8%AF%AD%E6%B3%95-04-%E8%A1%A8%E8%BE%BE%E5%BC%8F/index.html">
 <meta property="og:site_name" content="S1n9l3">
-<meta property="og:description" content="codeql语法-表达式表达式的计算结果为⼀组值并具有⼀个类型。例如，表达式 1+2 计算结果为整数3，表达式”QL” 的计算结果为字符串类型输出”QL” ,1 + 2 这个表达式的类型为int，⽽”QL”的表达式类型为string 括号表达式（Parenthesized expressions）带括号的表达式是⽤括号 ( 和括起来的表达式 ) 。此表达式的类型和值与原始表达式完全相同。括号可⽤于">
+<meta property="og:description" content="codeql语法–表达式（Expressions）表达式的计算结果为⼀组值并具有⼀个类型。例如，表达式 1+2 计算结果为整数3，表达式”QL” 的计算结果为字符串类型输出”QL” ,1 + 2 这个表达式的类型为int，⽽”QL”的表达式类型为string 括号表达式（Parenthesized expressions）带括号的表达式是⽤括号 ( 和括起来的表达式 ) 。此表达式的类型和值与原始">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221127200937406.png">
 <meta property="article:published_time" content="2022-11-27T09:14:12.340Z">
-<meta property="article:modified_time" content="2022-11-27T12:13:33.677Z">
+<meta property="article:modified_time" content="2022-11-29T13:38:22.121Z">
 <meta property="article:author" content="YY">
 <meta property="article:tag" content="代码审计">
 <meta property="article:tag" content="codeql">
@@ -276,7 +276,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="codeql语法-表达式"><a href="#codeql语法-表达式" class="headerlink" title="codeql语法-表达式"></a>codeql语法-表达式</h1><p>表达式的计算结果为⼀组值并具有⼀个类型。<br>例如，表达式 1+2 计算结果为整数3，表达式”QL” 的计算结果为字符串类型输出”QL” ,1 + 2 这个表达式的类型为int，⽽”QL”的表达式类型为string</p>
+                <h1 id="codeql语法–表达式（Expressions）"><a href="#codeql语法–表达式（Expressions）" class="headerlink" title="codeql语法–表达式（Expressions）"></a>codeql语法–表达式（Expressions）</h1><p>表达式的计算结果为⼀组值并具有⼀个类型。<br>例如，表达式 1+2 计算结果为整数3，表达式”QL” 的计算结果为字符串类型输出”QL” ,1 + 2 这个表达式的类型为int，⽽”QL”的表达式类型为string</p>
 <h2 id="括号表达式（Parenthesized-expressions）"><a href="#括号表达式（Parenthesized-expressions）" class="headerlink" title="括号表达式（Parenthesized expressions）"></a>括号表达式（Parenthesized expressions）</h2><p>带括号的表达式是⽤括号 ( 和括起来的表达式 ) 。此表达式的类型和值与原始表达式完全相同。括号可⽤于将表达式分组在⼀起以消除歧义并提⾼可读性。</p>
 <h2 id="范围表达式-Ranges"><a href="#范围表达式-Ranges" class="headerlink" title="范围表达式(Ranges)"></a>范围表达式(Ranges)</h2><p>范围表达式表示在两个表达式之间排序的值的范围。它由<code>..</code>将两个表达式分隔， 并⽤⽅括号（ <code>[</code> 和 <code>]</code> ）括起来。例如，是有效的范围表达式。它的值是和之间（包括和本身）之间的任何整数 。 <code>[3 .. 7]</code> 表示3和7内所有的整数在有效范围内，开始和结束表达式是整数，浮点数或⽇期。如果其中之⼀是⽇期，则两个都必须是⽇期。如果其中⼀个是整数，另⼀个是浮点数，则两者都将被视为浮点数。</p>
 <h2 id="常量范围表达式-Set-literal-expressions"><a href="#常量范围表达式-Set-literal-expressions" class="headerlink" title="常量范围表达式(Set literal expressions)"></a>常量范围表达式(Set literal expressions)</h2><p>可以设置⼀个常量范围表达式，例如： <code>[2, 3, 5, 7, 11, 13, 17, 19, 23, 29]</code> 它表示30以内的质数。</p>
@@ -474,6 +474,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2022/11/28/%5Bctf-web%5D%20%E6%8A%A4%E7%BD%91%E6%9D%AF2018-Easy-tornado/" title="[ctf-web] 护网杯2018-Easy-tornado">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">[ctf-web] 护网杯2018-Easy-tornado</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">

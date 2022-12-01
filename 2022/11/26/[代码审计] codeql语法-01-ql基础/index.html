@@ -16,15 +16,15 @@
   <meta name="author" content="YY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="codeql语法-ql基础QL是⼀种声明性的，⾯向对象的查询语⾔，经过优化可实现对分层数据结构（尤其是表示软件⼯件的数据库）的⾼效分析。 数据库是有组织的数据集合。最常⽤的数据库模型是将数据存储在表中的关系模型，⽽SQL（结构化查询语⾔）是关系数据库最常⽤的查询语⾔。 查询语⾔的⽬的是提供⼀个编程平台，您可以在其中询问有关存储在数据库中的信息的问题。数据库管理系统管理数据的存储和管理并提供查询机制">
+    <meta name="description" content="codeql语法–ql基础QL是⼀种声明性的，⾯向对象的查询语⾔，经过优化可实现对分层数据结构（尤其是表示软件⼯件的数据库）的⾼效分析。 数据库是有组织的数据集合。最常⽤的数据库模型是将数据存储在表中的关系模型，⽽SQL（结构化查询语⾔）是关系数据库最常⽤的查询语⾔。 查询语⾔的⽬的是提供⼀个编程平台，您可以在其中询问有关存储在数据库中的信息的问题。数据库管理系统管理数据的存储和管理并提供查询机制">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[代码审计] codeql语法-01-ql基础">
 <meta property="og:url" content="https://s1n9l3.github.io/2022/11/26/[%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1]%20codeql%E8%AF%AD%E6%B3%95-01-ql%E5%9F%BA%E7%A1%80/index.html">
 <meta property="og:site_name" content="S1n9l3">
-<meta property="og:description" content="codeql语法-ql基础QL是⼀种声明性的，⾯向对象的查询语⾔，经过优化可实现对分层数据结构（尤其是表示软件⼯件的数据库）的⾼效分析。 数据库是有组织的数据集合。最常⽤的数据库模型是将数据存储在表中的关系模型，⽽SQL（结构化查询语⾔）是关系数据库最常⽤的查询语⾔。 查询语⾔的⽬的是提供⼀个编程平台，您可以在其中询问有关存储在数据库中的信息的问题。数据库管理系统管理数据的存储和管理并提供查询机制">
+<meta property="og:description" content="codeql语法–ql基础QL是⼀种声明性的，⾯向对象的查询语⾔，经过优化可实现对分层数据结构（尤其是表示软件⼯件的数据库）的⾼效分析。 数据库是有组织的数据集合。最常⽤的数据库模型是将数据存储在表中的关系模型，⽽SQL（结构化查询语⾔）是关系数据库最常⽤的查询语⾔。 查询语⾔的⽬的是提供⼀个编程平台，您可以在其中询问有关存储在数据库中的信息的问题。数据库管理系统管理数据的存储和管理并提供查询机制">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-11-26T12:05:00.477Z">
-<meta property="article:modified_time" content="2022-11-27T08:38:20.949Z">
+<meta property="article:modified_time" content="2022-11-29T13:38:07.217Z">
 <meta property="article:author" content="YY">
 <meta property="article:tag" content="代码审计">
 <meta property="article:tag" content="codeql">
@@ -274,7 +274,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="codeql语法-ql基础"><a href="#codeql语法-ql基础" class="headerlink" title="codeql语法-ql基础"></a>codeql语法-ql基础</h1><p>QL是⼀种声明性的，⾯向对象的查询语⾔，经过优化可实现对分层数据结构（尤其是表示软件⼯件的数据库）的⾼效分析。</p>
+                <h1 id="codeql语法–ql基础"><a href="#codeql语法–ql基础" class="headerlink" title="codeql语法–ql基础"></a>codeql语法–ql基础</h1><p>QL是⼀种声明性的，⾯向对象的查询语⾔，经过优化可实现对分层数据结构（尤其是表示软件⼯件的数据库）的⾼效分析。</p>
 <p>数据库是有组织的数据集合。最常⽤的数据库模型是将数据存储在表中的关系模型，⽽SQL（结构化查询语⾔）是关系数据库最常⽤的查询语⾔。</p>
 <p>查询语⾔的⽬的是提供⼀个编程平台，您可以在其中询问有关存储在数据库中的信息的问题。数据库管理系统管理数据的存储和管理并提供查询机制。查询通常引⽤相关的数据库实体，并指定结果必须满⾜的各种条件（称为谓词）。查询评估涉及检查这些谓词并⽣成结果。好的查询语⾔及其实现的⼀些理想属性包括：</p>
 <ul>

@@ -27,7 +27,7 @@
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221120213427975.png">
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221120162446837.png">
 <meta property="article:published_time" content="2022-11-20T08:09:25.187Z">
-<meta property="article:modified_time" content="2022-11-23T14:15:10.516Z">
+<meta property="article:modified_time" content="2022-12-01T13:24:10.392Z">
 <meta property="article:author" content="YY">
 <meta property="article:tag" content="代码审计">
 <meta property="article:tag" content="codeql">
@@ -317,7 +317,8 @@
 <p>然后修改数据包的<code>Cookie</code>内容为生成的字符串，</p>
 <p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221120213427975.png" srcset="/img/loading.gif" lazyload alt="image-20221120213427975"></p>
 <p>发送数据包，就可以得到反弹的shell了。</p>
-<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><h2 id="codeql审计"><a href="#codeql审计" class="headerlink" title="codeql审计"></a>codeql审计</h2><p>由于codeql需要用maven编译，根据网上的方法，使用命令：</p>
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><p>使用<code>shiro</code>登录时，会有<code>Remember me</code>功能，漏洞存在于该功能。</p>
+<h2 id="codeql审计"><a href="#codeql审计" class="headerlink" title="codeql审计"></a>codeql审计</h2><p>由于codeql需要用maven编译，根据网上的方法，使用命令：</p>
 <figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">CodeQL <span class="hljs-keyword">database</span> <span class="hljs-keyword">create</span> shiro1<span class="hljs-number">.2</span><span class="hljs-number">.4</span> –<span class="hljs-keyword">language</span>=java –overwrite –command=&quot;mvn package -Dmaven.test.skip&quot;<br></code></pre></td></tr></table></figure>
 
 <p>但是没有成功，不断的出现错误，找了很多方法都没有成功。然后想到了vscode上的codeql插件好像可以直接下载数据库，</p>

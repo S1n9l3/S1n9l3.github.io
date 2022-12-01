@@ -16,12 +16,12 @@
   <meta name="author" content="YY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="codeql语法-ql语言基本数据类型QL语⾔中的基本数据类型，包括整型、浮点型、⽇期型、布尔型以及字符串类型。需要注意的是，对于QL语⾔来说，其⽀持的数据类型都带有相应的内建函数——通俗来说，就是系统已经为我们写好的函数，我们直接拿来就能⽤了。举例来说，如果我们想求⼀个整数的绝对值，直接调⽤内建函数abs()即可，例如-6.abs()。更⼀般地说，调⽤某种类型的变量的通⽤形式为：直接在变量后⾯加">
+    <meta name="description" content="codeql语法–ql语言基本数据类型QL语⾔中的基本数据类型，包括整型、浮点型、⽇期型、布尔型以及字符串类型。需要注意的是，对于QL语⾔来说，其⽀持的数据类型都带有相应的内建函数——通俗来说，就是系统已经为我们写好的函数，我们直接拿来就能⽤了。举例来说，如果我们想求⼀个整数的绝对值，直接调⽤内建函数abs()即可，例如-6.abs()。更⼀般地说，调⽤某种类型的变量的通⽤形式为：直接在变量后⾯加">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[代码审计] codeql语法-02-ql语言基本数据类型">
 <meta property="og:url" content="https://s1n9l3.github.io/2022/11/27/[%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1]%20codeql%E8%AF%AD%E6%B3%95-02-ql%E8%AF%AD%E8%A8%80%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">
 <meta property="og:site_name" content="S1n9l3">
-<meta property="og:description" content="codeql语法-ql语言基本数据类型QL语⾔中的基本数据类型，包括整型、浮点型、⽇期型、布尔型以及字符串类型。需要注意的是，对于QL语⾔来说，其⽀持的数据类型都带有相应的内建函数——通俗来说，就是系统已经为我们写好的函数，我们直接拿来就能⽤了。举例来说，如果我们想求⼀个整数的绝对值，直接调⽤内建函数abs()即可，例如-6.abs()。更⼀般地说，调⽤某种类型的变量的通⽤形式为：直接在变量后⾯加">
+<meta property="og:description" content="codeql语法–ql语言基本数据类型QL语⾔中的基本数据类型，包括整型、浮点型、⽇期型、布尔型以及字符串类型。需要注意的是，对于QL语⾔来说，其⽀持的数据类型都带有相应的内建函数——通俗来说，就是系统已经为我们写好的函数，我们直接拿来就能⽤了。举例来说，如果我们想求⼀个整数的绝对值，直接调⽤内建函数abs()即可，例如-6.abs()。更⼀般地说，调⽤某种类型的变量的通⽤形式为：直接在变量后⾯加">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221127163614761.png">
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221127164047282.png">
@@ -29,7 +29,7 @@
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221127165352688.png">
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221127170000305.png">
 <meta property="article:published_time" content="2022-11-27T08:19:51.723Z">
-<meta property="article:modified_time" content="2022-11-27T09:01:46.049Z">
+<meta property="article:modified_time" content="2022-11-29T13:38:05.361Z">
 <meta property="article:author" content="YY">
 <meta property="article:tag" content="代码审计">
 <meta property="article:tag" content="codeql">
@@ -280,7 +280,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="codeql语法-ql语言基本数据类型"><a href="#codeql语法-ql语言基本数据类型" class="headerlink" title="codeql语法-ql语言基本数据类型"></a>codeql语法-ql语言基本数据类型</h1><p>QL语⾔中的基本数据类型，包括整型、浮点型、⽇期型、布尔型以及字符串类型。需要注意的是，对于QL语⾔来说，其⽀持的数据类型都带有相应的内建函数——通俗来说，就是系统已经为我们写好的函数，我们直接拿来就能⽤了。举例来说，如果我们想求⼀个整数的绝对值，直接调⽤内建函数abs()即可，例如-6.abs()。更⼀般地说，调⽤某种类型的变量的通⽤形式为：直接在变量后⾯加上⼀个点号，然后加上要调⽤的内建函数即可。同时，我们还可以通过点号将多个函数串联起来，也就是对变量连续进⾏多种处理，例如，对于⼀个整型变量a，先求绝对值，再开平⽅，我们可以将这个处理过程表示为：<code>a.abs().sqrt()</code>。</p>
+                <h1 id="codeql语法–ql语言基本数据类型"><a href="#codeql语法–ql语言基本数据类型" class="headerlink" title="codeql语法–ql语言基本数据类型"></a>codeql语法–ql语言基本数据类型</h1><p>QL语⾔中的基本数据类型，包括整型、浮点型、⽇期型、布尔型以及字符串类型。需要注意的是，对于QL语⾔来说，其⽀持的数据类型都带有相应的内建函数——通俗来说，就是系统已经为我们写好的函数，我们直接拿来就能⽤了。举例来说，如果我们想求⼀个整数的绝对值，直接调⽤内建函数abs()即可，例如-6.abs()。更⼀般地说，调⽤某种类型的变量的通⽤形式为：直接在变量后⾯加上⼀个点号，然后加上要调⽤的内建函数即可。同时，我们还可以通过点号将多个函数串联起来，也就是对变量连续进⾏多种处理，例如，对于⼀个整型变量a，先求绝对值，再开平⽅，我们可以将这个处理过程表示为：<code>a.abs().sqrt()</code>。</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">from</span> <span class="hljs-type">int</span> i<br><span class="hljs-keyword">where</span> i<span class="hljs-operator">=</span><span class="hljs-number">5</span><br><span class="hljs-keyword">select</span> i.<span class="hljs-built_in">abs</span>().<span class="hljs-built_in">sqrt</span>()<br></code></pre></td></tr></table></figure>
 
 <h2 id="字符串类型"><a href="#字符串类型" class="headerlink" title="字符串类型"></a>字符串类型</h2><p>字符串类型的变量⽤来存放以双引号开头和结尾的字符序列，即字符串。例如：</p>
