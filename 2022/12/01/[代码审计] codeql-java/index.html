@@ -24,7 +24,7 @@
 <meta property="og:description" content="codeql-javacodeql学习 Method查询所有方法： 12from Method methodselect method  查询以get开头的方法： 123from Method methodwhere method.getName().matches(&quot;get%&quot;)select method  查询名为getStudent的方法： 123from Method">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-12-01T12:06:26.496Z">
-<meta property="article:modified_time" content="2022-12-01T13:17:07.207Z">
+<meta property="article:modified_time" content="2022-12-01T13:43:59.804Z">
 <meta property="article:author" content="YY">
 <meta property="article:tag" content="代码审计">
 <meta property="article:tag" content="codeql">
@@ -221,7 +221,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.6k 字
+          1.7k 字
         
       </span>
     
@@ -232,7 +232,7 @@
         
         
         
-          14 分钟
+          15 分钟
         
       </span>
     
@@ -297,10 +297,10 @@
 <p>或者这样：</p>
 <figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs oxygene"><span class="hljs-keyword">from</span> <span class="hljs-keyword">Method</span> <span class="hljs-title function_">method</span>, <span class="hljs-title function_">MethodAccess</span> <span class="hljs-title function_">ma</span><br><span class="hljs-title function_">where</span> <span class="hljs-title function_">method</span>.<span class="hljs-title function_">getName</span><span class="hljs-params">()</span>.<span class="hljs-title function_">matches</span><span class="hljs-params">(&quot;getStudent&quot;)</span> <span class="hljs-title function_">and</span> <br>      <span class="hljs-title function_">ma</span>.<span class="hljs-title function_">getMethod</span><span class="hljs-params">()</span> = <span class="hljs-title function_">method</span> <span class="hljs-title function_">and</span> <br>      <span class="hljs-title function_">method</span>.<span class="hljs-title function_">getDeclaringType</span><span class="hljs-params">()</span>.<span class="hljs-title function_">hasQualifiedName</span><span class="hljs-params">(&quot;com.l4yn3.microserviceseclab.db&quot;, &quot;IndexDb&quot;)</span><br><span class="hljs-title function_">select</span> <span class="hljs-title function_">ma</span><br></code></pre></td></tr></table></figure>
 
-<p>查询第一个参数名是<code>sql</code>：</p>
+<p>查询<code>org.springframework.jdbc.core</code>包中<code>JdbcTemplate</code>中方法<code>query</code>第一个参数名是<code>sql</code>：</p>
 <figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs oxygene"><span class="hljs-keyword">from</span> <span class="hljs-keyword">Method</span> <span class="hljs-title function_">method</span>, <span class="hljs-title function_">MethodAccess</span> <span class="hljs-title function_">ma</span><br><span class="hljs-title function_">where</span> <span class="hljs-title function_">method</span>.<span class="hljs-title function_">getName</span><span class="hljs-params">()</span>.<span class="hljs-title function_">matches</span><span class="hljs-params">(&quot;query&quot;)</span> <span class="hljs-title function_">and</span> <br>      <span class="hljs-title function_">ma</span>.<span class="hljs-title function_">getMethod</span><span class="hljs-params">()</span> = <span class="hljs-title function_">method</span> <span class="hljs-title function_">and</span> <br>      <span class="hljs-title function_">method</span>.<span class="hljs-title function_">getDeclaringType</span><span class="hljs-params">()</span>.<span class="hljs-title function_">hasQualifiedName</span><span class="hljs-params">(&quot;org.springframework.jdbc.core&quot;, &quot;JdbcTemplate&quot;)</span> <span class="hljs-title function_">and</span> <br>      <span class="hljs-title function_">ma</span>.<span class="hljs-title function_">getArgument</span><span class="hljs-params">(0)</span>.<span class="hljs-title function_">toString</span><span class="hljs-params">()</span> = &quot;<span class="hljs-title function_">sql</span>&quot;<br><br><span class="hljs-title function_">select</span> <span class="hljs-title function_">ma</span><br></code></pre></td></tr></table></figure>
 
-<p>查询第一个参数类型是<code>String</code>：</p>
+<p>查询<code>org.springframework.jdbc.core</code>包中<code>JdbcTemplate</code>中方法<code>query</code>第一个参数类型是<code>String</code>：</p>
 <figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs oxygene"><span class="hljs-keyword">from</span> <span class="hljs-keyword">Method</span> <span class="hljs-title function_">method</span>, <span class="hljs-title function_">MethodAccess</span> <span class="hljs-title function_">ma</span>, <span class="hljs-title function_">Parameter</span> <span class="hljs-title function_">p</span><br><span class="hljs-title function_">where</span> <span class="hljs-title function_">method</span>.<span class="hljs-title function_">getName</span><span class="hljs-params">()</span>.<span class="hljs-title function_">matches</span><span class="hljs-params">(&quot;query&quot;)</span> <span class="hljs-title function_">and</span> <br>      <span class="hljs-title function_">ma</span>.<span class="hljs-title function_">getMethod</span><span class="hljs-params">()</span> = <span class="hljs-title function_">method</span> <span class="hljs-title function_">and</span> <br>      <span class="hljs-title function_">method</span>.<span class="hljs-title function_">getDeclaringType</span><span class="hljs-params">()</span>.<span class="hljs-title function_">hasQualifiedName</span><span class="hljs-params">(&quot;org.springframework.jdbc.core&quot;, &quot;JdbcTemplate&quot;)</span> <span class="hljs-title function_">and</span> <br>      <span class="hljs-title function_">ma</span>.<span class="hljs-title function_">getArgument</span><span class="hljs-params">(0)</span>.<span class="hljs-title function_">getType</span><span class="hljs-params">()</span>.<span class="hljs-title function_">toString</span><span class="hljs-params">()</span> = &quot;<span class="hljs-title function_">String</span>&quot;<br><span class="hljs-title function_">select</span> <span class="hljs-title function_">ma</span><br></code></pre></td></tr></table></figure>
 
 
@@ -406,6 +406,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2022/12/05/%5Bctf-web%5D%20%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%982019-HardSQL/" title="[ctf-web] 极客大挑战2019-HardSQL">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">[ctf-web] 极客大挑战2019-HardSQL</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
