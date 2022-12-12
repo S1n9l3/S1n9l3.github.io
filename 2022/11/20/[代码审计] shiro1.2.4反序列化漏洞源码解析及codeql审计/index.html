@@ -25,9 +25,25 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221120211941945.png">
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221120213427975.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221211231730903.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/%E5%9B%BE%E7%89%871.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/%E5%9B%BE%E7%89%872.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/%E5%9B%BE%E7%89%873.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/%E5%9B%BE%E7%89%874.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/%E5%9B%BE%E7%89%875.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/%E5%9B%BE%E7%89%876.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/%E5%9B%BE%E7%89%877.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221211232953767.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221212215626283.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221212215723106.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221212220224517.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221212220754312.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/%E5%9B%BE%E7%89%878.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/%E5%9B%BE%E7%89%879.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221211233159416.png">
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221120162446837.png">
 <meta property="article:published_time" content="2022-11-20T08:09:25.187Z">
-<meta property="article:modified_time" content="2022-12-01T13:48:07.112Z">
+<meta property="article:modified_time" content="2022-12-12T14:17:05.269Z">
 <meta property="article:author" content="YY">
 <meta property="article:tag" content="代码审计">
 <meta property="article:tag" content="codeql">
@@ -226,7 +242,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.7k 字
+          3.6k 字
         
       </span>
     
@@ -237,7 +253,7 @@
         
         
         
-          23 分钟
+          31 分钟
         
       </span>
     
@@ -317,7 +333,39 @@
 <p>然后修改数据包的<code>Cookie</code>内容为生成的字符串，</p>
 <p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221120213427975.png" srcset="/img/loading.gif" lazyload alt="image-20221120213427975"></p>
 <p>发送数据包，就可以得到反弹的shell了。</p>
-<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><p>使用<code>shiro</code>登录时，会有<code>Remember me</code>功能，漏洞存在于该功能。</p>
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><p>使用<code>shiro</code>登录时，会有<code>Remember me</code>功能，漏洞存在于该功能。环境搭建用了很长的时间，最后找到网上教程完成的。</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221211231730903.png" srcset="/img/loading.gif" lazyload alt="image-20221211231730903"></p>
+<p>这里登录要使用默认的账号密码，一开始随便写的怎么都不行，还以为又出问题了:cry:</p>
+<p>首先断点到了这里：</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/%E5%9B%BE%E7%89%871.png" srcset="/img/loading.gif" lazyload alt="图片1"></p>
+<p>表示登录成功了，继续跟进，来到<code>rememberMeSuccessfulLogin</code>，这里好像是判断是否选择了<code>Remember me</code>功能，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/%E5%9B%BE%E7%89%872.png" srcset="/img/loading.gif" lazyload alt="图片2"></p>
+<p>会继续进入<code>AbstractRememberMeManager</code>的<code>onSuccessfulLogin</code>方法，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/%E5%9B%BE%E7%89%873.png" srcset="/img/loading.gif" lazyload alt="图片3"></p>
+<p>在这里<code>forgetIdentity(subject)</code>是清除之前的验证，往下跟进会进入<code>rememberIdentity</code>，这里的<code>PrincipalCollection</code>保存登录信息，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/%E5%9B%BE%E7%89%874.png" srcset="/img/loading.gif" lazyload alt="图片4"></p>
+<p>继续跟进，进入<code>rememberIdentity</code>，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/%E5%9B%BE%E7%89%875.png" srcset="/img/loading.gif" lazyload alt="图片5"></p>
+<p>进入<code>convertPrincipalsToBytes</code>，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/%E5%9B%BE%E7%89%876.png" srcset="/img/loading.gif" lazyload alt="图片6"></p>
+<p>到这里首先进行了序列化<code>serialize(principals)</code>，然后进入加密<code>encrypt()</code>，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/%E5%9B%BE%E7%89%877.png" srcset="/img/loading.gif" lazyload alt="图片7"></p>
+<p>这里用到了key，通过方法<code>getEncryptionCipherKey()</code>，查找这个方法，最后得到了key，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221211232953767.png" srcset="/img/loading.gif" lazyload alt="image-20221211232953767"></p>
+<p>然后继续跟进<code>encrypt()</code>方法，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221212215626283.png" srcset="/img/loading.gif" lazyload alt="image-20221212215626283"></p>
+<p>到<code>org/apache/shiro/crypto/JcaCipherService.java</code>中，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221212215723106.png" srcset="/img/loading.gif" lazyload alt="image-20221212215723106"></p>
+<p>这里传入的是序列化数组以及Key值，方法中会生成<code>ivBytes</code>，这里的<code>generate</code>的结果一直是<code>true</code>，跟进<code>generateInitializationVector</code>，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221212220224517.png" srcset="/img/loading.gif" lazyload alt="image-20221212220224517"></p>
+<p>首先会生成<code>size</code>，这里是<code>128</code>，然后<code>BITS_PER_BYTE</code>是<code>8</code>，所以生成的<code>ivBytes</code>是<code>16</code>位的，通过<code>ensureSecureRandom()</code>方法生成随机值。回到<code>encrypt</code>，继续进入重载的<code>encrypt</code>方法，这里是具体的加密方法，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221212220754312.png" srcset="/img/loading.gif" lazyload alt="image-20221212220754312"></p>
+<p>加密之后，就会设置cookie，在方法<code>rememberSerializedIdentity</code>中，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/%E5%9B%BE%E7%89%878.png" srcset="/img/loading.gif" lazyload alt="图片8"></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/%E5%9B%BE%E7%89%879.png" srcset="/img/loading.gif" lazyload alt="图片9"></p>
+<p>生成的cooke为：</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221211233159416.png" srcset="/img/loading.gif" lazyload alt="image-20221211233159416"></p>
+<p>整体审计下来会发现最大的问题是加密的Key是固定值（这个在1.2.5修复使用随机值），如果拿到了rememberMe的值，就可以进行解密，再进行反序列化操作。</p>
 <h2 id="codeql审计"><a href="#codeql审计" class="headerlink" title="codeql审计"></a>codeql审计</h2><p>由于codeql需要用maven编译，根据网上的方法，使用命令：</p>
 <figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">CodeQL <span class="hljs-keyword">database</span> <span class="hljs-keyword">create</span> shiro1<span class="hljs-number">.2</span><span class="hljs-number">.4</span> –<span class="hljs-keyword">language</span>=java –overwrite –command=&quot;mvn package -Dmaven.test.skip&quot;<br></code></pre></td></tr></table></figure>
 
@@ -329,10 +377,11 @@
 <p><a target="_blank" rel="noopener" href="https://johnfrod.top/%E5%B7%A5%E5%85%B7/ysoserial-%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8%E8%B0%83%E8%AF%95%E6%95%99%E7%A8%8B/">ysoserial 安装使用调试教程 – JohnFrod’s Blog</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/panisme/p/12552838.html">Apache Shiro 1.2.4反序列化漏洞（CVE-2016-4437）复现 - Panisme - 博客园 (cnblogs.com)</a></p>
 <p><a target="_blank" rel="noopener" href="https://paper.seebug.org/shiro-rememberme-1-2-4/">【漏洞分析】Shiro RememberMe 1.2.4 反序列化导致的命令执行漏洞 (seebug.org)</a></p>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/145246953">Apache Shiro 1.2.4反序列化漏洞（CVE-2016-4437）源码解析 - 知乎 (zhihu.com)</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/255721#h3-10">CodeQL从0到1（内附Shiro检测demo）-安全客 - 安全资讯平台 (anquanke.com)</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/god_zzZ/article/details/124342364">CodeQL基础语法_god_Zeo的博客-CSDN博客</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.knownsec.com/2016/08/apache-shiro-java/">Apache Shiro Java 反序列化漏洞分析 - 知道创宇 (knownsec.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_44769520/article/details/123476443">IDEA搭建shiro550复现环境_zyer1的博客-CSDN博客_idea shiro</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/225442#h2-7">Java安全之Shiro 550反序列化漏洞分析-安全客 - 安全资讯平台 (anquanke.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/nice0e3/p/13894507.html">Java安全之安全加密算法 - nice_0e3 - 博客园 (cnblogs.com)</a></p>
 
                 
               </div>
