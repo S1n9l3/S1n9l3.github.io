@@ -31,7 +31,7 @@
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221123200627281.png">
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221123195657297.png">
 <meta property="article:published_time" content="2022-11-23T11:28:46.227Z">
-<meta property="article:modified_time" content="2022-11-23T12:06:27.710Z">
+<meta property="article:modified_time" content="2022-12-13T10:45:51.349Z">
 <meta property="article:author" content="YY">
 <meta property="article:tag" content="sql注入">
 <meta property="article:tag" content="ctf">
@@ -309,7 +309,11 @@
 <h2 id="handler"><a href="#handler" class="headerlink" title="handler"></a>handler</h2><p><code>handler</code>可以打开表的句柄，然后一行一行读数据。基本操作为，</p>
 <figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">HANDLER</span> TableName <span class="hljs-keyword">OPEN</span> [<span class="hljs-keyword">AS</span> NewName];    # 打开表<br><span class="hljs-keyword">HANDLER</span> TableName <span class="hljs-keyword">READ</span> FIRST;           # 读首行<br><span class="hljs-keyword">HANDLER</span> TableName <span class="hljs-keyword">READ</span> NEXT;            # 读下一行<br><span class="hljs-keyword">HANDLER</span> TableName <span class="hljs-keyword">CLOSE</span>;                # 关闭<br></code></pre></td></tr></table></figure>
 
-<p>所以在这里可以<code>1&#39;;handler </code>1919810931114514<code> open as a;handler a read first;</code></p>
+<p>所以在这里可以</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript"><span class="hljs-number">1</span>&#x27;;handler `<span class="hljs-number">1919810931114514</span>` open <span class="hljs-keyword">as</span> a;handler a <span class="hljs-built_in">read</span> <span class="hljs-keyword">first</span>;<br></code></pre></td></tr></table></figure>
+
+
+
 <p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221123195657297.png" srcset="/img/loading.gif" lazyload alt="image-20221123195657297"></p>
 <h2 id="sql预处理"><a href="#sql预处理" class="headerlink" title="sql预处理"></a>sql预处理</h2><p>预处理语句可以这样定义，</p>
 <figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs n1ql">定义预处理语句 <span class="hljs-keyword">PREPARE</span> stmt_name <span class="hljs-keyword">FROM</span> preparable_stmt; <br>执行预处理语句 EXECUTE stmt_name [USING @var_name [, @var_name] ...]; <br>删除(释放)定义 &#123;DEALLOCATE | <span class="hljs-keyword">DROP</span>&#125; <span class="hljs-keyword">PREPARE</span> stmt_name;<br></code></pre></td></tr></table></figure>

