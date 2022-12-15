@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>[ctf-web] RoarCTF2019-EasyJava</title>
+    <link href="/2022/12/15/%5Bctf-web%5D%20RoarCTF2019-EayaJava/"/>
+    <url>/2022/12/15/%5Bctf-web%5D%20RoarCTF2019-EayaJava/</url>
+    
+    <content type="html"><![CDATA[<h1 id="RoarCTF-2019-Easy-Java"><a href="#RoarCTF-2019-Easy-Java" class="headerlink" title="[RoarCTF 2019]Easy Java"></a>[RoarCTF 2019]Easy Java</h1><p>进入是登录界面，</p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221215221720796.png" alt="image-20221215221720796"></p><p>首先尝试登录，注入没有成功（当然因为是java没怎么尝试），发现下面的help，进入后路径是：</p><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">http</span>://<span class="hljs-number">6</span>dd13dba-f7ac-<span class="hljs-number">40</span>de-a4eb-<span class="hljs-number">56</span>cad5c3403b.node4.buuoj.cn:<span class="hljs-number">81</span>/Download?filename=help.docx<br></code></pre></td></tr></table></figure><p>但是显示了<code>java.io.FileNotFoundException:&#123;help.docx&#125;</code>，不过尝试了发送POST请求成功下载文件，也不是POST请求，就是把请求方法换成了POST，在hackbar选择这个，</p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221215222141955.png" alt="image-20221215222141955"></p><p>打开文件发现只有<code>Are you sure the flag is here? ? ?</code>这样的内容，那么就尝试下载其他的文件，javaweb中有<code>/WEB-INF/web.xml</code>文件，尝试下载，成功了，打开发现</p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221215222351095.png" alt="image-20221215222351095"></p><p>尝试下载这个文件：</p><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">http:<span class="hljs-regexp">//</span><span class="hljs-number">6</span>dd13dba-f7ac-<span class="hljs-number">40</span>de-a4eb-<span class="hljs-number">56</span>cad5c3403b.node4.buuoj.cn:<span class="hljs-number">81</span><span class="hljs-regexp">/Download?filename=/</span>WEB-INF<span class="hljs-regexp">/classes/</span>com<span class="hljs-regexp">/wm/</span>ctf/FlagController.class<br></code></pre></td></tr></table></figure><p>不过需要反编译，<a href="http://javare.cn/">JAVA反向工程网 (javare.cn)</a></p><p>得到源码：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.io.IOException;<br><span class="hljs-keyword">import</span> java.io.PrintWriter;<br><span class="hljs-keyword">import</span> javax.servlet.ServletException;<br><span class="hljs-keyword">import</span> javax.servlet.annotation.WebServlet;<br><span class="hljs-keyword">import</span> javax.servlet.http.HttpServlet;<br><span class="hljs-keyword">import</span> javax.servlet.http.HttpServletRequest;<br><span class="hljs-keyword">import</span> javax.servlet.http.HttpServletResponse;<br><br><span class="hljs-meta">@WebServlet(</span><br><span class="hljs-meta">   name = &quot;FlagController&quot;</span><br><span class="hljs-meta">)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">FlagController</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">HttpServlet</span> &#123;<br><br>   <span class="hljs-type">String</span> <span class="hljs-variable">flag</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;ZmxhZ3swZTVmYjRiNy1lMzIzLTQ4NTQtOWUxNi0xMDVlNzE3OTEzZmF9Cg==&quot;</span>;<br><br><br>   <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doGet</span><span class="hljs-params">(HttpServletRequest var1, HttpServletResponse var2)</span> <span class="hljs-keyword">throws</span> ServletException, IOException &#123;<br>      <span class="hljs-type">PrintWriter</span> <span class="hljs-variable">var3</span> <span class="hljs-operator">=</span> var2.getWriter();<br>      var3.print(<span class="hljs-string">&quot;&lt;h1&gt;Flag is nearby ~ Come on! ! !&lt;/h1&gt;&quot;</span>);<br>   &#125;<br>&#125;<br></code></pre></td></tr></table></figure><p>base64解码。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>ctf</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>ctf</tag>
+      
+      <tag>ctf-web</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>[ctf-web] 网鼎杯2018-Fakebook</title>
     <link href="/2022/12/14/%5Bctf-web%5D%20%E7%BD%91%E9%BC%8E%E6%9D%AF2018-Fakebook/"/>
     <url>/2022/12/14/%5Bctf-web%5D%20%E7%BD%91%E9%BC%8E%E6%9D%AF2018-Fakebook/</url>
