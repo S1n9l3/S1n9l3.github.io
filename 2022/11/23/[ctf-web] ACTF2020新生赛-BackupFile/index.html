@@ -16,15 +16,15 @@
   <meta name="author" content="YY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="[ACTF2020 新生赛]BackupFile进入后是一个页面，只显示Try to find out source file!，看来需要目录爆破了，使用dirb进行爆破，看题目可能是备份文件.bak，所以使用命令， 1irb http:&#x2F;&#x2F;b093e3d8-cd04-4fe3-b874-a1ec95208d08.node4.buuoj.cn:81 &#x2F;usr&#x2F;share&#x2F;wordlists&#x2F;dir">
+    <meta name="description" content="[ACTF2020 新生赛]BackupFile进入后是一个页面，只显示Try to find out source file!，看来需要目录爆破了，使用dirb进行爆破，看题目可能是备份文件.bak，所以使用命令， 1dirb http:&#x2F;&#x2F;b093e3d8-cd04-4fe3-b874-a1ec95208d08.node4.buuoj.cn:81 &#x2F;usr&#x2F;share&#x2F;wordlists&#x2F;di">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[ctf-web] ACTF2020新生赛-BackupFile">
 <meta property="og:url" content="https://s1n9l3.github.io/2022/11/23/[ctf-web]%20ACTF2020%E6%96%B0%E7%94%9F%E8%B5%9B-BackupFile/index.html">
 <meta property="og:site_name" content="S1n9l3">
-<meta property="og:description" content="[ACTF2020 新生赛]BackupFile进入后是一个页面，只显示Try to find out source file!，看来需要目录爆破了，使用dirb进行爆破，看题目可能是备份文件.bak，所以使用命令， 1irb http:&#x2F;&#x2F;b093e3d8-cd04-4fe3-b874-a1ec95208d08.node4.buuoj.cn:81 &#x2F;usr&#x2F;share&#x2F;wordlists&#x2F;dir">
+<meta property="og:description" content="[ACTF2020 新生赛]BackupFile进入后是一个页面，只显示Try to find out source file!，看来需要目录爆破了，使用dirb进行爆破，看题目可能是备份文件.bak，所以使用命令， 1dirb http:&#x2F;&#x2F;b093e3d8-cd04-4fe3-b874-a1ec95208d08.node4.buuoj.cn:81 &#x2F;usr&#x2F;share&#x2F;wordlists&#x2F;di">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-11-23T11:05:56.267Z">
-<meta property="article:modified_time" content="2022-11-23T11:14:24.186Z">
+<meta property="article:modified_time" content="2022-12-31T10:05:39.658Z">
 <meta property="article:author" content="YY">
 <meta property="article:tag" content="ctf">
 <meta property="article:tag" content="ctf-web">
@@ -220,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          817 字
+          818 字
         
       </span>
     
@@ -275,7 +275,7 @@
               <div class="markdown-body">
                 
                 <h1 id="ACTF2020-新生赛-BackupFile"><a href="#ACTF2020-新生赛-BackupFile" class="headerlink" title="[ACTF2020 新生赛]BackupFile"></a>[ACTF2020 新生赛]BackupFile</h1><p>进入后是一个页面，只显示<code>Try to find out source file!</code>，看来需要目录爆破了，使用<code>dirb</code>进行爆破，看题目可能是备份文件<code>.bak</code>，所以使用命令，</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">irb http:<span class="hljs-regexp">//</span>b093e3d8-cd04-<span class="hljs-number">4</span>fe3-b874-a1ec95208d08.node4.buuoj.cn:<span class="hljs-number">81</span> <span class="hljs-regexp">/usr/</span>share<span class="hljs-regexp">/wordlists/</span>dirb/common.txt -N <span class="hljs-number">429</span> -X .bak<br></code></pre></td></tr></table></figure>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">dirb http:<span class="hljs-regexp">//</span>b093e3d8-cd04-<span class="hljs-number">4</span>fe3-b874-a1ec95208d08.node4.buuoj.cn:<span class="hljs-number">81</span> <span class="hljs-regexp">/usr/</span>share<span class="hljs-regexp">/wordlists/</span>dirb/common.txt -N <span class="hljs-number">429</span> -X .bak<br></code></pre></td></tr></table></figure>
 
 <p>得到了文件<code>index.php.bak</code>，下载后查看文件，</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-keyword">include_once</span> <span class="hljs-string">&quot;flag.php&quot;</span>;<br><br><span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;key&#x27;</span>])) &#123;<br>    <span class="hljs-variable">$key</span> = <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;key&#x27;</span>];<br>    <span class="hljs-keyword">if</span>(!<span class="hljs-title function_ invoke__">is_numeric</span>(<span class="hljs-variable">$key</span>)) &#123;<br>        <span class="hljs-keyword">exit</span>(<span class="hljs-string">&quot;Just num!&quot;</span>);<br>    &#125;<br>    <span class="hljs-variable">$key</span> = <span class="hljs-title function_ invoke__">intval</span>(<span class="hljs-variable">$key</span>);<br>    <span class="hljs-variable">$str</span> = <span class="hljs-string">&quot;123ffwsfwefwf24r2f32ir23jrw923rskfjwtsw54w3&quot;</span>;<br>    <span class="hljs-keyword">if</span>(<span class="hljs-variable">$key</span> == <span class="hljs-variable">$str</span>) &#123;<br>        <span class="hljs-keyword">echo</span> <span class="hljs-variable">$flag</span>;<br>    &#125;<br>&#125;<br><span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;Try to find out source file!&quot;</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>

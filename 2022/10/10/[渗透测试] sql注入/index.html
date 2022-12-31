@@ -24,7 +24,7 @@
 <meta property="og:description" content="SQL注入SQL 注入（SQL Injection）是发生在 Web 程序中数据库层的安全漏洞，是网站存在最多也是最简单的漏洞。主要原因是程序对用户输入数据的合法性没有判断和处理，导致攻击者可以在 Web 应用程序中事先定义好的 SQL 语句中添加额外的 SQL 语句，在管理员不知情的情况下实现非法操作，以此来实现欺骗数据库服务器执行非授权的任意查询，从而进一步获取到数据信息。 简而言之，SQL">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-10-10T13:05:26.009Z">
-<meta property="article:modified_time" content="2022-12-13T11:43:42.126Z">
+<meta property="article:modified_time" content="2022-12-29T11:20:25.179Z">
 <meta property="article:author" content="YY">
 <meta property="article:tag" content="渗透测试">
 <meta property="article:tag" content="sql注入">
@@ -458,7 +458,7 @@
 <p>对于<code>secure_file_priv</code>是不可以在数据库中修改的，只能在配置文件中修改，修改后重启才能生效。</p>
 </blockquote>
 <h3 id="写文件"><a href="#写文件" class="headerlink" title="写文件"></a>写文件</h3><p>在MySQL中，可以进行写文件操作，</p>
-<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs lasso"><span class="hljs-keyword">SELECT</span> <span class="hljs-string">&#x27;文件内容&#x27;</span> <span class="hljs-keyword">into</span> outfile <span class="hljs-string">&#x27;文件路径&#x27;</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-string">&#x27;文件内容&#x27;</span> <span class="hljs-keyword">into</span> outfile <span class="hljs-string">&#x27;文件路径&#x27;</span><br><br><span class="hljs-keyword">SELECT</span> @<span class="hljs-variable">@basedir</span><br>h<br></code></pre></td></tr></table></figure>
 
 <h4 id="条件-2"><a href="#条件-2" class="headerlink" title="条件"></a>条件</h4><p>写文件必须满足的条件：</p>
 <ul>
