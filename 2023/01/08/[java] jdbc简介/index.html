@@ -16,22 +16,21 @@
   <meta name="author" content="YY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="jdbc简介JDBC的全称是Java数据库连接(Java Database connect)，它是一套用于执行SQL语句的Java API。应用程序可通过这套API连接到关系数据库，并使用SQL语句来完成对数据库中数据的查询、更新和删除等操作。应用程序使用JDBC访问数据库的方式如下图所示：  应用程序使用JDBC访问特定的数据库时，需要与不同的数据库驱动进行连接。由于不同数据库厂商提供的数据库驱">
+    <meta name="description" content="jdbc简介 java JDBC连接数据库步骤及代码_夏沐_lk的博客-CSDN博客_jdbc怎么连接数据库 什么是JDBC？这篇文章告诉你 - 知乎 (zhihu.com) JDBC介绍_学无止路的博客-CSDN博客_jdbc  JDBC的全称是Java数据库连接(Java Database connect)，它是一套用于执行SQL语句的Java API。应用程序可通过这套API连接到关系数据库">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[java] jdbc简介">
 <meta property="og:url" content="https://s1n9l3.github.io/2023/01/08/[java]%20jdbc%E7%AE%80%E4%BB%8B/index.html">
 <meta property="og:site_name" content="S1n9l3">
-<meta property="og:description" content="jdbc简介JDBC的全称是Java数据库连接(Java Database connect)，它是一套用于执行SQL语句的Java API。应用程序可通过这套API连接到关系数据库，并使用SQL语句来完成对数据库中数据的查询、更新和删除等操作。应用程序使用JDBC访问数据库的方式如下图所示：  应用程序使用JDBC访问特定的数据库时，需要与不同的数据库驱动进行连接。由于不同数据库厂商提供的数据库驱">
+<meta property="og:description" content="jdbc简介 java JDBC连接数据库步骤及代码_夏沐_lk的博客-CSDN博客_jdbc怎么连接数据库 什么是JDBC？这篇文章告诉你 - 知乎 (zhihu.com) JDBC介绍_学无止路的博客-CSDN博客_jdbc  JDBC的全称是Java数据库连接(Java Database connect)，它是一套用于执行SQL语句的Java API。应用程序可通过这套API连接到关系数据库">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/57c4b7f65edb73fcd1b6d52876bdeb96_1440w.webp">
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230108210833948.png">
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230108220038889.png">
 <meta property="article:published_time" content="2023-01-08T13:04:24.765Z">
-<meta property="article:modified_time" content="2023-01-08T14:12:54.143Z">
+<meta property="article:modified_time" content="2023-01-09T13:27:39.570Z">
 <meta property="article:author" content="YY">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="jdbc">
-<meta property="article:tag" content="数据库">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/57c4b7f65edb73fcd1b6d52876bdeb96_1440w.webp">
   
@@ -225,7 +224,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.4k 字
+          3.5k 字
         
       </span>
     
@@ -236,7 +235,7 @@
         
         
         
-          29 分钟
+          30 分钟
         
       </span>
     
@@ -279,7 +278,12 @@
             
               <div class="markdown-body">
                 
-                <h1 id="jdbc简介"><a href="#jdbc简介" class="headerlink" title="jdbc简介"></a>jdbc简介</h1><p>JDBC的全称是Java数据库连接(Java Database connect)，它是一套用于执行SQL语句的Java API。应用程序可通过这套API连接到关系数据库，并使用SQL语句来完成对数据库中数据的查询、更新和删除等操作。应用程序使用JDBC访问数据库的方式如下图所示：</p>
+                <h1 id="jdbc简介"><a href="#jdbc简介" class="headerlink" title="jdbc简介"></a>jdbc简介</h1><blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/guanmao4322/article/details/84846647">java JDBC连接数据库步骤及代码_夏沐_lk的博客-CSDN博客_jdbc怎么连接数据库</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/140885502">什么是JDBC？这篇文章告诉你 - 知乎 (zhihu.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_40055163/article/details/120762277">JDBC介绍_学无止路的博客-CSDN博客_jdbc</a></p>
+</blockquote>
+<p>JDBC的全称是Java数据库连接(Java Database connect)，它是一套用于执行SQL语句的Java API。应用程序可通过这套API连接到关系数据库，并使用SQL语句来完成对数据库中数据的查询、更新和删除等操作。应用程序使用JDBC访问数据库的方式如下图所示：</p>
 <p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/57c4b7f65edb73fcd1b6d52876bdeb96_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>应用程序使用JDBC访问特定的数据库时，需要与不同的数据库驱动进行连接。由于不同数据库厂商提供的数据库驱动不同，因此，为了使应用程序与数据库真正建立连接，JDBC不仅需要提供访问数据库的API，还需要封装与各种数据库服务器通信的细节，下图描述了JDBC的具体实现细节：</p>
 <p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230108210833948.png" srcset="/img/loading.gif" lazyload alt="image-20230108210833948"></p>
@@ -388,8 +392,6 @@
       
         <a href="/tags/jdbc/">#jdbc</a>
       
-        <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">#数据库</a>
-      
     </div>
   
 </div>
@@ -444,6 +446,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2023/01/09/%5Bctf-web%5D%20ASIS2019-UnicornShop/" title="[ctf-web] ASIS2019-UnicornShop">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">[ctf-web] ASIS2019-UnicornShop</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
