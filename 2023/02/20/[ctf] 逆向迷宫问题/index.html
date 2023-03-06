@@ -16,13 +16,14 @@
   <meta name="author" content="YY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="ctf逆向——迷宫问题  逆向迷宫题总结 反调试、花指令、chacha20加密、rc4加密  迷宫问题总结。 迷宫通常一个字符串，然后从起点到达终点，路径就是flag。 [HDCTF2019]Maze首先查看程序基本信息：  发现加壳了，用upx脱壳，  再次查看信息：  已经成功脱壳了。因为是32位的，用IDA打开， 发现函数start，反编译查看源码，   发现调用main函数，虽然在函数列表">
+    <meta name="description" content="ctf逆向——迷宫问题  逆向迷宫题总结 反调试、花指令、chacha20加密、rc4加密  迷宫问题总结。 迷宫通常一个字符串，然后从起点到达终点，路径就是flag。 不一样的flag打开是一个exe文件，看下信息，  没有壳，32位的，在IDA中打开，直接查看源码， 1234567891011121314151617181920212223242526272829303132333435363">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[ctf] 逆向迷宫问题">
 <meta property="og:url" content="https://s1n9l3.github.io/2023/02/20/[ctf]%20%E9%80%86%E5%90%91%E8%BF%B7%E5%AE%AB%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="S1n9l3">
-<meta property="og:description" content="ctf逆向——迷宫问题  逆向迷宫题总结 反调试、花指令、chacha20加密、rc4加密  迷宫问题总结。 迷宫通常一个字符串，然后从起点到达终点，路径就是flag。 [HDCTF2019]Maze首先查看程序基本信息：  发现加壳了，用upx脱壳，  再次查看信息：  已经成功脱壳了。因为是32位的，用IDA打开， 发现函数start，反编译查看源码，   发现调用main函数，虽然在函数列表">
+<meta property="og:description" content="ctf逆向——迷宫问题  逆向迷宫题总结 反调试、花指令、chacha20加密、rc4加密  迷宫问题总结。 迷宫通常一个字符串，然后从起点到达终点，路径就是flag。 不一样的flag打开是一个exe文件，看下信息，  没有壳，32位的，在IDA中打开，直接查看源码， 1234567891011121314151617181920212223242526272829303132333435363">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230222213134100.png">
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230221222115485.png">
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230221222216359.png">
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230221222240062.png">
@@ -38,11 +39,11 @@
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230221230427506.png">
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230221231423826.png">
 <meta property="article:published_time" content="2023-02-20T13:52:10.687Z">
-<meta property="article:modified_time" content="2023-02-21T15:24:13.564Z">
+<meta property="article:modified_time" content="2023-02-22T14:01:13.148Z">
 <meta property="article:author" content="YY">
 <meta property="article:tag" content="ctf">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230221222115485.png">
+<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230222213134100.png">
   
   
   
@@ -234,7 +235,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.7k 字
+          3.9k 字
         
       </span>
     
@@ -245,7 +246,7 @@
         
         
         
-          23 分钟
+          33 分钟
         
       </span>
     
@@ -294,6 +295,16 @@
 </blockquote>
 <p>迷宫问题总结。</p>
 <p>迷宫通常一个字符串，然后从起点到达终点，路径就是flag。</p>
+<h2 id="不一样的flag"><a href="#不一样的flag" class="headerlink" title="不一样的flag"></a>不一样的flag</h2><p>打开是一个exe文件，看下信息，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230222213134100.png" srcset="/img/loading.gif" lazyload alt="image-20230222213134100"></p>
+<p>没有壳，32位的，在IDA中打开，直接查看源码，</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> __cdecl __noreturn <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">const</span> <span class="hljs-type">char</span> **argv, <span class="hljs-type">const</span> <span class="hljs-type">char</span> **envp)</span><br>&#123;<br>  <span class="hljs-type">char</span> v3[<span class="hljs-number">29</span>]; <span class="hljs-comment">// [esp+17h] [ebp-35h] BYREF</span><br>  <span class="hljs-type">int</span> v4; <span class="hljs-comment">// [esp+34h] [ebp-18h]</span><br>  <span class="hljs-type">int</span> v5; <span class="hljs-comment">// [esp+38h] [ebp-14h] BYREF</span><br>  <span class="hljs-type">int</span> i; <span class="hljs-comment">// [esp+3Ch] [ebp-10h]</span><br>  _BYTE v7[<span class="hljs-number">12</span>]; <span class="hljs-comment">// [esp+40h] [ebp-Ch] BYREF</span><br><br>  __main();<br>  v4 = <span class="hljs-number">0</span>;<br>  <span class="hljs-built_in">strcpy</span>(v3, <span class="hljs-string">&quot;*11110100001010000101111#&quot;</span>);<br>  <span class="hljs-keyword">while</span> ( <span class="hljs-number">1</span> )<br>  &#123;<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;you can choose one action to execute&quot;</span>);<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;1 up&quot;</span>);<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;2 down&quot;</span>);<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;3 left&quot;</span>);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;4 right\n:&quot;</span>);<br>    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;v5);<br>    <span class="hljs-keyword">if</span> ( v5 == <span class="hljs-number">2</span> )<br>    &#123;<br>      ++*(_DWORD *)&amp;v3[<span class="hljs-number">25</span>];<br>    &#125;<br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( v5 &gt; <span class="hljs-number">2</span> )<br>    &#123;<br>      <span class="hljs-keyword">if</span> ( v5 == <span class="hljs-number">3</span> )<br>      &#123;<br>        --v4;<br>      &#125;<br>      <span class="hljs-keyword">else</span><br>      &#123;<br>        <span class="hljs-keyword">if</span> ( v5 != <span class="hljs-number">4</span> )<br>LABEL_13:<br>          <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);<br>        ++v4;<br>      &#125;<br>    &#125;<br>    <span class="hljs-keyword">else</span><br>    &#123;<br>      <span class="hljs-keyword">if</span> ( v5 != <span class="hljs-number">1</span> )<br>        <span class="hljs-keyword">goto</span> LABEL_13;<br>      --*(_DWORD *)&amp;v3[<span class="hljs-number">25</span>];<br>    &#125;<br>    <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; i &lt;= <span class="hljs-number">1</span>; ++i )<br>    &#123;<br>      <span class="hljs-keyword">if</span> ( *(<span class="hljs-type">int</span> *)&amp;v3[<span class="hljs-number">4</span> * i + <span class="hljs-number">25</span>] &lt; <span class="hljs-number">0</span> || *(<span class="hljs-type">int</span> *)&amp;v3[<span class="hljs-number">4</span> * i + <span class="hljs-number">25</span>] &gt; <span class="hljs-number">4</span> )<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);<br>    &#125;<br>    <span class="hljs-keyword">if</span> ( v7[<span class="hljs-number">5</span> * *(_DWORD *)&amp;v3[<span class="hljs-number">25</span>] - <span class="hljs-number">41</span> + v4] == <span class="hljs-number">49</span> )<br>      <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);<br>    <span class="hljs-keyword">if</span> ( v7[<span class="hljs-number">5</span> * *(_DWORD *)&amp;v3[<span class="hljs-number">25</span>] - <span class="hljs-number">41</span> + v4] == <span class="hljs-number">35</span> )<br>    &#123;<br>      <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;\nok, the order you enter is the flag!&quot;</span>);<br>      <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>看到大概是走上下左右，最后说明走的顺序就是flag，关键信息：</p>
+<figure class="highlight hsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs hsp"><span class="hljs-symbol">*11110100001010000101111</span><span class="hljs-meta">#</span><br><br>转换一下：<br><span class="hljs-symbol">*1111</span><br><span class="hljs-number">01000</span><br><span class="hljs-number">01010</span><br><span class="hljs-number">00010</span><br><span class="hljs-number">1111</span><span class="hljs-meta">#</span><br></code></pre></td></tr></table></figure>
+
+<p>如果是<code>1</code>（ASCII为49）就退出；如果是<code>#</code>（ASCII为35）就成功。</p>
+<p>所以最后的路径为<code>222441144222</code></p>
 <h2 id="HDCTF2019-Maze"><a href="#HDCTF2019-Maze" class="headerlink" title="[HDCTF2019]Maze"></a>[HDCTF2019]Maze</h2><p>首先查看程序基本信息：</p>
 <p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230221222115485.png" srcset="/img/loading.gif" lazyload alt="image-20230221222115485"></p>
 <p>发现加壳了，用upx脱壳，</p>
@@ -442,6 +453,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2023/02/27/%5B%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%5D%20vs%E4%B8%8E%E6%B1%87%E7%BC%96/" title="[代码分析] vs和汇编">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">[代码分析] vs和汇编</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
