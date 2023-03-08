@@ -32,8 +32,20 @@
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230306212410911.png">
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230306213113698.png">
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230306213245194.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308201820453.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308204115727.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308204149785.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308204320472.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308204359554.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308204432844.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308204522134.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308204550754.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308205546721.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308205703526.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308210216199.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308211545095.png">
 <meta property="article:published_time" content="2023-03-06T12:51:08.082Z">
-<meta property="article:modified_time" content="2023-03-06T15:24:29.854Z">
+<meta property="article:modified_time" content="2023-03-08T13:17:59.664Z">
 <meta property="article:author" content="YY">
 <meta property="article:tag" content="PE">
 <meta name="twitter:card" content="summary_large_image">
@@ -229,7 +241,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          6.1k 字
+          10k 字
         
       </span>
     
@@ -240,7 +252,7 @@
         
         
         
-          51 分钟
+          85 分钟
         
       </span>
     
@@ -357,7 +369,196 @@
 <p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230306213245194.png" srcset="/img/loading.gif" lazyload alt="image-20230306213245194"></p>
 <h3 id="可选NT头"><a href="#可选NT头" class="headerlink" title="可选NT头"></a>可选NT头</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> _<span class="hljs-title">IMAGE_OPTIONAL_HEADER</span> &#123;</span><br>    <span class="hljs-comment">//</span><br>    <span class="hljs-comment">// Standard fields.</span><br>    <span class="hljs-comment">//</span><br><br>    WORD    Magic;<br>    BYTE    MajorLinkerVersion;<br>    BYTE    MinorLinkerVersion;<br>    DWORD   SizeOfCode;<br>    DWORD   SizeOfInitializedData;<br>    DWORD   SizeOfUninitializedData;<br>    DWORD   AddressOfEntryPoint;<br>    DWORD   BaseOfCode;<br>    DWORD   BaseOfData;<br><br>    <span class="hljs-comment">//</span><br>    <span class="hljs-comment">// NT additional fields.</span><br>    <span class="hljs-comment">//</span><br><br>    DWORD   ImageBase;<br>    DWORD   SectionAlignment;<br>    DWORD   FileAlignment;<br>    WORD    MajorOperatingSystemVersion;<br>    WORD    MinorOperatingSystemVersion;<br>    WORD    MajorImageVersion;<br>    WORD    MinorImageVersion;<br>    WORD    MajorSubsystemVersion;<br>    WORD    MinorSubsystemVersion;<br>    DWORD   Win32VersionValue;<br>    DWORD   SizeOfImage;<br>    DWORD   SizeOfHeaders;<br>    DWORD   CheckSum;<br>    WORD    Subsystem;<br>    WORD    DllCharacteristics;<br>    DWORD   SizeOfStackReserve;<br>    DWORD   SizeOfStackCommit;<br>    DWORD   SizeOfHeapReserve;<br>    DWORD   SizeOfHeapCommit;<br>    DWORD   LoaderFlags;<br>    DWORD   NumberOfRvaAndSizes;<br>    IMAGE_DATA_DIRECTORY DataDirectory[IMAGE_NUMBEROF_DIRECTORY_ENTRIES];<br>&#125; IMAGE_OPTIONAL_HEADER32, *PIMAGE_OPTIONAL_HEADER32;<br><br></code></pre></td></tr></table></figure>
 
-<p>可选NT头</p>
+<h4 id="WORD-Magic"><a href="#WORD-Magic" class="headerlink" title="WORD Magic"></a><strong>WORD Magic</strong></h4><p><code>WORD Magic</code>，文件类型标识，</p>
+<ul>
+<li><code>0x10B</code>，表示这是一个32位镜像文件；</li>
+<li><code>0x107</code>，表示这是一个ROM镜像；</li>
+<li><code>0x20B</code>，表示这是一个64位镜像文件；</li>
+</ul>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308201820453.png" srcset="/img/loading.gif" lazyload alt="image-20230308201820453"></p>
+<h4 id="BYTE-MajorLinkerVersion"><a href="#BYTE-MajorLinkerVersion" class="headerlink" title="BYTE MajorLinkerVersion"></a>BYTE MajorLinkerVersion</h4><p><code>BYTE MajorLinkerVersion</code>，链接器的版本号。</p>
+<h4 id="BYTE-MinorLinkerVersion"><a href="#BYTE-MinorLinkerVersion" class="headerlink" title="BYTE MinorLinkerVersion"></a>BYTE MinorLinkerVersion</h4><p><code>BYTE MinorLinkerVersion</code>，链接器副版本号。</p>
+<h4 id="DWORD-SizeOfCode"><a href="#DWORD-SizeOfCode" class="headerlink" title="DWORD SizeOfCode"></a>DWORD SizeOfCode</h4><p><code>DWORD SizeOfCode</code>，<code>.text</code>总大小。</p>
+<h4 id="DWORD-SizeOfInitializedData"><a href="#DWORD-SizeOfInitializedData" class="headerlink" title="DWORD SizeOfInitializedData"></a>DWORD SizeOfInitializedData</h4><p><code>DWORD SizeOfInitializedData</code>，<code>.data</code>总大小。</p>
+<h4 id="DWORD-SizeOfUninitializedData"><a href="#DWORD-SizeOfUninitializedData" class="headerlink" title="DWORD SizeOfUninitializedData"></a>DWORD SizeOfUninitializedData</h4><p><code>DWORD SizeOfUninitializedData</code>，<code>.bss</code>总大小，BSS段通常是指用来存放程序中未初始化的或者初始化为0的全局变量和静态变量的一块内存区域。特点是可读写的，在程序执行之前BSS段会自动清0。</p>
+<h4 id="DWORD-AddressOfEntryPoint"><a href="#DWORD-AddressOfEntryPoint" class="headerlink" title="DWORD AddressOfEntryPoint"></a><strong>DWORD AddressOfEntryPoint</strong></h4><p><code>DWORD AddressOfEntryPoint</code>，程序的虚拟入口地址，按照偏移量的方式表示。</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308204115727.png" srcset="/img/loading.gif" lazyload alt="image-20230308204115727"></p>
+<p>这里是<code>11023</code>，在OD中打开，进入的第一行就是这里，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308204149785.png" srcset="/img/loading.gif" lazyload alt="image-20230308204149785"></p>
+<h4 id="DWORD-BaseOfCode"><a href="#DWORD-BaseOfCode" class="headerlink" title="DWORD BaseOfCode"></a>DWORD BaseOfCode</h4><p><code>DWORD BaseOfCode</code>，代码基址，表示写的代码的开始，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308204320472.png" srcset="/img/loading.gif" lazyload alt="image-20230308204320472"></p>
+<p>在OD中，最上面的一行，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308204359554.png" srcset="/img/loading.gif" lazyload alt="image-20230308204359554"></p>
+<h4 id="DWORD-BaseOfData"><a href="#DWORD-BaseOfData" class="headerlink" title="DWORD BaseOfData"></a>DWORD BaseOfData</h4><p><code>DWORD BaseOfData</code>，数据基址。</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308204432844.png" srcset="/img/loading.gif" lazyload alt="image-20230308204432844"></p>
+<h4 id="DWORD-ImageBase"><a href="#DWORD-ImageBase" class="headerlink" title="DWORD ImageBase"></a>DWORD ImageBase</h4><p><code>DWORD ImageBase</code>，入口点，<strong>当加载进内存时镜像的第1个字节的首选地址。它必须是64K的倍数。DLL默认是10000000H。Windows CE 的EXE默认是00010000H。Windows 系列的EXE默认是00400000H。</strong></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308204522134.png" srcset="/img/loading.gif" lazyload alt="image-20230308204522134"></p>
+<p>在OD中，格式是<code>00400000</code>，上面的地址在此基础上偏移的。</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308204550754.png" srcset="/img/loading.gif" lazyload alt="image-20230308204550754"></p>
+<p>如果设置了<strong>随机基址</strong>，导致看到的地址会不同的。</p>
+<h4 id="DWORD-SectionAlignment"><a href="#DWORD-SectionAlignment" class="headerlink" title="DWORD SectionAlignment"></a>DWORD SectionAlignment</h4><p><code>DWORD SectionAlignment</code>，当加载进内存时节的对齐值（以字节计）（内存）</p>
+<h4 id="DWORD-FileAlignment"><a href="#DWORD-FileAlignment" class="headerlink" title="DWORD FileAlignment"></a>DWORD FileAlignment</h4><p><code>DWORD FileAlignment</code>，用来对齐镜像文件的节中的原始数据的对齐因子（以字节计）（磁盘）</p>
+<blockquote>
+<p>对齐：</p>
+<p>一个pe文件无论在磁盘和内存中存放都会进行对齐，但他们的对齐值会不相同。<br>PE 文件头里边的FileAligment 定义了磁盘区块的对齐值。每一个区块从对齐值的倍数的偏移位置开始存放。而区块的实际代码或数据的大小不一定刚好是这么多，所以在多余的地方一般以00h 来填充，这就是区块间的间隙。<br>PE 文件头里边的SectionAligment 定义了内存中区块的对齐值。PE 文件被映射到内存中时，区块总是至少从一个页边界开始。</p>
+</blockquote>
+<h4 id="WORD-MajorOperatingSystemVersion"><a href="#WORD-MajorOperatingSystemVersion" class="headerlink" title="WORD MajorOperatingSystemVersion"></a>WORD MajorOperatingSystemVersion</h4><h4 id="WORD-MinorOperatingSystemVersion"><a href="#WORD-MinorOperatingSystemVersion" class="headerlink" title="WORD MinorOperatingSystemVersion"></a>WORD MinorOperatingSystemVersion</h4><h4 id="WORD-MajorImageVersion"><a href="#WORD-MajorImageVersion" class="headerlink" title="WORD MajorImageVersion"></a>WORD MajorImageVersion</h4><h4 id="WORD-MinorImageVersion"><a href="#WORD-MinorImageVersion" class="headerlink" title="WORD MinorImageVersion"></a>WORD MinorImageVersion</h4><h4 id="WORD-MajorSubsystemVersion"><a href="#WORD-MajorSubsystemVersion" class="headerlink" title="WORD MajorSubsystemVersion"></a>WORD MajorSubsystemVersion</h4><h4 id="WORD-MinorSubsystemVersion"><a href="#WORD-MinorSubsystemVersion" class="headerlink" title="WORD MinorSubsystemVersion"></a>WORD MinorSubsystemVersion</h4><p>以上全是版本号</p>
+<h4 id="DWORD-Win32VersionValue"><a href="#DWORD-Win32VersionValue" class="headerlink" title="DWORD Win32VersionValue"></a>DWORD Win32VersionValue</h4><p>win32版本（必须为0）</p>
+<h4 id="DWORD-SizeOfImage"><a href="#DWORD-SizeOfImage" class="headerlink" title="DWORD SizeOfImage"></a>DWORD SizeOfImage</h4><p>文件总大小</p>
+<h4 id="DWORD-SizeOfHeaders"><a href="#DWORD-SizeOfHeaders" class="headerlink" title="DWORD SizeOfHeaders"></a>DWORD SizeOfHeaders</h4><p>三个头的总大小</p>
+<h4 id="DWORD-CheckSum"><a href="#DWORD-CheckSum" class="headerlink" title="DWORD CheckSum"></a>DWORD CheckSum</h4><p>校验和（用来检查文件是否被修改）</p>
+<h4 id="WORD-Subsystem"><a href="#WORD-Subsystem" class="headerlink" title="WORD Subsystem"></a>WORD Subsystem</h4><p>子系统</p>
+<p>子系统表：</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>未知子系统</td>
+</tr>
+<tr>
+<td>1</td>
+<td>设备驱动程序和Native Windows进程</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Windows图形用户界面（GUI）子系统（一般程序），通常指MFC</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Windows字符模式（CUI）子系统（从命令提示符启动的）</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Posix字符模式子系统</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Windows CE</td>
+</tr>
+<tr>
+<td>10</td>
+<td>可扩展固件接口（EFI）应用程序</td>
+</tr>
+<tr>
+<td>11</td>
+<td>带引导服务的EFI驱动程序</td>
+</tr>
+<tr>
+<td>12</td>
+<td>带运行时服务的EFI驱动程序</td>
+</tr>
+<tr>
+<td>13</td>
+<td>EFI ROM镜像</td>
+</tr>
+<tr>
+<td>14</td>
+<td>XBOX</td>
+</tr>
+</tbody></table>
+<p>这里是</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308205546721.png" srcset="/img/loading.gif" lazyload alt="image-20230308205546721"></p>
+<h4 id="WORD-DllCharacteristics"><a href="#WORD-DllCharacteristics" class="headerlink" title="WORD DllCharacteristics"></a>WORD DllCharacteristics</h4><p>dll特征</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE 0x0040     <span class="hljs-comment">// DLL can move. aslr随机地址关掉</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY    0x0080     <span class="hljs-comment">// Code Integrity Image</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> IMAGE_DLLCHARACTERISTICS_NX_COMPAT    0x0100     <span class="hljs-comment">// Image is NX compatible</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> IMAGE_DLLCHARACTERISTICS_NO_ISOLATION 0x0200     <span class="hljs-comment">// Image understands isolation and doesn&#x27;t want it</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> IMAGE_DLLCHARACTERISTICS_NO_SEH       0x0400     <span class="hljs-comment">// Image does not use SEH.  No SE handler may reside in this image</span></span><br>                                                        <span class="hljs-comment">//seh的保护机制</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> IMAGE_DLLCHARACTERISTICS_NO_BIND      0x0800     <span class="hljs-comment">// Do not bind this image.</span></span><br><span class="hljs-comment">//                                            0x1000     // Reserved.</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> IMAGE_DLLCHARACTERISTICS_WDM_DRIVER   0x2000     <span class="hljs-comment">// Driver uses WDM model</span></span><br>                                                        <span class="hljs-comment">//大部分的dll都有这个</span><br><span class="hljs-comment">//                                            0x4000     // Reserved.</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> IMAGE_DLLCHARACTERISTICS_TERMINAL_SERVER_AWARE     0x8000</span><br></code></pre></td></tr></table></figure>
+
+<p>这里是<code>8100</code>，表示下面的两个特征：</p>
+<ul>
+<li><code>IMAGE_DLLCHARACTERISTICS_TERMINAL_SERVER_AWARE</code></li>
+<li><code>IMAGE_DLLCHARACTERISTICS_NX_COMPAT</code></li>
+</ul>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308205703526.png" srcset="/img/loading.gif" lazyload alt="image-20230308205703526"></p>
+<h4 id="DWORD-SizeOfStackReserve"><a href="#DWORD-SizeOfStackReserve" class="headerlink" title="DWORD SizeOfStackReserve"></a>DWORD SizeOfStackReserve</h4><p>栈保留大小</p>
+<h4 id="DWORD-SizeOfStackCommit"><a href="#DWORD-SizeOfStackCommit" class="headerlink" title="DWORD SizeOfStackCommit"></a>DWORD SizeOfStackCommit</h4><p>栈申请大小</p>
+<h4 id="DWORD-SizeOfHeapReserve"><a href="#DWORD-SizeOfHeapReserve" class="headerlink" title="DWORD SizeOfHeapReserve"></a>DWORD SizeOfHeapReserve</h4><p>堆保留大小</p>
+<h4 id="DWORD-SizeOfHeapCommit"><a href="#DWORD-SizeOfHeapCommit" class="headerlink" title="DWORD SizeOfHeapCommit"></a>DWORD SizeOfHeapCommit</h4><p>堆申请大小</p>
+<h4 id="DWORD-LoaderFlags"><a href="#DWORD-LoaderFlags" class="headerlink" title="DWORD LoaderFlags"></a>DWORD LoaderFlags</h4><p>标志位（必须为0）</p>
+<h4 id="DWORD-NumberOfRvaAndSizes"><a href="#DWORD-NumberOfRvaAndSizes" class="headerlink" title="DWORD NumberOfRvaAndSizes"></a>DWORD NumberOfRvaAndSizes</h4><p>数据目录（16）</p>
+<h4 id="IMAGE-DATA-DIRECTORY"><a href="#IMAGE-DATA-DIRECTORY" class="headerlink" title="IMAGE_DATA_DIRECTORY"></a>IMAGE_DATA_DIRECTORY</h4><p>API函数导入表的位置，是函数位置的，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308210216199.png" srcset="/img/loading.gif" lazyload alt="image-20230308210216199"></p>
+<h2 id="节头"><a href="#节头" class="headerlink" title="节头"></a>节头</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> _<span class="hljs-title">IMAGE_SECTION_HEADER</span> &#123;</span><br>    BYTE    Name[IMAGE_SIZEOF_SHORT_NAME];<br>    <span class="hljs-class"><span class="hljs-keyword">union</span> &#123;</span><br>            DWORD   PhysicalAddress;<br>            DWORD   VirtualSize;<br>    &#125; Misc;<br>    DWORD   VirtualAddress;<br>    DWORD   SizeOfRawData;<br>    DWORD   PointerToRawData;<br>    DWORD   PointerToRelocations;<br>    DWORD   PointerToLinenumbers;<br>    WORD    NumberOfRelocations;<br>    WORD    NumberOfLinenumbers;<br>    DWORD   Characteristics;<br>&#125; IMAGE_SECTION_HEADER, *PIMAGE_SECTION_HEADER;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>BYTE Name[IMAGE_SIZEOF_SHORT_NAME];</code>，本节的名字</p>
+</li>
+<li><p><code>DWORD PhysicalAddress;</code>，本节的物理地址</p>
+</li>
+<li><p><code>DWORD VirtualSize</code>，本节的实际大小</p>
+<blockquote>
+<p>为什么有union大括号：2选1，通常选后面，因为不知道具体的物理地址 </p>
+</blockquote>
+</li>
+<li><p><code>DWORD VirtualAddress</code>，本节的RVA，在内存中的位置，<br>虚拟地址，指的偏移量；</p>
+</li>
+<li><p><code>DWORD SizeOfRawData</code>，本节在磁盘中的大小</p>
+</li>
+<li><p><code>DWORD PointerToRawData</code>，本节在磁盘中的偏移<br>在文件中的偏移；</p>
+</li>
+<li><p><code>DWORD PointerToRelocations</code>，exe文件无意义</p>
+</li>
+<li><p><code>DWORD PointerToLinenumbers</code>，行号表的位置（调试用，不过基本没用）</p>
+</li>
+<li><p><code>WORD NumberOfRelocations</code>，重定位数量</p>
+</li>
+<li><p><code>WORD NumberOfLinenumbers</code>，行号表数量</p>
+</li>
+<li><p><code>DWORD Characteristics</code>，特征</p>
+</li>
+</ul>
+<p>特征表：</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>IMAGE_SCN_CNT_CODE 0x00000020</td>
+<td>包含代码，常与 0x10000000一起设置。</td>
+</tr>
+<tr>
+<td>IMAGE_SCN_CNT_INITIALIZED_DATA 0x00000040</td>
+<td>该区块包含已初始化的数据。</td>
+</tr>
+<tr>
+<td>IMAGE_SCN_CNT_UNINITIALIZED_DATA 0x00000080</td>
+<td>该区块包含未初始化的数据。</td>
+</tr>
+<tr>
+<td>IMAGE_SCN_MEM_DISCARDABLE 0x02000000</td>
+<td>该区块可被丢弃，因为当它一旦被装入后，进程就不在需要它了，典型的如重定位区块（如.reloc）。</td>
+</tr>
+<tr>
+<td>IMAGE_SCN_MEM_SHARED 0x10000000</td>
+<td>该区块为共享区块。</td>
+</tr>
+<tr>
+<td>IMAGE_SCN_MEM_EXECUTE 0x20000000</td>
+<td>该区块可以执行。通常当0x00000020被设置时候，该标志也被设置。</td>
+</tr>
+<tr>
+<td>IMAGE_SCN_MEM_READ 0x40000000</td>
+<td>该区块可读，可执行文件中的区块总是设置该标志。</td>
+</tr>
+<tr>
+<td>IMAGE_SCN_MEM_WRITE 0x80000000</td>
+<td>该区块可写。该标志没有设置，装载程序就会将内存映像也标记为可读或可执行</td>
+</tr>
+</tbody></table>
+<p>比如这里的特征，<code>E00000A0</code>，表示可读可写可执行，</p>
+<ul>
+<li><code>IMAGE_SCN_MEM_WRITE</code>，<code>0x80000000</code></li>
+<li><code>IMAGE_SCN_MEM_READ</code>，<code>0x40000000</code></li>
+<li><code>IMAGE_SCN_MEM_EXECUTE</code>，<code>0x20000000</code></li>
+<li><code>IMAGE_SCN_CNT_UNINITIALIZED_DATA</code>，<code>0x00000080</code></li>
+<li><code>IMAGE_SCN_CNT_CODE</code>，<code>0x00000020</code></li>
+</ul>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308211545095.png" srcset="/img/loading.gif" lazyload alt="image-20230308211545095"></p>
 
                 
               </div>
