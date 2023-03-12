@@ -16,12 +16,12 @@
   <meta name="author" content="YY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="PE结构PE结构是一种固定的文件狗屎，通常写在二进制文件的最开始部分。 PE文件主要分为三部分：  DOS头 NT头 文件头 可选头   节头  在VS中，通过下面的代码查看： 1234#include &lt;windows.h&gt;_IMAGE_DOS_HEADER;_IMAGE_NT_HEADERS;_IMAGE_SECTION_HEADER;    基础WORD类型 占4个位置,2字节">
+    <meta name="description" content="PE结构PE结构是一种固定的文件格式，通常写在二进制文件的最开始部分。 PE文件主要分为三部分：  DOS头 NT头 文件头 可选头   节头  在VS中，通过下面的代码查看： 1234#include &lt;windows.h&gt;_IMAGE_DOS_HEADER;_IMAGE_NT_HEADERS;_IMAGE_SECTION_HEADER;    基础WORD类型 占4个位置,2字节">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[代码分析] PE结构">
 <meta property="og:url" content="https://s1n9l3.github.io/2023/03/06/[%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90]%20PE%E7%BB%93%E6%9E%84/index.html">
 <meta property="og:site_name" content="S1n9l3">
-<meta property="og:description" content="PE结构PE结构是一种固定的文件狗屎，通常写在二进制文件的最开始部分。 PE文件主要分为三部分：  DOS头 NT头 文件头 可选头   节头  在VS中，通过下面的代码查看： 1234#include &lt;windows.h&gt;_IMAGE_DOS_HEADER;_IMAGE_NT_HEADERS;_IMAGE_SECTION_HEADER;    基础WORD类型 占4个位置,2字节">
+<meta property="og:description" content="PE结构PE结构是一种固定的文件格式，通常写在二进制文件的最开始部分。 PE文件主要分为三部分：  DOS头 NT头 文件头 可选头   节头  在VS中，通过下面的代码查看： 1234#include &lt;windows.h&gt;_IMAGE_DOS_HEADER;_IMAGE_NT_HEADERS;_IMAGE_SECTION_HEADER;    基础WORD类型 占4个位置,2字节">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230306210246584.png">
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230306210800195.png">
@@ -45,7 +45,7 @@
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308210216199.png">
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230308211545095.png">
 <meta property="article:published_time" content="2023-03-06T12:51:08.082Z">
-<meta property="article:modified_time" content="2023-03-08T13:17:59.664Z">
+<meta property="article:modified_time" content="2023-03-11T10:50:01.445Z">
 <meta property="article:author" content="YY">
 <meta property="article:tag" content="PE">
 <meta name="twitter:card" content="summary_large_image">
@@ -295,7 +295,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="PE结构"><a href="#PE结构" class="headerlink" title="PE结构"></a>PE结构</h1><p>PE结构是一种固定的文件狗屎，通常写在二进制文件的最开始部分。</p>
+                <h1 id="PE结构"><a href="#PE结构" class="headerlink" title="PE结构"></a>PE结构</h1><p>PE结构是一种固定的文件格式，通常写在二进制文件的最开始部分。</p>
 <p>PE文件主要分为三部分：</p>
 <ul>
 <li>DOS头</li>
@@ -648,6 +648,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2023/03/11/%5Bctf-reverse%20SimpleRev%5D/" title="[ctf-reverse] SimpleRev">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">[ctf-reverse] SimpleRev</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
