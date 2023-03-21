@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>[代码分析] 样本-ws</title>
+    <link href="/2023/03/21/%5B%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%5D%20%E6%A0%B7%E6%9C%AC-ws/"/>
+    <url>/2023/03/21/%5B%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%5D%20%E6%A0%B7%E6%9C%AC-ws/</url>
+    
+    <content type="html"><![CDATA[<h1 id="代码分析-样本-ws"><a href="#代码分析-样本-ws" class="headerlink" title="[代码分析] 样本-ws"></a>[代码分析] 样本-ws</h1><blockquote><p> <a href="https://s.threatbook.com/report/file/0e8a4cecd169e7add111d1559caaa48cad8d26b47957a930acf7375d1766baba">样本报告-微步在线云沙箱 (threatbook.com)</a></p></blockquote><h2 id="基本信息"><a href="#基本信息" class="headerlink" title="基本信息"></a>基本信息</h2><p>总的统计信息：</p><ul><li>PE文件</li><li>32位可执行文件</li><li>运行在<code>Intel386</code></li><li>有5个区段</li><li>创建时间：<code>10/09/2022 01:05:19</code></li><li>文件可执行</li><li>虚拟入口地址，<code>0x00EC06</code></li><li>代码基址，<code>0x00001000</code></li><li>数据基址，<code>0x00020000</code></li><li>入口点，<code>0x00400000</code></li><li>开启了随机基址</li></ul><hr><hr><p>用<code>010editor</code>打开，</p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321220355713.png" alt="image-20230321220355713"></p><p>明显是一个PE文件。</p><p>看文件头，直接汇总信息：</p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321220835153.png" alt="image-20230321220835153"></p><p>运行在<code>Intel386</code>架构上；</p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321221027647.png" alt="image-20230321221027647"></p><p>有5个区段；</p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321221104741.png" alt="image-20230321221104741"></p><p>时间：<code>10/09/2022 01:05:19</code></p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321221239145.png" alt="image-20230321221239145"></p><p>文件特征<code>0X0102</code>，</p><ul><li><code>0x0100</code>，表示32位机器</li><li><code>0x0002</code>，表示文件可执行</li></ul><p>接着看可选NT头，</p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321222006100.png" alt="image-20230321222006100"></p><p><code>0x010B</code>，表示是一个32位镜像文件；</p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321222227633.png" alt="image-20230321222227633"></p><p><code>AddressOfEntryPoint</code>，程序的虚拟入口地址；</p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321222318070.png" alt="image-20230321222318070"></p><p><code>BaseOfCode</code>，代码基址；</p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321222345544.png" alt="image-20230321222345544"></p><p><code>BaseOfData</code>，数据基址；</p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321222409958.png" alt="image-20230321222409958"></p><p><code>ImageBase</code>，入口点。</p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321222620723.png" alt="image-20230321222620723"></p><p>DLL特征，<code>0x8140</code>，</p><ul><li><code>IMAGE_DLLCHARACTERISTICS_TERMINAL_SERVER_AWARE</code>，<code>0x8000</code></li><li><code>IMAGE_DLLCHARACTERISTICS_NX_COMPAT</code>，<code>0x010</code></li><li><code>IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE</code>，<code>0x0040</code></li></ul><p>用了随机基址。</p><h2 id="动静分析"><a href="#动静分析" class="headerlink" title="动静分析"></a>动静分析</h2><h3 id="导入函数"><a href="#导入函数" class="headerlink" title="导入函数"></a>导入函数</h3><p>导入函数有很多，</p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321224352355.png" alt="image-20230321224352355"></p><p>首先有几个会操作打印机：</p><ul><li><code>DocumentProperties</code> 函数检索或修改打印机初始化信息，或显示指定打印机的打印机配置属性表。</li><li><code>OpenPrinter </code>函数检索到打印子系统中指定打印机或打印服务器或其他类型的句柄的句柄。</li><li><code>ClosePrinter</code> 函数关闭指定的打印机对象。</li></ul><p>还有一些处理注册表的；</p><p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321224921959.png" alt="image-20230321224921959"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>代码分析</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>恶意代码分析</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>[ctf-reverse] Youngter-drive</title>
     <link href="/2023/03/20/%5Bctf-reverse%5D%20Youngter-drive/"/>
     <url>/2023/03/20/%5Bctf-reverse%5D%20Youngter-drive/</url>
