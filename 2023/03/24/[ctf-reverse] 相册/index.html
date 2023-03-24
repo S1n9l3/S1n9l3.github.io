@@ -16,36 +16,28 @@
   <meta name="author" content="YY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="[代码分析] 样本-ws  样本报告-微步在线云沙箱 (threatbook.com)  基本信息总的统计信息：  PE文件 32位可执行文件 运行在Intel386 有5个区段 创建时间：10&#x2F;09&#x2F;2022 01:05:19 文件可执行 虚拟入口地址，0x00EC06 代码基址，0x00001000 数据基址，0x00020000 入口点，0x00400000 开启了随机基址    用010e">
+    <meta name="description" content="逆向相册 陌生的文件不要安装！！！  下载是一个APK，题目中提示是一个邮箱，用ApkIDE打开，发现没什么用，每次用这个打开都是一堆看不懂的东西。。然后用解压apk文件，d2j-dex2jar将dex转换为jar包，用jd-gui查看源码，然后就开始找mail相关的，搜索邮箱，  这里应该是和邮箱相关的内容，然后发现A2.sendMsg(C2.phoneNumber, A2.getInstall">
 <meta property="og:type" content="article">
-<meta property="og:title" content="[代码分析] 样本-ws">
-<meta property="og:url" content="https://s1n9l3.github.io/2023/03/21/[%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90]%20%E6%A0%B7%E6%9C%AC-ws/index.html">
+<meta property="og:title" content="[ctf-reverse] 相册">
+<meta property="og:url" content="https://s1n9l3.github.io/2023/03/24/[ctf-reverse]%20%E7%9B%B8%E5%86%8C/index.html">
 <meta property="og:site_name" content="S1n9l3">
-<meta property="og:description" content="[代码分析] 样本-ws  样本报告-微步在线云沙箱 (threatbook.com)  基本信息总的统计信息：  PE文件 32位可执行文件 运行在Intel386 有5个区段 创建时间：10&#x2F;09&#x2F;2022 01:05:19 文件可执行 虚拟入口地址，0x00EC06 代码基址，0x00001000 数据基址，0x00020000 入口点，0x00400000 开启了随机基址    用010e">
+<meta property="og:description" content="逆向相册 陌生的文件不要安装！！！  下载是一个APK，题目中提示是一个邮箱，用ApkIDE打开，发现没什么用，每次用这个打开都是一堆看不懂的东西。。然后用解压apk文件，d2j-dex2jar将dex转换为jar包，用jd-gui查看源码，然后就开始找mail相关的，搜索邮箱，  这里应该是和邮箱相关的内容，然后发现A2.sendMsg(C2.phoneNumber, A2.getInstall">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321220355713.png">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321220835153.png">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321221027647.png">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321221104741.png">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321221239145.png">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321222006100.png">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321222227633.png">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321222318070.png">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321222345544.png">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321222409958.png">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321222620723.png">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321224352355.png">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321224921959.png">
-<meta property="article:published_time" content="2023-03-21T14:00:41.847Z">
-<meta property="article:modified_time" content="2023-03-23T11:40:20.463Z">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230324213220342.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230324213423108.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230324213819743.png">
+<meta property="article:published_time" content="2023-03-24T13:27:35.439Z">
+<meta property="article:modified_time" content="2023-03-24T13:42:22.008Z">
 <meta property="article:author" content="YY">
-<meta property="article:tag" content="恶意代码分析">
+<meta property="article:tag" content="ctf">
+<meta property="article:tag" content="ctf-reverse">
+<meta property="article:tag" content="apk逆向">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321220355713.png">
+<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230324213220342.png">
   
   
   
-  <title>[代码分析] 样本-ws - S1n9l3</title>
+  <title>[ctf-reverse] 相册 - S1n9l3</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -210,7 +202,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="[代码分析] 样本-ws"></span>
+            <span id="subtitle" data-typed-text="[ctf-reverse] 相册"></span>
           
         </div>
 
@@ -221,8 +213,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-03-21 22:00" pubdate>
-          2023年3月21日 晚上
+        <time datetime="2023-03-24 21:27" pubdate>
+          2023年3月24日 晚上
         </time>
       </span>
     
@@ -233,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          786 字
+          487 字
         
       </span>
     
@@ -244,7 +236,7 @@
         
         
         
-          7 分钟
+          5 分钟
         
       </span>
     
@@ -282,76 +274,33 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">[代码分析] 样本-ws</h1>
+            <h1 style="display: none">[ctf-reverse] 相册</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="代码分析-样本-ws"><a href="#代码分析-样本-ws" class="headerlink" title="[代码分析] 样本-ws"></a>[代码分析] 样本-ws</h1><blockquote>
-<p> <a target="_blank" rel="noopener" href="https://s.threatbook.com/report/file/0e8a4cecd169e7add111d1559caaa48cad8d26b47957a930acf7375d1766baba">样本报告-微步在线云沙箱 (threatbook.com)</a></p>
+                <h1 id="逆向"><a href="#逆向" class="headerlink" title="逆向"></a>逆向</h1><h1 id="相册"><a href="#相册" class="headerlink" title="相册"></a>相册</h1><blockquote>
+<p>陌生的文件不要安装！！！</p>
 </blockquote>
-<h2 id="基本信息"><a href="#基本信息" class="headerlink" title="基本信息"></a>基本信息</h2><p>总的统计信息：</p>
-<ul>
-<li>PE文件</li>
-<li>32位可执行文件</li>
-<li>运行在<code>Intel386</code></li>
-<li>有5个区段</li>
-<li>创建时间：<code>10/09/2022 01:05:19</code></li>
-<li>文件可执行</li>
-<li>虚拟入口地址，<code>0x00EC06</code></li>
-<li>代码基址，<code>0x00001000</code></li>
-<li>数据基址，<code>0x00020000</code></li>
-<li>入口点，<code>0x00400000</code></li>
-<li>开启了随机基址</li>
-</ul>
-<hr>
-<hr>
-<p>用<code>010editor</code>打开，</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321220355713.png" srcset="/img/loading.gif" lazyload alt="image-20230321220355713"></p>
-<p>明显是一个PE文件。</p>
-<p>看文件头，直接汇总信息：</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321220835153.png" srcset="/img/loading.gif" lazyload alt="image-20230321220835153"></p>
-<p>运行在<code>Intel386</code>架构上；</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321221027647.png" srcset="/img/loading.gif" lazyload alt="image-20230321221027647"></p>
-<p>有5个区段；</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321221104741.png" srcset="/img/loading.gif" lazyload alt="image-20230321221104741"></p>
-<p>时间：<code>10/09/2022 01:05:19</code></p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321221239145.png" srcset="/img/loading.gif" lazyload alt="image-20230321221239145"></p>
-<p>文件特征<code>0X0102</code>，</p>
-<ul>
-<li><code>0x0100</code>，表示32位机器</li>
-<li><code>0x0002</code>，表示文件可执行</li>
-</ul>
-<p>接着看可选NT头，</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321222006100.png" srcset="/img/loading.gif" lazyload alt="image-20230321222006100"></p>
-<p><code>0x010B</code>，表示是一个32位镜像文件；</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321222227633.png" srcset="/img/loading.gif" lazyload alt="image-20230321222227633"></p>
-<p><code>AddressOfEntryPoint</code>，程序的虚拟入口地址；</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321222318070.png" srcset="/img/loading.gif" lazyload alt="image-20230321222318070"></p>
-<p><code>BaseOfCode</code>，代码基址；</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321222345544.png" srcset="/img/loading.gif" lazyload alt="image-20230321222345544"></p>
-<p><code>BaseOfData</code>，数据基址；</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321222409958.png" srcset="/img/loading.gif" lazyload alt="image-20230321222409958"></p>
-<p><code>ImageBase</code>，入口点。</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321222620723.png" srcset="/img/loading.gif" lazyload alt="image-20230321222620723"></p>
-<p>DLL特征，<code>0x8140</code>，</p>
-<ul>
-<li><code>IMAGE_DLLCHARACTERISTICS_TERMINAL_SERVER_AWARE</code>，<code>0x8000</code></li>
-<li><code>IMAGE_DLLCHARACTERISTICS_NX_COMPAT</code>，<code>0x010</code></li>
-<li><code>IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE</code>，<code>0x0040</code></li>
-</ul>
-<p>用了随机基址。</p>
-<h2 id="动静分析"><a href="#动静分析" class="headerlink" title="动静分析"></a>动静分析</h2><h3 id="导入函数"><a href="#导入函数" class="headerlink" title="导入函数"></a>导入函数</h3><p>导入函数有很多，</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321224352355.png" srcset="/img/loading.gif" lazyload alt="image-20230321224352355"></p>
-<p>首先有几个会操作打印机：</p>
-<ul>
-<li><code>DocumentProperties</code> 函数检索或修改打印机初始化信息，或显示指定打印机的打印机配置属性表。</li>
-<li><code>OpenPrinter </code>函数检索到打印子系统中指定打印机或打印服务器或其他类型的句柄的句柄。</li>
-<li><code>ClosePrinter</code> 函数关闭指定的打印机对象。</li>
-</ul>
-<p>还有一些处理注册表的；</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230321224921959.png" srcset="/img/loading.gif" lazyload alt="image-20230321224921959"></p>
-<h2 id="开始分析"><a href="#开始分析" class="headerlink" title="开始分析"></a>开始分析</h2><p>&#x3D;&#x3D;在虚拟机中进行分析的，结果用OD运行后，暂停重启不了了:cry:，分析代码需谨慎，这个就放弃了&#x3D;&#x3D;</p>
+<p>下载是一个APK，题目中提示是一个邮箱，用ApkIDE打开，发现没什么用，每次用这个打开都是一堆看不懂的东西。。然后用解压apk文件，<code>d2j-dex2jar</code>将dex转换为jar包，用jd-gui查看源码，然后就开始找mail相关的，搜索<code>邮箱</code>，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230324213220342.png" srcset="/img/loading.gif" lazyload alt="image-20230324213220342"></p>
+<p>这里应该是和邮箱相关的内容，然后发现<code>A2.sendMsg(C2.phoneNumber, A2.getInstallFlag((Context)this, &quot;&quot;));</code>，这里是发送信息，有个电话号码，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230324213423108.png" srcset="/img/loading.gif" lazyload alt="image-20230324213423108"></p>
+<p>跳转到这里，看到这里的信息比较多了，163的邮箱服务，有两个base64编码的东西，这里用的是<code>NativeMethod</code>，应该是调用了外部的东西。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/dengshusheng2/article/details/79977232">Java 本地方法Native Method详细介绍_雪荠的博客-CSDN博客</a></p>
+</blockquote>
+<p>其实是lib文件夹中的<code>so</code>文件，</p>
+<blockquote>
+<p>对java不太懂，不确定一定要找so文件</p>
+</blockquote>
+<p>用IDA打开so文件，然后<code>SHIFT+F12</code>查看字符串，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230324213819743.png" srcset="/img/loading.gif" lazyload alt="image-20230324213819743"></p>
+<p>挨着用base64解码就得到flag。</p>
+<blockquote>
+<p>用jadx可以直接打开APK，推荐使用</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/skylot/jadx/releases">Releases · skylot&#x2F;jadx · GitHub</a></p>
+</blockquote>
 
                 
               </div>
@@ -370,7 +319,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/" class="category-chain-item">代码分析</a>
+  <a href="/categories/ctf/" class="category-chain-item">ctf</a>
   
   
 
@@ -385,7 +334,11 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/">#恶意代码分析</a>
+        <a href="/tags/ctf/">#ctf</a>
+      
+        <a href="/tags/ctf-reverse/">#ctf-reverse</a>
+      
+        <a href="/tags/apk%E9%80%86%E5%90%91/">#apk逆向</a>
       
     </div>
   
@@ -397,8 +350,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>[代码分析] 样本-ws</div>
-      <div>https://s1n9l3.github.io/2023/03/21/[代码分析] 样本-ws/</div>
+      <div>[ctf-reverse] 相册</div>
+      <div>https://s1n9l3.github.io/2023/03/24/[ctf-reverse] 相册/</div>
     </div>
     <div class="license-meta">
       
@@ -410,7 +363,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年3月21日</div>
+          <div>2023年3月24日</div>
         </div>
       
       
@@ -442,18 +395,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/03/24/%5Bctf-reverse%5D%20%E7%9B%B8%E5%86%8C/" title="[ctf-reverse] 相册">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">[ctf-reverse] 相册</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/03/20/%5Bctf-reverse%5D%20Youngter-drive/" title="[ctf-reverse] Youngter-drive">
-                        <span class="hidden-mobile">[ctf-reverse] Youngter-drive</span>
+                      <a href="/2023/03/21/%5B%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%5D%20%E6%A0%B7%E6%9C%AC-ws/" title="[代码分析] 样本-ws">
+                        <span class="hidden-mobile">[代码分析] 样本-ws</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
