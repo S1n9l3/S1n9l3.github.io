@@ -1,0 +1,713 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/Aries.ico">
+  <link rel="icon" href="/img/Aries.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="YY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="[FlareOn4]IgniteMe下载文件，没有壳，IDA打开，看主函数的反汇编， 123456789101112131415void __noreturn start()&amp;#123;  DWORD NumberOfBytesWritten; &#x2F;&#x2F; [esp+0h] [ebp-4h] BYREF  NumberOfBytesWritten &#x3D; 0;  hFile &#x3D; GetStdHandle(0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[ctf-reverse] [FlareOn4]IgniteMe">
+<meta property="og:url" content="https://s1n9l3.github.io/2023/03/27/[ctf-reverse]%20FlareOn4-IgniteMe/index.html">
+<meta property="og:site_name" content="S1n9l3">
+<meta property="og:description" content="[FlareOn4]IgniteMe下载文件，没有壳，IDA打开，看主函数的反汇编， 123456789101112131415void __noreturn start()&amp;#123;  DWORD NumberOfBytesWritten; &#x2F;&#x2F; [esp+0h] [ebp-4h] BYREF  NumberOfBytesWritten &#x3D; 0;  hFile &#x3D; GetStdHandle(0">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230327204316292.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230327205344543.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230327205431291.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230327205558034.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230327205606400.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230327205702444.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230327205759987.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230327210704606.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230327210750831.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230327210942795.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230327212107773.png">
+<meta property="article:published_time" content="2023-03-27T12:09:43.533Z">
+<meta property="article:modified_time" content="2023-03-27T13:29:17.988Z">
+<meta property="article:author" content="YY">
+<meta property="article:tag" content="ctf">
+<meta property="article:tag" content="ctf-reverse">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230327204316292.png">
+  
+  
+  
+  <title>[ctf-reverse] [FlareOn4]IgniteMe - S1n9l3</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"s1n9l3.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>WXYY</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="[ctf-reverse] [FlareOn4]IgniteMe"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-03-27 20:09" pubdate>
+          2023年3月27日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          30 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">[ctf-reverse] [FlareOn4]IgniteMe</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="FlareOn4-IgniteMe"><a href="#FlareOn4-IgniteMe" class="headerlink" title="[FlareOn4]IgniteMe"></a>[FlareOn4]IgniteMe</h1><p>下载文件，没有壳，IDA打开，看主函数的反汇编，</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> __noreturn <span class="hljs-title function_">start</span><span class="hljs-params">()</span><br>&#123;<br>  DWORD NumberOfBytesWritten; <span class="hljs-comment">// [esp+0h] [ebp-4h] BYREF</span><br><br>  NumberOfBytesWritten = <span class="hljs-number">0</span>;<br>  hFile = GetStdHandle(<span class="hljs-number">0xFFFFFFF6</span>);<br>  dword_403074 = GetStdHandle(<span class="hljs-number">0xFFFFFFF5</span>);<br>  WriteFile(dword_403074, aG1v3M3T3hFl4g, <span class="hljs-number">0x13</span>u, &amp;NumberOfBytesWritten, <span class="hljs-number">0</span>);<br>  sub_4010F0(NumberOfBytesWritten);<br>  <span class="hljs-keyword">if</span> ( sub_401050() )<br>    WriteFile(dword_403074, aG00dJ0b, <span class="hljs-number">0xA</span>u, &amp;NumberOfBytesWritten, <span class="hljs-number">0</span>);<br>  <span class="hljs-keyword">else</span><br>    WriteFile(dword_403074, aN0tT00H0tRWe7r, <span class="hljs-number">0x24</span>u, &amp;NumberOfBytesWritten, <span class="hljs-number">0</span>);<br>  ExitProcess(<span class="hljs-number">0</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>意思很简单，将输入输出重定向到了控制台，输入flag，判断是否正确。</p>
+<blockquote>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/console/getstdhandle">GetStdHandle 函数</a>：检索指定标准设备的句柄（标准输入、标准输出或标准错误）。</li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/api/fileapi/nf-fileapi-writefile">WriteFile 函数 (fileapi.h)</a>：将数据写入指定的文件或输入&#x2F;输出 (I&#x2F;O) 设备。</li>
+</ul>
+</blockquote>
+<p>接着看<code>sub_4010F0</code>函数，</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">sub_4010F0</span><span class="hljs-params">()</span><br>&#123;<br>  <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> v0; <span class="hljs-comment">// eax</span><br>  <span class="hljs-type">char</span> Buffer[<span class="hljs-number">260</span>]; <span class="hljs-comment">// [esp+0h] [ebp-110h] BYREF</span><br>  DWORD NumberOfBytesRead; <span class="hljs-comment">// [esp+104h] [ebp-Ch] BYREF</span><br>  <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> i; <span class="hljs-comment">// [esp+108h] [ebp-8h]</span><br>  <span class="hljs-type">char</span> v5; <span class="hljs-comment">// [esp+10Fh] [ebp-1h]</span><br><br>  v5 = <span class="hljs-number">0</span>;<br>  <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">0x104</span>; ++i )<br>    Buffer[i] = <span class="hljs-number">0</span>;<br>  ReadFile(hFile, Buffer, <span class="hljs-number">0x104</span>u, &amp;NumberOfBytesRead, <span class="hljs-number">0</span>);<br>  <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; ; ++i )<br>  &#123;<br>    v0 = sub_401020(Buffer);<br>    <span class="hljs-keyword">if</span> ( i &gt;= v0 )<br>      <span class="hljs-keyword">break</span>;<br>    v5 = Buffer[i];<br>    <span class="hljs-keyword">if</span> ( v5 != <span class="hljs-number">10</span> &amp;&amp; v5 != <span class="hljs-number">13</span> )<br>    &#123;<br>      <span class="hljs-keyword">if</span> ( v5 )<br>        byte_403078[i] = v5;<br>    &#125;<br>  &#125;<br>  <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>大概意思是将输入的内容保存到<code>byte_403078</code>；</p>
+<p>然后看<code>sub_401050</code>函数，如果这个函数返回<code>1</code>的话就是正确的flag了，</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">sub_401050</span><span class="hljs-params">()</span><br>&#123;<br>  <span class="hljs-type">int</span> v1; <span class="hljs-comment">// [esp+0h] [ebp-Ch]</span><br>  <span class="hljs-type">int</span> i; <span class="hljs-comment">// [esp+4h] [ebp-8h]</span><br>  <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> j; <span class="hljs-comment">// [esp+4h] [ebp-8h]</span><br>  <span class="hljs-type">char</span> v4; <span class="hljs-comment">// [esp+Bh] [ebp-1h]</span><br><br>  v1 = sub_401020(byte_403078);<br>  v4 = sub_401000();<br>  <span class="hljs-keyword">for</span> ( i = v1 - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; --i )<br>  &#123;<br>    byte_403180[i] = v4 ^ byte_403078[i];<br>    v4 = byte_403078[i];<br>  &#125;<br>  <span class="hljs-keyword">for</span> ( j = <span class="hljs-number">0</span>; j &lt; <span class="hljs-number">0x27</span>; ++j )<br>  &#123;<br>    <span class="hljs-keyword">if</span> ( byte_403180[j] != (<span class="hljs-type">unsigned</span> __int8)byte_403000[j] )<br>      <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>  &#125;<br>  <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>操作也比较简单了，主要是进行异或操作，然后等于<code>byte_403000</code>，<code>byte_403000</code>是已知的，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230327204316292.png" srcset="/img/loading.gif" lazyload alt="image-20230327204316292"></p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs x86asm">byte_403000 = [<br>    <span class="hljs-number">0x0D</span>, <span class="hljs-number">0x26</span>, <span class="hljs-number">0x49</span>, <span class="hljs-number">0x45</span>, <span class="hljs-number">0x2A</span>, <span class="hljs-number">0x17</span>, <span class="hljs-number">0x78</span>, <span class="hljs-number">0x44</span>, <span class="hljs-number">0x2B</span>, <span class="hljs-number">0x6C</span>, <br>	<span class="hljs-number">0x5D</span>, <span class="hljs-number">0x5E</span>, <span class="hljs-number">0x45</span>, <span class="hljs-number">0x12</span>, <span class="hljs-number">0x2F</span>, <span class="hljs-number">0x17</span>, <span class="hljs-number">0x2B</span>, <span class="hljs-number">0x44</span>, <span class="hljs-number">0x6F</span>, <span class="hljs-number">0x6E</span>, <br>	<span class="hljs-number">0x56</span>, <span class="hljs-number">0x09</span>, <span class="hljs-number">0x5F</span>, <span class="hljs-number">0x45</span>, <span class="hljs-number">0x47</span>, <span class="hljs-number">0x73</span>, <span class="hljs-number">0x26</span>, <span class="hljs-number">0x0A</span>, <span class="hljs-number">0x0D</span>, <span class="hljs-number">0x13</span>, <br>	<span class="hljs-number">0x17</span>, <span class="hljs-number">0x48</span>, <span class="hljs-number">0x42</span>, <span class="hljs-number">0x01</span>, <span class="hljs-number">0x40</span>, <span class="hljs-number">0x4D</span>, <span class="hljs-number">0x0C</span>, <span class="hljs-number">0x02</span>, <span class="hljs-number">0x69</span>, <br>]<br></code></pre></td></tr></table></figure>
+
+<p>函数<code>sub_401020</code>得到的是<code>byte_403078</code>的长度，然后函数<code>sub_401000</code>，</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c">__int16 <span class="hljs-title function_">sub_401000</span><span class="hljs-params">()</span><br>&#123;<br>  <span class="hljs-keyword">return</span> (<span class="hljs-type">unsigned</span> __int16)__ROL4__(<span class="hljs-number">-2147024896</span>, <span class="hljs-number">4</span>) &gt;&gt; <span class="hljs-number">1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><code>ROL</code>是循环左移的操作，但是算出来的值不太对。这里确定<code>v4</code>的值有两个方法，首先是题目的提示信息，</p>
+<figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sqf"><span class="hljs-built_in">Hint</span>:本题解出相应字符串后请用<span class="hljs-built_in">flag</span>&#123;&#125;包裹，形如：<span class="hljs-built_in">flag</span>&#123;<span class="hljs-number">123456</span>@flare-on.com&#125;<br></code></pre></td></tr></table></figure>
+
+<p>那么flag最后一位就是<code>m</code>，和<code>v4</code>的异或结果是<code>byte_403000</code>的最后一位，即<code>0x6D ^ v4 = 0x69</code>，可以得到<code>v4</code>的值是<code>4</code>。另一种解法放在最后。</p>
+<p>对flag的主要操作是，</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">for</span> ( i = v1 - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; --i )<br>&#123;<br>  byte_403180[i] = v4 ^ byte_403078[i];<br>  v4 = byte_403078[i];<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>意思就是从最后一位开始，每次都和<code>v4</code>异或，然后将<code>v4</code>修改为异或后的结果。这样就可以写程序了，</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs python">byte_403000 = [<br>    <span class="hljs-number">0x0D</span>, <span class="hljs-number">0x26</span>, <span class="hljs-number">0x49</span>, <span class="hljs-number">0x45</span>, <span class="hljs-number">0x2A</span>, <span class="hljs-number">0x17</span>, <span class="hljs-number">0x78</span>, <span class="hljs-number">0x44</span>, <span class="hljs-number">0x2B</span>, <span class="hljs-number">0x6C</span>, <br>	<span class="hljs-number">0x5D</span>, <span class="hljs-number">0x5E</span>, <span class="hljs-number">0x45</span>, <span class="hljs-number">0x12</span>, <span class="hljs-number">0x2F</span>, <span class="hljs-number">0x17</span>, <span class="hljs-number">0x2B</span>, <span class="hljs-number">0x44</span>, <span class="hljs-number">0x6F</span>, <span class="hljs-number">0x6E</span>, <br>	<span class="hljs-number">0x56</span>, <span class="hljs-number">0x09</span>, <span class="hljs-number">0x5F</span>, <span class="hljs-number">0x45</span>, <span class="hljs-number">0x47</span>, <span class="hljs-number">0x73</span>, <span class="hljs-number">0x26</span>, <span class="hljs-number">0x0A</span>, <span class="hljs-number">0x0D</span>, <span class="hljs-number">0x13</span>, <br>	<span class="hljs-number">0x17</span>, <span class="hljs-number">0x48</span>, <span class="hljs-number">0x42</span>, <span class="hljs-number">0x01</span>, <span class="hljs-number">0x40</span>, <span class="hljs-number">0x4D</span>, <span class="hljs-number">0x0C</span>, <span class="hljs-number">0x02</span>, <span class="hljs-number">0x69</span>, <span class="hljs-number">0x00</span>, <br>]<br><br>v4 = <span class="hljs-number">0x04</span><br><br>flag = [<span class="hljs-number">0</span>] * <span class="hljs-built_in">len</span>(byte_403000)<br><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(byte_403000)-<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>):<br>    flag[i] = v4 ^ byte_403000[i]<br>    v4 = flag[i]<br><br><span class="hljs-built_in">print</span>(flag)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;&quot;</span>.join(<span class="hljs-built_in">map</span>(<span class="hljs-built_in">chr</span>, flag)))<br><br></code></pre></td></tr></table></figure>
+
+<p>最后得到flag是<code>R_y0u_H0t_3n0ugH_t0_1gn1t3@flare-on.com</code>。</p>
+<hr>
+<hr>
+<p>另一种得到<code>v4</code>的值的方法是od动态调试。</p>
+<p>首先在IDA中找到函数<code>sub_401000</code>的调用位置，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230327205344543.png" srcset="/img/loading.gif" lazyload alt="image-20230327205344543"></p>
+<p>在od中<code>ctrl+G</code>查找<code>0x00401066</code>，按<code>F2</code>添加断点，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230327205431291.png" srcset="/img/loading.gif" lazyload alt="image-20230327205431291"></p>
+<p>按<code>F8</code>开始单步运行，当运行到<code>0x4011EF</code>的时候需要在控制台输入内容，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230327205558034.png" srcset="/img/loading.gif" lazyload alt="image-20230327205558034"></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230327205606400.png" srcset="/img/loading.gif" lazyload alt="image-20230327205606400"></p>
+<p>输入后，回车，继续<code>F7</code>步入，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230327205702444.png" srcset="/img/loading.gif" lazyload alt="image-20230327205702444"></p>
+<p>继续<code>F8</code>运行，在<code>0x00401066</code>，<code>F7</code>步入，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230327205759987.png" srcset="/img/loading.gif" lazyload alt="image-20230327205759987"></p>
+<p>可以看到真正的操作是，</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs x86asm"><span class="hljs-keyword">mov</span> <span class="hljs-built_in">eax</span>,<span class="hljs-number">0x80070057</span><br><span class="hljs-keyword">mov</span> <span class="hljs-built_in">edx</span>,<span class="hljs-built_in">eax</span><br><span class="hljs-keyword">xor</span> <span class="hljs-built_in">ax</span>,<span class="hljs-built_in">dx</span><br><span class="hljs-keyword">rol</span> <span class="hljs-built_in">eax</span>,<span class="hljs-number">0x4</span><br><span class="hljs-keyword">shr</span> <span class="hljs-built_in">ax</span>,<span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+
+<p>首先将<code>0x80070057</code>赋值给eax，然后将eax赋值给edx，接着将eax和edx的后16位异或，这个结果是<code>0x80070000</code>，因为相等异或为零；接着将eax循环左移4位，结果是<code>0x00700008</code>，最后将eax的后16位右移一位，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230327210704606.png" srcset="/img/loading.gif" lazyload alt="image-20230327210704606"></p>
+<p>接着函数退出，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230327210750831.png" srcset="/img/loading.gif" lazyload alt="image-20230327210750831"></p>
+<p>将<code>al</code>，即eax的低8位的值赋值给了<code>[ebp-0x1]</code>这块地址，这块地址是谁？</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230327210942795.png" srcset="/img/loading.gif" lazyload alt="image-20230327210942795"></p>
+<p>可以看到<code>v4</code>是一个字节的<code>char</code>类型，也就是8位，地址就是这里。把后面的也分析一下，其实这块地址叫什么不重要，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230327212107773.png" srcset="/img/loading.gif" lazyload alt="image-20230327212107773"></p>
+<p>这里接下来会将eax赋值为<code>[local.3]</code>，也就是<code>3</code>，这个是输入的长度，然后减1，<code>jmp</code>跳到<code>0x401082</code>开始循环；</p>
+<p>在循环中会比较是否<code>jl</code>，即小于<code>0x0</code>，小于就退出了。主要的异或操作是，</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs x86asm"><span class="hljs-keyword">movsx</span> <span class="hljs-built_in">eax</span>,<span class="hljs-built_in">byte</span> <span class="hljs-built_in">ptr</span> <span class="hljs-built_in">ds</span>:[<span class="hljs-built_in">edx</span>+<span class="hljs-number">0x403078</span>]<br><span class="hljs-keyword">movzx</span> <span class="hljs-built_in">ecx</span>,<span class="hljs-built_in">byte</span> <span class="hljs-built_in">ptr</span> <span class="hljs-built_in">ss</span>:[<span class="hljs-built_in">ebp</span>-<span class="hljs-number">0x1</span>]<br><span class="hljs-keyword">xor</span> <span class="hljs-built_in">eax</span>,<span class="hljs-built_in">ecx</span><br></code></pre></td></tr></table></figure>
+
+<p>然后将结果保存到<code>0x403180</code>，然后将<code>[ebp-0x1]</code>的值修改为<code>eax+0x403078</code>，和反汇编代码的逻辑一样。</p>
+<p>如果能看懂汇编，看汇编会更准确。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/ctf/" class="category-chain-item">ctf</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/ctf/">#ctf</a>
+      
+        <a href="/tags/ctf-reverse/">#ctf-reverse</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>[ctf-reverse] [FlareOn4]IgniteMe</div>
+      <div>https://s1n9l3.github.io/2023/03/27/[ctf-reverse] FlareOn4-IgniteMe/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>YY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年3月27日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/03/26/%5Bctf-reverse%5D%20WUSTCTF2020-level3/" title="[ctf-reverse] [WUSTCTF2020]level3">
+                        <span class="hidden-mobile">[ctf-reverse] [WUSTCTF2020]level3</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
