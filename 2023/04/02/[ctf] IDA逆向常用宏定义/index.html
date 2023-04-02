@@ -1,0 +1,638 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/Aries.ico">
+  <link rel="icon" href="/img/Aries.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="YY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="IDA逆向常用宏定义IDA中常用的宏定义 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[ctf] IDA逆向常用宏定义">
+<meta property="og:url" content="https://s1n9l3.github.io/2023/04/02/[ctf]%20IDA%E9%80%86%E5%90%91%E5%B8%B8%E7%94%A8%E5%AE%8F%E5%AE%9A%E4%B9%89/index.html">
+<meta property="og:site_name" content="S1n9l3">
+<meta property="og:description" content="IDA逆向常用宏定义IDA中常用的宏定义 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-04-02T14:01:43.581Z">
+<meta property="article:modified_time" content="2023-04-02T14:04:21.790Z">
+<meta property="article:author" content="YY">
+<meta property="article:tag" content="ctf">
+<meta property="article:tag" content="ctf-reverse">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>[ctf] IDA逆向常用宏定义 - S1n9l3</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"s1n9l3.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>WXYY</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="[ctf] IDA逆向常用宏定义"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-04-02 22:01" pubdate>
+          2023年4月2日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          8.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          72 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">[ctf] IDA逆向常用宏定义</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="IDA逆向常用宏定义"><a href="#IDA逆向常用宏定义" class="headerlink" title="IDA逆向常用宏定义"></a>IDA逆向常用宏定义</h1><p>IDA中常用的宏定义</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/*</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">   This file contains definitions used by the Hex-Rays decompiler output.</span><br><span class="hljs-comment">   It has type definitions and convenience macros to make the</span><br><span class="hljs-comment">   output more readable.</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">   Copyright (c) 2007-2011 Hex-Rays</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">*/</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">if</span> defined(__GNUC__)</span><br>  <span class="hljs-keyword">typedef</span>          <span class="hljs-type">long</span> <span class="hljs-type">long</span> ll;<br>  <span class="hljs-keyword">typedef</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> ull;<br>  <span class="hljs-meta">#<span class="hljs-keyword">define</span> __int64 long long</span><br>  <span class="hljs-meta">#<span class="hljs-keyword">define</span> __int32 int</span><br>  <span class="hljs-meta">#<span class="hljs-keyword">define</span> __int16 short</span><br>  <span class="hljs-meta">#<span class="hljs-keyword">define</span> __int8  char</span><br>  <span class="hljs-meta">#<span class="hljs-keyword">define</span> MAKELL(num) num ## LL</span><br>  <span class="hljs-meta">#<span class="hljs-keyword">define</span> FMT_64 <span class="hljs-string">&quot;ll&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">elif</span> defined(_MSC_VER)</span><br>  <span class="hljs-keyword">typedef</span>          __int64 ll;<br>  <span class="hljs-keyword">typedef</span> <span class="hljs-type">unsigned</span> __int64 ull;<br>  <span class="hljs-meta">#<span class="hljs-keyword">define</span> MAKELL(num) num ## i64</span><br>  <span class="hljs-meta">#<span class="hljs-keyword">define</span> FMT_64 <span class="hljs-string">&quot;I64&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">elif</span> defined (__BORLANDC__)</span><br>  <span class="hljs-keyword">typedef</span>          __int64 ll;<br>  <span class="hljs-keyword">typedef</span> <span class="hljs-type">unsigned</span> __int64 ull;<br>  <span class="hljs-meta">#<span class="hljs-keyword">define</span> MAKELL(num) num ## i64</span><br>  <span class="hljs-meta">#<span class="hljs-keyword">define</span> FMT_64 <span class="hljs-string">&quot;L&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">else</span></span><br>  <span class="hljs-meta">#<span class="hljs-keyword">error</span> <span class="hljs-string">&quot;unknown compiler&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><span class="hljs-keyword">typedef</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> uint;<br><span class="hljs-keyword">typedef</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> uchar;<br><span class="hljs-keyword">typedef</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">short</span> ushort;<br><span class="hljs-keyword">typedef</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> ulong;<br><br><span class="hljs-keyword">typedef</span>          <span class="hljs-type">char</span>   int8;<br><span class="hljs-keyword">typedef</span>   <span class="hljs-type">signed</span> <span class="hljs-type">char</span>   sint8;<br><span class="hljs-keyword">typedef</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span>   uint8;<br><span class="hljs-keyword">typedef</span>          <span class="hljs-type">short</span>  int16;<br><span class="hljs-keyword">typedef</span>   <span class="hljs-type">signed</span> <span class="hljs-type">short</span>  sint16;<br><span class="hljs-keyword">typedef</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">short</span>  uint16;<br><span class="hljs-keyword">typedef</span>          <span class="hljs-type">int</span>    int32;<br><span class="hljs-keyword">typedef</span>   <span class="hljs-type">signed</span> <span class="hljs-type">int</span>    sint32;<br><span class="hljs-keyword">typedef</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>    uint32;<br><span class="hljs-keyword">typedef</span> ll              int64;<br><span class="hljs-keyword">typedef</span> ll              sint64;<br><span class="hljs-keyword">typedef</span> ull             uint64;<br><br><span class="hljs-comment">// Partially defined types:</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> _BYTE  uint8</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> _WORD  uint16</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> _DWORD uint32</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> _QWORD uint64</span><br><span class="hljs-meta">#<span class="hljs-keyword">if</span> !defined(_MSC_VER)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> _LONGLONG __int128</span><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">ifndef</span> _WINDOWS_</span><br><span class="hljs-keyword">typedef</span> int8 BYTE;<br><span class="hljs-keyword">typedef</span> int16 WORD;<br><span class="hljs-keyword">typedef</span> int32 DWORD;<br><span class="hljs-keyword">typedef</span> int32 LONG;<br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><span class="hljs-keyword">typedef</span> int64 QWORD;<br><span class="hljs-meta">#<span class="hljs-keyword">ifndef</span> __cplusplus</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-type">int</span> <span class="hljs-type">bool</span>;       <span class="hljs-comment">// we want to use bool in our C programs</span><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br><span class="hljs-comment">// Some convenience macros to make partial accesses nicer</span><br><span class="hljs-comment">// first unsigned macros:</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> LOBYTE(x)   (*((_BYTE*)&amp;(x)))   <span class="hljs-comment">// low byte</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> LOWORD(x)   (*((_WORD*)&amp;(x)))   <span class="hljs-comment">// low word</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> LODWORD(x)  (*((_DWORD*)&amp;(x)))  <span class="hljs-comment">// low dword</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> HIBYTE(x)   (*((_BYTE*)&amp;(x)+1))</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> HIWORD(x)   (*((_WORD*)&amp;(x)+1))</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> HIDWORD(x)  (*((_DWORD*)&amp;(x)+1))</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> BYTEn(x, n)   (*((_BYTE*)&amp;(x)+n))</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> WORDn(x, n)   (*((_WORD*)&amp;(x)+n))</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> BYTE1(x)   BYTEn(x,  1)         <span class="hljs-comment">// byte 1 (counting from 0)</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> BYTE2(x)   BYTEn(x,  2)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> BYTE3(x)   BYTEn(x,  3)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> BYTE4(x)   BYTEn(x,  4)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> BYTE5(x)   BYTEn(x,  5)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> BYTE6(x)   BYTEn(x,  6)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> BYTE7(x)   BYTEn(x,  7)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> BYTE8(x)   BYTEn(x,  8)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> BYTE9(x)   BYTEn(x,  9)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> BYTE10(x)  BYTEn(x, 10)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> BYTE11(x)  BYTEn(x, 11)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> BYTE12(x)  BYTEn(x, 12)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> BYTE13(x)  BYTEn(x, 13)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> BYTE14(x)  BYTEn(x, 14)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> BYTE15(x)  BYTEn(x, 15)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> WORD1(x)   WORDn(x,  1)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> WORD2(x)   WORDn(x,  2)         <span class="hljs-comment">// third word of the object, unsigned</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> WORD3(x)   WORDn(x,  3)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> WORD4(x)   WORDn(x,  4)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> WORD5(x)   WORDn(x,  5)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> WORD6(x)   WORDn(x,  6)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> WORD7(x)   WORDn(x,  7)</span><br><br><span class="hljs-comment">// now signed macros (the same but with sign extension)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SLOBYTE(x)   (*((int8*)&amp;(x)))</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SLOWORD(x)   (*((int16*)&amp;(x)))</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SLODWORD(x)  (*((int32*)&amp;(x)))</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SHIBYTE(x)   (*((int8*)&amp;(x)+1))</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SHIWORD(x)   (*((int16*)&amp;(x)+1))</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SHIDWORD(x)  (*((int32*)&amp;(x)+1))</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SBYTEn(x, n)   (*((int8*)&amp;(x)+n))</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SWORDn(x, n)   (*((int16*)&amp;(x)+n))</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SBYTE1(x)   SBYTEn(x,  1)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SBYTE2(x)   SBYTEn(x,  2)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SBYTE3(x)   SBYTEn(x,  3)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SBYTE4(x)   SBYTEn(x,  4)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SBYTE5(x)   SBYTEn(x,  5)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SBYTE6(x)   SBYTEn(x,  6)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SBYTE7(x)   SBYTEn(x,  7)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SBYTE8(x)   SBYTEn(x,  8)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SBYTE9(x)   SBYTEn(x,  9)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SBYTE10(x)  SBYTEn(x, 10)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SBYTE11(x)  SBYTEn(x, 11)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SBYTE12(x)  SBYTEn(x, 12)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SBYTE13(x)  SBYTEn(x, 13)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SBYTE14(x)  SBYTEn(x, 14)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SBYTE15(x)  SBYTEn(x, 15)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SWORD1(x)   SWORDn(x,  1)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SWORD2(x)   SWORDn(x,  2)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SWORD3(x)   SWORDn(x,  3)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SWORD4(x)   SWORDn(x,  4)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SWORD5(x)   SWORDn(x,  5)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SWORD6(x)   SWORDn(x,  6)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SWORD7(x)   SWORDn(x,  7)</span><br><br><br><span class="hljs-comment">// Helper functions to represent some assembly instructions.</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> __cplusplus</span><br><br><span class="hljs-comment">// Fill memory block with an integer value</span><br><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title function_">memset32</span><span class="hljs-params">(<span class="hljs-type">void</span> *ptr, uint32 value, <span class="hljs-type">int</span> count)</span><br>&#123;<br>  uint32 *p = (uint32 *)ptr;<br>  <span class="hljs-keyword">for</span> ( <span class="hljs-type">int</span> i=<span class="hljs-number">0</span>; i &lt; count; i++ )<br>    *p++ = value;<br>&#125;<br><br><span class="hljs-comment">// Generate a reference to pair of operands</span><br>template&lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">T</span>&gt;</span>  int16 __PAIR__( int8  high, T low) &#123; <span class="hljs-keyword">return</span> ((( int16)high) &lt;&lt; <span class="hljs-keyword">sizeof</span>(high)*<span class="hljs-number">8</span>) | uint8(low); &#125;<br>template&lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">T</span>&gt;</span>  int32 __PAIR__( int16 high, T low) &#123; <span class="hljs-keyword">return</span> ((( int32)high) &lt;&lt; <span class="hljs-keyword">sizeof</span>(high)*<span class="hljs-number">8</span>) | uint16(low); &#125;<br>template&lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">T</span>&gt;</span>  int64 __PAIR__( int32 high, T low) &#123; <span class="hljs-keyword">return</span> ((( int64)high) &lt;&lt; <span class="hljs-keyword">sizeof</span>(high)*<span class="hljs-number">8</span>) | uint32(low); &#125;<br>template&lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">T</span>&gt;</span> uint16 __PAIR__(uint8  high, T low) &#123; <span class="hljs-keyword">return</span> (((uint16)high) &lt;&lt; <span class="hljs-keyword">sizeof</span>(high)*<span class="hljs-number">8</span>) | uint8(low); &#125;<br>template&lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">T</span>&gt;</span> uint32 __PAIR__(uint16 high, T low) &#123; <span class="hljs-keyword">return</span> (((uint32)high) &lt;&lt; <span class="hljs-keyword">sizeof</span>(high)*<span class="hljs-number">8</span>) | uint16(low); &#125;<br>template&lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">T</span>&gt;</span> uint64 __PAIR__(uint32 high, T low) &#123; <span class="hljs-keyword">return</span> (((uint64)high) &lt;&lt; <span class="hljs-keyword">sizeof</span>(high)*<span class="hljs-number">8</span>) | uint32(low); &#125;<br><br><span class="hljs-comment">// rotate left</span><br>template&lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">T</span>&gt;</span> T __ROL__(T value, uint count)<br>&#123;<br>  <span class="hljs-type">const</span> uint nbits = <span class="hljs-keyword">sizeof</span>(T) * <span class="hljs-number">8</span>;<br>  count %= nbits;<br><br>  T high = value &gt;&gt; (nbits - count);<br>  value &lt;&lt;= count;<br>  value |= high;<br>  <span class="hljs-keyword">return</span> value;<br>&#125;<br><br><span class="hljs-comment">// rotate right</span><br>template&lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">T</span>&gt;</span> T __ROR__(T value, uint count)<br>&#123;<br>  <span class="hljs-type">const</span> uint nbits = <span class="hljs-keyword">sizeof</span>(T) * <span class="hljs-number">8</span>;<br>  count %= nbits;<br><br>  T low = value &lt;&lt; (nbits - count);<br>  value &gt;&gt;= count;<br>  value |= low;<br>  <span class="hljs-keyword">return</span> value;<br>&#125;<br><br><span class="hljs-comment">// carry flag of left shift</span><br>template&lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">T</span>&gt;</span> int8 __MKCSHL__(T value, uint count)<br>&#123;<br>  <span class="hljs-type">const</span> uint nbits = <span class="hljs-keyword">sizeof</span>(T) * <span class="hljs-number">8</span>;<br>  count %= nbits;<br><br>  <span class="hljs-keyword">return</span> (value &gt;&gt; (nbits-count)) &amp; <span class="hljs-number">1</span>;<br>&#125;<br><br><span class="hljs-comment">// carry flag of right shift</span><br>template&lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">T</span>&gt;</span> int8 __MKCSHR__(T value, uint count)<br>&#123;<br>  <span class="hljs-keyword">return</span> (value &gt;&gt; (count<span class="hljs-number">-1</span>)) &amp; <span class="hljs-number">1</span>;<br>&#125;<br><br><span class="hljs-comment">// sign flag</span><br>template&lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">T</span>&gt;</span> int8 __SETS__(T x)<br>&#123;<br>  <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">sizeof</span>(T) == <span class="hljs-number">1</span> )<br>    <span class="hljs-keyword">return</span> int8(x) &lt; <span class="hljs-number">0</span>;<br>  <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">sizeof</span>(T) == <span class="hljs-number">2</span> )<br>    <span class="hljs-keyword">return</span> int16(x) &lt; <span class="hljs-number">0</span>;<br>  <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">sizeof</span>(T) == <span class="hljs-number">4</span> )<br>    <span class="hljs-keyword">return</span> int32(x) &lt; <span class="hljs-number">0</span>;<br>  <span class="hljs-keyword">return</span> int64(x) &lt; <span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-comment">// overflow flag of subtraction (x-y)</span><br>template&lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">T</span>, <span class="hljs-keyword">class</span> <span class="hljs-title">U</span>&gt;</span> int8 __OFSUB__(T x, U y)<br>&#123;<br>  <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">sizeof</span>(T) &lt; <span class="hljs-keyword">sizeof</span>(U) )<br>  &#123;<br>    U x2 = x;<br>    int8 sx = __SETS__(x2);<br>    <span class="hljs-keyword">return</span> (sx ^ __SETS__(y)) &amp; (sx ^ __SETS__(x2-y));<br>  &#125;<br>  <span class="hljs-keyword">else</span><br>  &#123;<br>    T y2 = y;<br>    int8 sx = __SETS__(x);<br>    <span class="hljs-keyword">return</span> (sx ^ __SETS__(y2)) &amp; (sx ^ __SETS__(x-y2));<br>  &#125;<br>&#125;<br><br><span class="hljs-comment">// overflow flag of addition (x+y)</span><br>template&lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">T</span>, <span class="hljs-keyword">class</span> <span class="hljs-title">U</span>&gt;</span> int8 __OFADD__(T x, U y)<br>&#123;<br>  <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">sizeof</span>(T) &lt; <span class="hljs-keyword">sizeof</span>(U) )<br>  &#123;<br>    U x2 = x;<br>    int8 sx = __SETS__(x2);<br>    <span class="hljs-keyword">return</span> ((<span class="hljs-number">1</span> ^ sx) ^ __SETS__(y)) &amp; (sx ^ __SETS__(x2+y));<br>  &#125;<br>  <span class="hljs-keyword">else</span><br>  &#123;<br>    T y2 = y;<br>    int8 sx = __SETS__(x);<br>    <span class="hljs-keyword">return</span> ((<span class="hljs-number">1</span> ^ sx) ^ __SETS__(y2)) &amp; (sx ^ __SETS__(x+y2));<br>  &#125;<br>&#125;<br><br><span class="hljs-comment">// carry flag of subtraction (x-y)</span><br>template&lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">T</span>, <span class="hljs-keyword">class</span> <span class="hljs-title">U</span>&gt;</span> int8 __CFSUB__(T x, U y)<br>&#123;<br>  <span class="hljs-type">int</span> size = <span class="hljs-keyword">sizeof</span>(T) &gt; <span class="hljs-keyword">sizeof</span>(U) ? <span class="hljs-keyword">sizeof</span>(T) : <span class="hljs-keyword">sizeof</span>(U);<br>  <span class="hljs-keyword">if</span> ( size == <span class="hljs-number">1</span> )<br>    <span class="hljs-keyword">return</span> uint8(x) &lt; uint8(y);<br>  <span class="hljs-keyword">if</span> ( size == <span class="hljs-number">2</span> )<br>    <span class="hljs-keyword">return</span> uint16(x) &lt; uint16(y);<br>  <span class="hljs-keyword">if</span> ( size == <span class="hljs-number">4</span> )<br>    <span class="hljs-keyword">return</span> uint32(x) &lt; uint32(y);<br>  <span class="hljs-keyword">return</span> uint64(x) &lt; uint64(y);<br>&#125;<br><br><span class="hljs-comment">// carry flag of addition (x+y)</span><br>template&lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">T</span>, <span class="hljs-keyword">class</span> <span class="hljs-title">U</span>&gt;</span> int8 __CFADD__(T x, U y)<br>&#123;<br>  <span class="hljs-type">int</span> size = <span class="hljs-keyword">sizeof</span>(T) &gt; <span class="hljs-keyword">sizeof</span>(U) ? <span class="hljs-keyword">sizeof</span>(T) : <span class="hljs-keyword">sizeof</span>(U);<br>  <span class="hljs-keyword">if</span> ( size == <span class="hljs-number">1</span> )<br>    <span class="hljs-keyword">return</span> uint8(x) &gt; uint8(x+y);<br>  <span class="hljs-keyword">if</span> ( size == <span class="hljs-number">2</span> )<br>    <span class="hljs-keyword">return</span> uint16(x) &gt; uint16(x+y);<br>  <span class="hljs-keyword">if</span> ( size == <span class="hljs-number">4</span> )<br>    <span class="hljs-keyword">return</span> uint32(x) &gt; uint32(x+y);<br>  <span class="hljs-keyword">return</span> uint64(x) &gt; uint64(x+y);<br>&#125;<br><br><span class="hljs-meta">#<span class="hljs-keyword">else</span></span><br><span class="hljs-comment">// The following definition is not quite correct because it always returns</span><br><span class="hljs-comment">// uint64. The above C++ functions are good, though.</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> __PAIR__(high, low) (((uint64)(high)&lt;&lt;sizeof(high)*8) | low)</span><br><span class="hljs-comment">// For C, we just provide macros, they are not quite correct.</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> __ROL__(x, y) __rotl__(x, y)      <span class="hljs-comment">// Rotate left</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> __ROR__(x, y) __rotr__(x, y)      <span class="hljs-comment">// Rotate right</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> __CFSHL__(x, y) invalid_operation <span class="hljs-comment">// Generate carry flag for (x&lt;&lt;y)</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> __CFSHR__(x, y) invalid_operation <span class="hljs-comment">// Generate carry flag for (x&gt;&gt;y)</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> __CFADD__(x, y) invalid_operation <span class="hljs-comment">// Generate carry flag for (x+y)</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> __CFSUB__(x, y) invalid_operation <span class="hljs-comment">// Generate carry flag for (x-y)</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> __OFADD__(x, y) invalid_operation <span class="hljs-comment">// Generate overflow flag for (x+y)</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> __OFSUB__(x, y) invalid_operation <span class="hljs-comment">// Generate overflow flag for (x-y)</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br><span class="hljs-comment">// No definition for rcl/rcr because the carry flag is unknown</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> __RCL__(x, y)    invalid_operation <span class="hljs-comment">// Rotate left thru carry</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> __RCR__(x, y)    invalid_operation <span class="hljs-comment">// Rotate right thru carry</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> __MKCRCL__(x, y) invalid_operation <span class="hljs-comment">// Generate carry flag for a RCL</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> __MKCRCR__(x, y) invalid_operation <span class="hljs-comment">// Generate carry flag for a RCR</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> __SETP__(x, y)   invalid_operation <span class="hljs-comment">// Generate parity flag for (x-y)</span></span><br><br><span class="hljs-comment">// In the decompilation listing there are some objects declarared as _UNKNOWN</span><br><span class="hljs-comment">// because we could not determine their types. Since the C compiler does not</span><br><span class="hljs-comment">// accept void item declarations, we replace them by anything of our choice,</span><br><span class="hljs-comment">// for example a char:</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> _UNKNOWN char</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> _MSC_VER</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> snprintf _snprintf</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> vsnprintf _vsnprintf</span><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/ctf/" class="category-chain-item">ctf</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/ctf/">#ctf</a>
+      
+        <a href="/tags/ctf-reverse/">#ctf-reverse</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>[ctf] IDA逆向常用宏定义</div>
+      <div>https://s1n9l3.github.io/2023/04/02/[ctf] IDA逆向常用宏定义/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>YY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年4月2日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/03/27/%5Bctf-reverse%5D%20FlareOn4-IgniteMe/" title="[ctf-reverse] [FlareOn4]IgniteMe">
+                        <span class="hidden-mobile">[ctf-reverse] [FlareOn4]IgniteMe</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
