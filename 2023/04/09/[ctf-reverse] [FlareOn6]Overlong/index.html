@@ -16,26 +16,29 @@
   <meta name="author" content="YY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="[代码分析] 程序与汇编–函数函数调用在汇编中的详细流程。 想象一下，在做一道复杂的数学题时，如果发现需要一个值x，但是没办法直接得到，那么我们要怎么做？首先要做的是将我们已经进行的步骤记录下来，这样等会就不需要再次计算了，然后经过一系列计算解决值x，最后回到之前停止的位置，将值x代入，继续计算。 其实在计算机中，同样是以这样的方法来进行的：  保存已经计算的 转到需要计算的 返回计算结果  这里">
+    <meta name="description" content="[FlareOn6]Overlong这道题很难说是简单或难，是一个很好的动静态分析的例子。 文件用IDA打开，结构很简单，只有三个函数， 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556int __stdcall start(int a1,">
 <meta property="og:type" content="article">
-<meta property="og:title" content="[代码分析] 程序与汇编--函数">
-<meta property="og:url" content="https://s1n9l3.github.io/2023/04/08/[%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90]%20%E7%A8%8B%E5%BA%8F%E4%B8%8E%E6%B1%87%E7%BC%96--%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:title" content="[ctf] [FlareOn6]Overlong">
+<meta property="og:url" content="https://s1n9l3.github.io/2023/04/09/[ctf-reverse]%20[FlareOn6]Overlong/index.html">
 <meta property="og:site_name" content="S1n9l3">
-<meta property="og:description" content="[代码分析] 程序与汇编–函数函数调用在汇编中的详细流程。 想象一下，在做一道复杂的数学题时，如果发现需要一个值x，但是没办法直接得到，那么我们要怎么做？首先要做的是将我们已经进行的步骤记录下来，这样等会就不需要再次计算了，然后经过一系列计算解决值x，最后回到之前停止的位置，将值x代入，继续计算。 其实在计算机中，同样是以这样的方法来进行的：  保存已经计算的 转到需要计算的 返回计算结果  这里">
+<meta property="og:description" content="[FlareOn6]Overlong这道题很难说是简单或难，是一个很好的动静态分析的例子。 文件用IDA打开，结构很简单，只有三个函数， 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556int __stdcall start(int a1,">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/%E6%B1%87%E7%BC%96%E6%89%A7%E8%A1%8C%E6%B5%81%E5%9B%BE.png">
-<meta property="article:published_time" content="2023-04-08T06:45:46.907Z">
-<meta property="article:modified_time" content="2023-04-09T12:44:51.239Z">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230409172545834.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230409172816949.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230409173229330.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230409173244575.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230409173316773.png">
+<meta property="article:published_time" content="2023-04-09T09:17:51.524Z">
+<meta property="article:modified_time" content="2023-04-09T09:33:22.132Z">
 <meta property="article:author" content="YY">
-<meta property="article:tag" content="VisualStudio">
-<meta property="article:tag" content="汇编">
-<meta property="article:tag" content="c语言">
+<meta property="article:tag" content="ctf">
+<meta property="article:tag" content="ctf-reverse">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/%E6%B1%87%E7%BC%96%E6%89%A7%E8%A1%8C%E6%B5%81%E5%9B%BE.png">
+<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230409172545834.png">
   
   
   
-  <title>[代码分析] 程序与汇编--函数 - S1n9l3</title>
+  <title>[ctf] [FlareOn6]Overlong - S1n9l3</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -200,7 +203,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="[代码分析] 程序与汇编--函数"></span>
+            <span id="subtitle" data-typed-text="[ctf] [FlareOn6]Overlong"></span>
           
         </div>
 
@@ -211,8 +214,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-04-08 14:45" pubdate>
-          2023年4月8日 下午
+        <time datetime="2023-04-09 17:17" pubdate>
+          2023年4月9日 下午
         </time>
       </span>
     
@@ -272,57 +275,25 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">[代码分析] 程序与汇编--函数</h1>
+            <h1 style="display: none">[ctf] [FlareOn6]Overlong</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="代码分析-程序与汇编–函数"><a href="#代码分析-程序与汇编–函数" class="headerlink" title="[代码分析] 程序与汇编–函数"></a>[代码分析] 程序与汇编–函数</h1><p>函数调用在汇编中的详细流程。</p>
-<p>想象一下，在做一道复杂的数学题时，如果发现需要一个值x，但是没办法直接得到，那么我们要怎么做？首先要做的是将我们已经进行的步骤记录下来，这样等会就不需要再次计算了，然后经过一系列计算解决值x，最后回到之前停止的位置，将值x代入，继续计算。</p>
-<p>其实在计算机中，同样是以这样的方法来进行的：</p>
-<ol>
-<li>保存已经计算的</li>
-<li>转到需要计算的</li>
-<li>返回计算结果</li>
-</ol>
-<p>这里截取其中某个函数调用的流程，</p>
-<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/%E6%B1%87%E7%BC%96%E6%89%A7%E8%A1%8C%E6%B5%81%E5%9B%BE.png" srcset="/img/loading.gif" lazyload alt="汇编执行流图"></p>
-<p>一共有三行，分别表示代码的汇编、寄存器和栈。接着对这个调用的流程开始分析。</p>
-<blockquote>
-<p>这里的寄存器主要关注3个：</p>
-<ul>
-<li>ESP    栈顶指针，这个指针会一直指向栈的顶部</li>
-<li>EBP    栈底指针，这个指针会一直指向栈的底部</li>
-<li>EIP    指向下一步执行的地址</li>
-</ul>
-<p>其中ESI和EDI可以直接作为通用寄存器，用来存放数据、地址.</p>
-</blockquote>
-<p>首先在汇编中，函数的调用使用的是<code>call</code>，在第一列中开始调用函数，按照上面的步骤，首先要保存已经计算的，那么就是我们计算的一些值会保存到栈中；然后转到需要计算的，即跳转到函数所在的内存地址；函数计算中可能会用到栈空间，用到的空间不能与之前的空间重合，所以栈顶指针会上移，对应的ESP会改变，这时候会写入一个值，这个值表示的是需要回去的地址，毕竟来到了一块新的内存，执行结束之后得知道要去哪，这个地址是<code>call</code>的下一步的地址。</p>
-<blockquote>
-<p>栈的顺序：栈是从大地址到小地址的方向前进的，即先写入的值的地址数值大，后写入的值的地址小</p>
-</blockquote>
-<p>接着会将EBP入栈，我们知道EBP指向的栈底，所以现在的EBP指向的是主函数的栈底地址，调用函数也需要用到EBP，所以先将上一个EBP保存在这里；然后将ESP赋值给EBP，这是因为这一块栈空间还没有用到，栈顶和栈底是一样的，这里开始才算是调用函数自己的栈空间。</p>
-<p>后面就是函数内部的计算了，期间栈中会不断写入内容，ESP相应的改变。</p>
-<blockquote>
-<p>这里在进行函数内部的计算之前，也把ESI入栈，这时因为调用的函数也会用到ESI，所以需要把主函数在ESI中的内容先保存下来，有的函数并不会用到ESI，也就不需要将ESI入栈了。</p>
-</blockquote>
-<p>计算结束之后，执行了<code>add esp,0x18</code>这样的操作，这其实是清栈操作，根据栈的顺序，可以知道这样会把栈顶指针下移，也就是说，在函数中不断的使用栈空间，计算结束，这一段空间也就没用了，就可以给其他的函数使用了。</p>
-<blockquote>
-<p>虽然叫清栈，但是并没有把其中内容并没有改变。如果读取这些地址的内容，还是会得到相应的值，这就叫栈溢出漏洞。</p>
-</blockquote>
-<p>现在就开始取回之前保存的内容了，因为之前EBP先入栈，ESI后入栈，所以ESI先出栈，EBP后出栈。</p>
-<p>最后<code>retn</code>，即返回，由于之前会把返回的地址先入栈，所以会返回到这个地址的位置。</p>
-<hr>
-<hr>
-<p>上面的过程大概就是函数调用的一般流程了，但是还有很多没有说到，比如参数的调用，其实上面的函数是<code>printf</code>，其中传入了两个参数，在函数中会通过<code>[ebp+偏移量]</code>来得到参数，因为EBP是栈底指针，再向下就是其他函数的空间了，这里是主函数的空间，在调用之前会将参数入栈，函数读取参数就是这样了。</p>
-<blockquote>
-<p>参数的顺序，非常关键的点，参数的入栈顺序和声明的顺序是相反的。</p>
-<p>比如void fun(int a, int b)，在汇编中首先最后一个参数入栈，然后倒数第二个参数入栈，以此类推。这样的话出栈顺序就和声明的顺序是一样的。</p>
-</blockquote>
-<p>还有非常关键的作用域的问题，我们知道寄存器是全局可知可用的，那么在函数中的局部变量和全局变量是如何操作的呢？之后补充。。。</p>
-<hr>
-<p>2023年4月9日</p>
-<p>函数的返回值保存在EAX中</p>
+                <h1 id="FlareOn6-Overlong"><a href="#FlareOn6-Overlong" class="headerlink" title="[FlareOn6]Overlong"></a>[FlareOn6]Overlong</h1><p>这道题很难说是简单或难，是一个很好的动静态分析的例子。</p>
+<p>文件用IDA打开，结构很简单，只有三个函数，</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> __stdcall <span class="hljs-title function_">start</span><span class="hljs-params">(<span class="hljs-type">int</span> a1, <span class="hljs-type">int</span> a2, <span class="hljs-type">int</span> a3, <span class="hljs-type">int</span> a4)</span><br>&#123;<br>  CHAR Text[<span class="hljs-number">128</span>]; <span class="hljs-comment">// [esp+0h] [ebp-84h] BYREF</span><br>  <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> v6; <span class="hljs-comment">// [esp+80h] [ebp-4h]</span><br><br>  v6 = sub_401160(Text, (<span class="hljs-type">int</span>)&amp;unk_402008, <span class="hljs-number">0x1C</span>u);<br>  Text[v6] = <span class="hljs-number">0</span>;<br>  MessageBoxA(<span class="hljs-number">0</span>, Text, Caption, <span class="hljs-number">0</span>);<br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-comment">////////////////////////////////////////</span><br><br><span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> __cdecl <span class="hljs-title function_">sub_401160</span><span class="hljs-params">(<span class="hljs-type">char</span> *a1, <span class="hljs-type">int</span> a2, <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> a3)</span><br>&#123;<br>  <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> i; <span class="hljs-comment">// [esp+4h] [ebp-4h]</span><br><br>  <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; i &lt; a3; ++i )<br>  &#123;<br>    a2 += sub_401000(a1, (<span class="hljs-type">char</span> *)a2);<br>    <span class="hljs-keyword">if</span> ( !*a1++ )<br>      <span class="hljs-keyword">break</span>;<br>  &#125;<br>  <span class="hljs-keyword">return</span> i;<br>&#125;<br><br><span class="hljs-comment">/////////////////////////////////////////</span><br><br><span class="hljs-type">int</span> __cdecl <span class="hljs-title function_">sub_401000</span><span class="hljs-params">(_BYTE *a1, <span class="hljs-type">char</span> *a2)</span><br>&#123;<br>  <span class="hljs-type">int</span> v3; <span class="hljs-comment">// [esp+0h] [ebp-8h]</span><br>  <span class="hljs-type">char</span> v4; <span class="hljs-comment">// [esp+4h] [ebp-4h]</span><br><br>  <span class="hljs-keyword">if</span> ( (<span class="hljs-type">int</span>)(<span class="hljs-type">unsigned</span> __int8)*a2 &gt;&gt; <span class="hljs-number">3</span> == <span class="hljs-number">30</span> )<br>  &#123;<br>    v4 = a2[<span class="hljs-number">3</span>] &amp; <span class="hljs-number">0x3F</span> | ((a2[<span class="hljs-number">2</span>] &amp; <span class="hljs-number">0x3F</span>) &lt;&lt; <span class="hljs-number">6</span>);<br>    v3 = <span class="hljs-number">4</span>;<br>  &#125;<br>  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( (<span class="hljs-type">int</span>)(<span class="hljs-type">unsigned</span> __int8)*a2 &gt;&gt; <span class="hljs-number">4</span> == <span class="hljs-number">14</span> )<br>  &#123;<br>    v4 = a2[<span class="hljs-number">2</span>] &amp; <span class="hljs-number">0x3F</span> | ((a2[<span class="hljs-number">1</span>] &amp; <span class="hljs-number">0x3F</span>) &lt;&lt; <span class="hljs-number">6</span>);<br>    v3 = <span class="hljs-number">3</span>;<br>  &#125;<br>  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( (<span class="hljs-type">int</span>)(<span class="hljs-type">unsigned</span> __int8)*a2 &gt;&gt; <span class="hljs-number">5</span> == <span class="hljs-number">6</span> )<br>  &#123;<br>    v4 = a2[<span class="hljs-number">1</span>] &amp; <span class="hljs-number">0x3F</span> | ((*a2 &amp; <span class="hljs-number">0x1F</span>) &lt;&lt; <span class="hljs-number">6</span>);<br>    v3 = <span class="hljs-number">2</span>;<br>  &#125;<br>  <span class="hljs-keyword">else</span><br>  &#123;<br>    v4 = *a2;<br>    v3 = <span class="hljs-number">1</span>;<br>  &#125;<br>  *a1 = v4;<br>  <span class="hljs-keyword">return</span> v3;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><code>MessageBoxA</code>是一个弹窗的函数，内容就是<code>Text</code>，<code>Text</code>是128位的字符串，在<code>sub_401160</code>中处理，但是在函数中可以发现，处理的只有28位；unk_402008是一个175的数组。运行程序，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230409172545834.png" srcset="/img/loading.gif" lazyload alt="image-20230409172545834"></p>
+<p>输出内容中有<code>:</code>，所以可能后面还有字符，那么如何修改程序并运行呢？使用OD进行动态的修改。</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230409172816949.png" srcset="/img/loading.gif" lazyload alt="image-20230409172816949"></p>
+<p>可以看到，入栈的参数<code>0x1C</code>，把这里修改就行了，但是修改为多少呢？unk_402008的长度175，即0xAF。</p>
+<p>如何修改，F8逐步运行，将0x1F入栈，然后在这里修改值，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230409173229330.png" srcset="/img/loading.gif" lazyload alt="image-20230409173229330"></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230409173244575.png" srcset="/img/loading.gif" lazyload alt="image-20230409173244575"></p>
+<p>F9运行，得到最后的结果。</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230409173316773.png" srcset="/img/loading.gif" lazyload alt="image-20230409173316773"></p>
 
                 
               </div>
@@ -341,7 +312,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/" class="category-chain-item">代码分析</a>
+  <a href="/categories/ctf/" class="category-chain-item">ctf</a>
   
   
 
@@ -356,11 +327,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/VisualStudio/">#VisualStudio</a>
+        <a href="/tags/ctf/">#ctf</a>
       
-        <a href="/tags/%E6%B1%87%E7%BC%96/">#汇编</a>
-      
-        <a href="/tags/c%E8%AF%AD%E8%A8%80/">#c语言</a>
+        <a href="/tags/ctf-reverse/">#ctf-reverse</a>
       
     </div>
   
@@ -372,8 +341,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>[代码分析] 程序与汇编--函数</div>
-      <div>https://s1n9l3.github.io/2023/04/08/[代码分析] 程序与汇编--函数/</div>
+      <div>[ctf] [FlareOn6]Overlong</div>
+      <div>https://s1n9l3.github.io/2023/04/09/[ctf-reverse] [FlareOn6]Overlong/</div>
     </div>
     <div class="license-meta">
       
@@ -385,7 +354,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年4月8日</div>
+          <div>2023年4月9日</div>
         </div>
       
       
@@ -417,9 +386,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/04/09/%5Bctf-reverse%5D%20%5BFlareOn6%5DOverlong/" title="[ctf] [FlareOn6]Overlong">
+                      <a href="/2023/04/12/%5B%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%5D%20snort%E4%BD%BF%E7%94%A8/" title="[代码分析] snort使用">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">[ctf] [FlareOn6]Overlong</span>
+                        <span class="hidden-mobile">[代码分析] snort使用</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -427,8 +396,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/04/05/%5B%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%5D%20%E7%A8%8B%E5%BA%8F%E4%B8%8E%E6%B1%87%E7%BC%96--%E6%95%B0%E7%BB%84/" title="[代码分析] 程序与汇编--循环">
-                        <span class="hidden-mobile">[代码分析] 程序与汇编--循环</span>
+                      <a href="/2023/04/08/%5B%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%5D%20%E7%A8%8B%E5%BA%8F%E4%B8%8E%E6%B1%87%E7%BC%96--%E5%87%BD%E6%95%B0/" title="[代码分析] 程序与汇编--函数">
+                        <span class="hidden-mobile">[代码分析] 程序与汇编--函数</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

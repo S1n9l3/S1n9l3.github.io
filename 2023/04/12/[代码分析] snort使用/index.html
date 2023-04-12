@@ -1,0 +1,756 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/Aries.ico">
+  <link rel="icon" href="/img/Aries.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="YY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="snort使用简介Snort是一个一个具有多平台、实时流量分析、网络IP数据包记录等特性的强大的网络入侵检测&#x2F;防御系统，即NIDS&#x2F;NIPS。 snort有三种工作模式：  嗅探器：嗅探器模式仅仅是从网络上读取数据包并作为连续不断的流显示在终端上。 数据包记录：数据包记录器模式把数据包记录到硬盘上。 网络入侵检测：分析网络数据流以匹配用户定义的一些规则，并根据检测结果采取一定的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[代码分析] snort使用">
+<meta property="og:url" content="https://s1n9l3.github.io/2023/04/12/[%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90]%20snort%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="S1n9l3">
+<meta property="og:description" content="snort使用简介Snort是一个一个具有多平台、实时流量分析、网络IP数据包记录等特性的强大的网络入侵检测&#x2F;防御系统，即NIDS&#x2F;NIPS。 snort有三种工作模式：  嗅探器：嗅探器模式仅仅是从网络上读取数据包并作为连续不断的流显示在终端上。 数据包记录：数据包记录器模式把数据包记录到硬盘上。 网络入侵检测：分析网络数据流以匹配用户定义的一些规则，并根据检测结果采取一定的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230412230445458.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230412230359046.png">
+<meta property="article:published_time" content="2023-04-12T14:24:01.539Z">
+<meta property="article:modified_time" content="2023-04-12T15:12:01.247Z">
+<meta property="article:author" content="YY">
+<meta property="article:tag" content="工具">
+<meta property="article:tag" content="防火墙">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230412230445458.png">
+  
+  
+  
+  <title>[代码分析] snort使用 - S1n9l3</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"s1n9l3.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>WXYY</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="[代码分析] snort使用"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-04-12 22:24" pubdate>
+          2023年4月12日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          56 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">[代码分析] snort使用</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="snort使用"><a href="#snort使用" class="headerlink" title="snort使用"></a>snort使用</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><a target="_blank" rel="noopener" href="https://www.snort.org/downloads#snort-downloads">Snort</a>是一个一个具有多平台、实时流量分析、网络IP数据包记录等特性的强大的网络入侵检测&#x2F;防御系统，即NIDS&#x2F;NIPS。</p>
+<p>snort有三种工作模式：</p>
+<ul>
+<li>嗅探器：嗅探器模式仅仅是从网络上读取数据包并作为连续不断的流显示在终端上。</li>
+<li>数据包记录：数据包记录器模式把数据包记录到硬盘上。</li>
+<li>网络入侵检测：分析网络数据流以匹配用户定义的一些规则，并根据检测结果采取一定的动作。</li>
+</ul>
+<p>这里主要使用snort的入侵检测功能。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_32350719/article/details/101025106">snort规则_RyanWang0000的博客-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/madconnon/SCADA-Rules">madconnon&#x2F;SCADA-Rules: Snort rules (github.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/digitalbond/Quickdraw-Snort">digitalbond&#x2F;Quickdraw-Snort: Digital Bond’s IDS&#x2F;IPS rules for ICS and ICS protocols. (github.com)</a></p>
+</blockquote>
+<h2 id="snort规则"><a href="#snort规则" class="headerlink" title="snort规则"></a>snort规则</h2><p>Snort规则被分成两个逻辑部分：</p>
+<ul>
+<li>规则头：规则头包含规则的动作，协议，源和目标ip地址与网络掩码，以及源和目标端口信息</li>
+<li>规则选项：规则选项部分包含报警消息内容和要检查的包的具体部分</li>
+</ul>
+<p>一个snort规则：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs powershell">alert icmp any any &lt;&gt; <span class="hljs-variable">$HOME_NET</span> any (logto:<span class="hljs-string">&quot;task1&quot;</span>;msg:<span class="hljs-string">&quot;--ICMP ping--&quot;</span>;sid:<span class="hljs-number">10000001</span>)<br>处理策略 协议 IP 端口 方向 IP 端口 (内容的具体处理)<br></code></pre></td></tr></table></figure>
+
+<h3 id="规则头"><a href="#规则头" class="headerlink" title="规则头"></a>规则头</h3><h4 id="处理策略（规则动作）"><a href="#处理策略（规则动作）" class="headerlink" title="处理策略（规则动作）"></a>处理策略（规则动作）</h4><p>snort中有5种动作：</p>
+<ul>
+<li>alert：使用选择的报警方法生成一个警报，然后记录（log）这个包。 Alert动作用来在一个包符合规则条件时发送告警消息。告警的发送有多种方式，例如可以发送到文件或者控制台。</li>
+<li>log：记录这个包。Log动作用来记录包，记录包有不同的方式，例如，可以记录到文件或者数据库，这将在以后讨论。根据命令行参数和配置文件，包可以被记录为不同的详细程度。你可以用“snort - ?”命令来查看你所用版本Snort的命令行可用参数。</li>
+<li>pass：丢弃（忽略）这个包。 这个动作告诉Snort不理会这个包，这个动作在你不想检查特定的包的时候可以加快Snort的操作速度。例如，如果你在网络中有一台包含一些弱点的主机，用来检测网络安全漏洞，可能会希望不理会对这台机器的攻击，pass规则这时就可以用到了。</li>
+<li>activate：报警并且激活另一条dynamic规则。Activate动作用来产生告警然后激活其它规则来进行进一步的检验。如下面所说的，dynamic动态规则就是用于这个目的。当你需要对捕获的包进行进一步检验的时候，就可以用activate动作。</li>
+<li>dynamic：保持空闲直到被一条activate规则激活，被激活后就作为一条log规则执行。Dynamic规则动作由其它用activate动作的规则调用，在正常情况下，他们不会被用来检测包。一个动态规则仅能被一个“activate”动作激活。</li>
+</ul>
+<blockquote>
+<p>Log动作与Alert动作的不同在于：Alert动作是发送告警然后记录包，Log动作仅仅记录包。</p>
+</blockquote>
+<h4 id="协议类型"><a href="#协议类型" class="headerlink" title="协议类型"></a>协议类型</h4><p>Snort当前分析可疑包的ip协议有四种：<strong>tcp</strong> 、<strong>udp</strong>、<strong>icmp</strong>和<strong>ip</strong>。</p>
+<h4 id="地址"><a href="#地址" class="headerlink" title="地址"></a>地址</h4><p>关键字”any”可以被用来定义任何地址。地址就是由直接的数字型ip地址和一个CIDR块组成的。CIDR块指示作用在规则地址和需要检查的进入的任何包的网络掩码。&#x2F;24表示c类网络， &#x2F;16表示b类网络，&#x2F;32表示一个特定的机器的地址。</p>
+<p>否定操作符用”！”表示。也可以指定ip地址列表，一个ip地址列表由逗号分割的ip地址和CIDR块组成，并且要放在方括号内。此时，ip列表可以不包含空格在ip地址之间。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs powershell">alert tcp !<span class="hljs-function">[<span class="hljs-number">192.168</span><span class="hljs-type">.1.0</span>/<span class="hljs-number">24</span>,<span class="hljs-number">10.1</span><span class="hljs-type">.1.0</span>/<span class="hljs-number">24</span>] <span class="hljs-title">any</span></span> -&gt; <span class="hljs-function">[<span class="hljs-number">192.168</span><span class="hljs-type">.1.0</span>/<span class="hljs-number">24</span>,<span class="hljs-number">10.1</span><span class="hljs-type">.1.0</span>/<span class="hljs-number">24</span>] 111 (<span class="hljs-title">content</span></span>: <span class="hljs-string">&quot;|00 01 86 a5|&quot;</span>; msg: <span class="hljs-string">&quot;external mountd access&quot;</span>;)<br></code></pre></td></tr></table></figure>
+
+<p>var: 自定义变量</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs powershell">var MY_NET <span class="hljs-number">192.168</span>.<span class="hljs-number">1.0</span>/<span class="hljs-number">24</span> <br>alert tcp any any -&gt; <span class="hljs-variable">$MY_NET</span> any (flags: S; msg: <span class="hljs-string">&quot;SYN packet&quot;</span>;)<br></code></pre></td></tr></table></figure>
+
+<h4 id="端口号"><a href="#端口号" class="headerlink" title="端口号"></a>端口号</h4><p>端口号可以用几种方法表示，包括”any”端口、静态端口定义、范围、以及通过否定操作符。</p>
+<p>静态端口定义表示一个单个端口号，例如111表示portmapper，23表示telnet，80表示http等等。端口范围用范围操作符”：”表示。范围操作符可以有数种使用方法，如下所示：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs powershell">log udp any any -&gt; <span class="hljs-number">192.168</span>.<span class="hljs-number">1.0</span>/<span class="hljs-number">24</span> <span class="hljs-number">1</span>:<span class="hljs-number">1024</span><br>记录来自任何端口的，目标端口范围在<span class="hljs-number">1</span>到<span class="hljs-number">1024</span>的udp流<br><br>log tcp any any -&gt; <span class="hljs-number">192.168</span>.<span class="hljs-number">1.0</span>/<span class="hljs-number">24</span> :<span class="hljs-number">6000</span><br>记录来自任何端口，目标端口小于等于<span class="hljs-number">6000</span>的tcp流<br><br>log tcp any :<span class="hljs-number">1024</span> -&gt; <span class="hljs-number">192.168</span>.<span class="hljs-number">1.0</span>/<span class="hljs-number">24</span> <span class="hljs-number">500</span>:<br>记录来自任何小于等于<span class="hljs-number">1024</span>的特权端口，目标端口大于等于<span class="hljs-number">500</span>的tcp流<br><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs powershell">常用端口号     描述<br>   <span class="hljs-number">20</span>        FTP数据<br>   <span class="hljs-number">21</span>        FTP<br>   <span class="hljs-number">22</span>        SSH或安全Shell<br>   <span class="hljs-number">23</span>        Telnet<br>   <span class="hljs-number">25</span>        SMTP或类似于Sendmail的e<span class="hljs-literal">-mail</span>服务器<br>   <span class="hljs-number">37</span>        NTP（网络时钟协议，用来同步网络主机时间）<br>   <span class="hljs-number">53</span>        DNS 服务器<br>   <span class="hljs-number">67</span>        BootP/DHCP客户端<br>   <span class="hljs-number">68</span>        BootP/DHCP服务器<br>   <span class="hljs-number">69</span>        TFTP<br>   <span class="hljs-number">80</span>        HTTP,web服务器<br>   <span class="hljs-number">110</span>       POP3，供类似于OE的邮件客户端使用<br>   <span class="hljs-number">161</span>       SNMP<br>   <span class="hljs-number">162</span>       SNMP <span class="hljs-keyword">trap</span><br>   <span class="hljs-number">443</span>       HTTPS或安全HTTP<br>   <span class="hljs-number">514</span>       Syslog<br></code></pre></td></tr></table></figure>
+
+<h4 id="方向操作符"><a href="#方向操作符" class="headerlink" title="方向操作符"></a>方向操作符</h4><p>方向操作符”-&gt;”表示规则所施加的流的方向。方向操作符左边的ip地址和端口号被认为是流来自的源主机，方向操作符右边的ip地址和端口信息是目标主机，还有一个双向操作符”&lt;&gt;”。</p>
+<h3 id="规则选项"><a href="#规则选项" class="headerlink" title="规则选项"></a>规则选项</h3><p>规则选项组成了snort入侵检测引擎的核心，既易用又强大还灵活。所有的snort规则选项用分号”；”隔开。规则选项关键字和它们的参数用冒号”：”分开。</p>
+<h4 id="msg"><a href="#msg" class="headerlink" title="msg"></a>msg</h4><p>在报警和包日志中打印一个消息。</p>
+<h4 id="flags"><a href="#flags" class="headerlink" title="flags"></a>flags</h4><p>检查tcp flags的值。</p>
+<p>在snort中有8个标志变量：<br>1、 F - FIN (LSB in TCP Flags byte)<br>2、 S - SYN<br>3、 R - RST<br>4、 P - PSH<br>5、 A - ACK<br>6、 U - URG<br>7、 2 - Reserved bit 2<br>8、 1 - Reserved bit 1 (MSB in TCP Flags byte)</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs powershell">alert any any -&gt; <span class="hljs-number">192.168</span>.<span class="hljs-number">1.0</span>/<span class="hljs-number">24</span> any (flags: SF; msg: <span class="hljs-string">&quot;Possible SYN FIN scan&quot;</span>;)<br></code></pre></td></tr></table></figure>
+
+<h4 id="content"><a href="#content" class="headerlink" title="content"></a>content</h4><p>在包的净荷中搜索指定的样式。它可以包含混合的文本和二进制数据。二进制数据一般包含在管道符号中（”|”），表示为字节码（bytecode）。字节码把二进制数据表示为16进制数字，是描述复杂二进制数据的好方法。<strong>区分大小写</strong>。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs powershell">alert tcp <span class="hljs-number">192.168</span>.<span class="hljs-number">1.0</span>/<span class="hljs-number">24</span> any -&gt; !<span class="hljs-function">[<span class="hljs-number">192.168</span><span class="hljs-type">.1.0</span>/<span class="hljs-number">24</span>] <span class="hljs-title">any</span></span> (content: <span class="hljs-string">&quot;GET&quot;</span>; msg: <span class="hljs-string">&quot;GET matched&quot;</span>;)<br>以下的规则作用与上面一条相同，但是特征以<span class="hljs-number">16</span>进制表示。<br>alert tcp <span class="hljs-number">192.168</span>.<span class="hljs-number">1.0</span>/<span class="hljs-number">24</span> any -&gt; !<span class="hljs-function">[<span class="hljs-number">192.168</span><span class="hljs-type">.1.0</span>/<span class="hljs-number">24</span>] <span class="hljs-title">any</span></span> (content: <span class="hljs-string">&quot;|47 45 54|&quot;</span>; msg: <span class="hljs-string">&quot;GET matched&quot;</span>;)<br><span class="hljs-number">16</span>进值的数字<span class="hljs-number">47</span>与ASCII字符G的值相等，<span class="hljs-number">45</span>与E相等，<span class="hljs-number">54</span>与T相等。<br></code></pre></td></tr></table></figure>
+
+<h4 id="offset"><a href="#offset" class="headerlink" title="offset"></a>offset</h4><p>content选项的修饰符，设定开始搜索的位置 。</p>
+<p>offset规则选项被用作使用 content规则选项关键字的规则的修饰符。这个关键字修饰符指定模式匹配函数从数据包开始处开始搜索的偏移量。它对于cgi扫描*(通用网关接口：Common Gateway Interface)*检测规则很有用，cgi扫描的内容搜索字符串不会在数据区的前4个字节中出现。小心不要把这个偏移量设置的太严格了，会有可能漏掉攻击！这个规 则选项关键字必须和content规则选项一起使用。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs powershell">alert tcp any any -&gt; any <span class="hljs-number">102</span> (msg:<span class="hljs-string">&quot;COTP CR Connect Request&quot;</span>;content:<span class="hljs-string">&quot;|03 00|&quot;</span>;offset:<span class="hljs-number">0</span>;depth:<span class="hljs-number">2</span>;content:<span class="hljs-string">&quot;|e0 00 00|&quot;</span>;offset:<span class="hljs-number">5</span>;depth:<span class="hljs-number">3</span>;sid:<span class="hljs-number">1</span>;)<br></code></pre></td></tr></table></figure>
+
+<h4 id="depth"><a href="#depth" class="headerlink" title="depth"></a>depth</h4><p>content选项的修饰符，设定搜索的最大深度。</p>
+<p>depth 也是一个content规则选项修饰符。它设置了内容模式匹配函数从他搜索的区域的起始位置搜索的最大深度。它对于限制模式匹配函数超出搜索域指定范围而 造成无效搜索很有用。（也就是说，如果你在一个web包中搜索”cgi-bin&#x2F;phf”，你可能不需要浪费时间搜索超过数据区的头20个字节）</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs powershell">alert tcp any any -&gt; <span class="hljs-number">192.168</span>.<span class="hljs-number">1.0</span>/<span class="hljs-number">24</span> <span class="hljs-number">80</span> (content: <span class="hljs-string">&quot;cgi-bin/phf&quot;</span>; offset: <span class="hljs-number">3</span>; depth: <span class="hljs-number">22</span>; msg: <span class="hljs-string">&quot;CGI-PHF access&quot;</span>;)<br></code></pre></td></tr></table></figure>
+
+<h4 id="nocase"><a href="#nocase" class="headerlink" title="nocase"></a>nocase</h4><p>指定对content字符串大小写不敏感。</p>
+<h4 id="distance"><a href="#distance" class="headerlink" title="distance"></a>distance</h4><p>两次content匹配的最小间距</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs powershell">alert tcp any any -&gt; any [<span class="hljs-number">1210</span>,<span class="hljs-number">1211</span>] (msg:<span class="hljs-string">&quot;SCADA CODESYS Gateway-Server executable file upload attempt&quot;</span>; flow:to_server,established; content:<span class="hljs-string">&quot;|DD DD|&quot;</span>; depth:<span class="hljs-number">2</span>; content:<span class="hljs-string">&quot;..|5C|..|5C|&quot;</span>; distance:<span class="hljs-number">0</span>; content:<span class="hljs-string">&quot;MZ&quot;</span>; distance:<span class="hljs-number">0</span>; byte_jump:<span class="hljs-number">4</span>,<span class="hljs-number">58</span>,relative,little; content:<span class="hljs-string">&quot;PE|00 00|&quot;</span>; within:<span class="hljs-number">4</span>; distance:<span class="hljs-literal">-64</span>; metadata:policy balanced<span class="hljs-literal">-ips</span> drop, policy connectivity<span class="hljs-literal">-ips</span> drop, policy security<span class="hljs-literal">-ips</span> drop; reference:bugtraq,<span class="hljs-number">58032</span>; reference:cve,<span class="hljs-number">2012</span><span class="hljs-literal">-4705</span>; reference:url,ics<span class="hljs-literal">-cert</span>.us<span class="hljs-literal">-cert</span>.gov/pdf/ICSA<span class="hljs-literal">-13-050-01-a</span>.pdf; classtype:attempted<span class="hljs-literal">-admin</span>; sid:<span class="hljs-number">26414</span>; rev:<span class="hljs-number">6</span>;)<br></code></pre></td></tr></table></figure>
+
+<h4 id="within"><a href="#within" class="headerlink" title="within"></a>within</h4><p>两次content匹配之间的最大间距</p>
+<h4 id="flow"><a href="#flow" class="headerlink" title="flow"></a>flow</h4><p>这个选项要和TCP流联合使用。它允许规则只应用到流量流的某个方向上。这将允许规则只应用到客户端或者服务器端。这将能把内网客户端流览web页面的数据包和内网服务器所发送的数据包区分开来。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs powershell">to_client 触发上服务器从A到B的响应。<br>to_server 触发客户端上从A到B的请求。<br>from_client 触发客户端上从A到B的请求。<br>from_server 触发服务器上从A到B的响应。<br>established 只触发已经建立的TCP连接。<br>stateless 不管流处理器的状态都触发（这对处理那些能引起机器崩溃的数据包很有用。<br>no_stream 不在重建的流数据包上触发。<br>only_stream 只在重建的流数据包上触发。<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs powershell"><span class="hljs-comment"># CVE 2008-2639: CitectSCADA ODBC Overflow Attempt</span><br><span class="hljs-comment">#</span><br>alert tcp any any -&gt; any <span class="hljs-number">20222</span> (msg:<span class="hljs-string">&quot;CitectSCADA ODBC Overflow Attempt&quot;</span>; flow:established,to_server; byte_test:<span class="hljs-number">4</span>,&gt;,<span class="hljs-number">399</span>,<span class="hljs-number">0</span>; dsize:<span class="hljs-number">4</span>; reference:cve, CVE<span class="hljs-literal">-2008-2639</span>; reference:url,digitalbond.com/tools/quickdraw/vulnerability<span class="hljs-literal">-rules</span>; sid:<span class="hljs-number">1111601</span>; rev:<span class="hljs-number">2</span>; priority:<span class="hljs-number">1</span>;)<br></code></pre></td></tr></table></figure>
+
+<h4 id="fast-pattern"><a href="#fast-pattern" class="headerlink" title="fast_pattern"></a>fast_pattern</h4><p>suricata对只有一个content关键字的规则使用多模匹配，而对于多个content的规则就对最长对复杂的一个进行多模匹配，而fast_pattern则可以改变这个状况，如果在较短较简单的content字段后加上fast_pattern关键字则会优先匹配这个content，有时这种方法可以有效提升效率。</p>
+<p>下面这个例子就是这种情况，如果第二个content没有fast_parttern关键字的话便会先去匹配”User-Agent:”，而这个在数据包中的出现频率是远远高于”Badness”的，这样就会导致大量的多余时间浪费到无用的匹配上，使用了fast_pattern之后便大大提高了匹配的效率：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs powershell">content:<span class="hljs-string">&quot;User-Agent|3A|&quot;</span>;<br>content:<span class="hljs-string">&quot;Badness&quot;</span>; distance:<span class="hljs-number">0</span>; fast_pattern;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>nocase是用法和fast_pattern类似，都是直接放在后面就行了；</p>
+</blockquote>
+<h2 id="metasploit示例"><a href="#metasploit示例" class="headerlink" title="metasploit示例"></a>metasploit示例</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.didierstevens.com/2015/05/11/detecting-network-traffic-from-metasploits-meterpreter-reverse-http-module/">Detecting Network Traffic from Metasploit’s Meterpreter Reverse HTTP Module | Didier Stevens</a></p>
+</blockquote>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230412230445458.png" srcset="/img/loading.gif" lazyload alt="image-20230412230445458"></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230412230359046.png" srcset="/img/loading.gif" lazyload alt="image-20230412230359046"></p>
+<p>检测规则：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs powershell"><span class="hljs-comment"># Snort rules by Didier Stevens (http://DidierStevens.com)</span><br><span class="hljs-comment"># 2015/05/01 - 2015/05/10</span><br><span class="hljs-comment"># Thanks to Nathan Fowler for helping out with performance optimization</span><br><span class="hljs-comment"># I start numbering my rules at SID 1618000</span><br>alert tcp <span class="hljs-variable">$HOME_NET</span> any -&gt; <span class="hljs-variable">$EXTERNAL_NET</span> <span class="hljs-variable">$HTTP_PORTS</span> (msg:<span class="hljs-string">&quot;Metasploit Meterpreter&quot;</span>; flow:to_server,established; content:<span class="hljs-string">&quot;RECV&quot;</span>; http_client_body; depth:<span class="hljs-number">4</span>; fast_pattern; isdataat:!<span class="hljs-number">0</span>,relative; urilen:<span class="hljs-number">23</span>&lt;&gt;<span class="hljs-number">24</span>,norm; content:<span class="hljs-string">&quot;POST&quot;</span>; pcre:<span class="hljs-string">&quot;/^\/[a-z0-9]&#123;4,5&#125;_[a-z0-9]&#123;16&#125;\/<span class="hljs-variable">$</span>/Ui&quot;</span>; classtype:trojan<span class="hljs-literal">-activity</span>; reference:url,blog.didierstevens.com/<span class="hljs-number">2015</span>/<span class="hljs-number">05</span>/<span class="hljs-number">11</span>/detecting<span class="hljs-literal">-network-traffic-from-metasploits-meterpreter-reverse-http-module</span>/; sid:<span class="hljs-number">1618008</span>; rev:<span class="hljs-number">1</span>;)<br></code></pre></td></tr></table></figure>
+
+<p>解释</p>
+<ul>
+<li><p>检测的是TCP连接</p>
+</li>
+<li><p>检测的是本机任意端口出来到目标地址的流量</p>
+</li>
+<li><p>flow定义的是到服务端的，且是已经建立的TCP连接</p>
+</li>
+<li><p>content内容是RECV，因为上图中包的内容是RECV</p>
+</li>
+<li><p>http_client_body表示内容是在body中的值</p>
+</li>
+<li><p>depth表示长度是4</p>
+</li>
+<li><p>fast_pattern模式</p>
+</li>
+<li><p>isdataat表示特定的部分是否有数据，这里是<code>!0</code>，即有数据</p>
+</li>
+<li><p>urilen表示uri的长度，<code>23&lt;&gt;24</code>，表示长度在23到24之间</p>
+</li>
+<li><p>pcre表示一个正则表达式，这里就是根据uri来匹配的</p>
+</li>
+<li><p>classtype是进行分类</p>
+</li>
+<li><p>reference表示参考信息</p>
+</li>
+<li><p>sid是必须的，且长度大于100000</p>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/" class="category-chain-item">代码分析</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%B7%A5%E5%85%B7/">#工具</a>
+      
+        <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/">#防火墙</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>[代码分析] snort使用</div>
+      <div>https://s1n9l3.github.io/2023/04/12/[代码分析] snort使用/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>YY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年4月12日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/04/09/%5Bctf-reverse%5D%20%5BFlareOn6%5DOverlong/" title="[ctf] [FlareOn6]Overlong">
+                        <span class="hidden-mobile">[ctf] [FlareOn6]Overlong</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
