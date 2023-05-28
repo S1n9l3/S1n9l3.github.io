@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>[代码分析] 加壳和脱壳</title>
+    <link href="/2023/05/20/%5B%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%5D%20%E5%8A%A0%E5%A3%B3%E5%92%8C%E8%84%B1%E5%A3%B3/"/>
+    <url>/2023/05/20/%5B%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%5D%20%E5%8A%A0%E5%A3%B3%E5%92%8C%E8%84%B1%E5%A3%B3/</url>
+    
+    <content type="html"><![CDATA[<h1 id="加壳和脱壳"><a href="#加壳和脱壳" class="headerlink" title="加壳和脱壳"></a>加壳和脱壳</h1><p>加壳是针对静态调试的，反调试是针对动态分析的。</p><p>壳，英语中叫<code>shell</code>，是程序在运行之前，提前运行一些东西，来改变原始程序的区节段内容，使得原始代码在静态上无法正常分析。</p><p>有两种壳：压缩壳和指令壳</p><h2 id="压缩壳"><a href="#压缩壳" class="headerlink" title="压缩壳"></a>压缩壳</h2>]]></content>
+    
+    
+    <categories>
+      
+      <category>代码分析</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>加壳脱壳</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>[游戏] 空洞骑士-梦魇格林-给我爬打法</title>
     <link href="/2023/04/30/%5B%E6%B8%B8%E6%88%8F%5D%20%E7%A9%BA%E6%B4%9E%E9%AA%91%E5%A3%AB-%E6%A2%A6%E9%AD%87%E6%A0%BC%E6%9E%97-%E7%BB%99%E6%88%91%E7%88%AC%E6%89%93%E6%B3%95/"/>
     <url>/2023/04/30/%5B%E6%B8%B8%E6%88%8F%5D%20%E7%A9%BA%E6%B4%9E%E9%AA%91%E5%A3%AB-%E6%A2%A6%E9%AD%87%E6%A0%BC%E6%9E%97-%E7%BB%99%E6%88%91%E7%88%AC%E6%89%93%E6%B3%95/</url>
