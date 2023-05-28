@@ -16,18 +16,34 @@
   <meta name="author" content="YY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="加壳和脱壳加壳是针对静态调试的，反调试是针对动态分析的。 壳，英语中叫shell，是程序在运行之前，提前运行一些东西，来改变原始程序的区节段内容，使得原始代码在静态上无法正常分析。 有两种壳：压缩壳和指令壳 压缩壳">
+    <meta name="description" content="加壳和脱壳加壳是针对静态调试的，反调试是针对动态分析的。 壳，英语中叫shell，是程序在运行之前，提前运行一些东西，来改变原始程序的区节段内容，使得原始代码在静态上无法正常分析。 有两种壳：压缩壳和指令壳 基本概念OEP，Original Entry Point，程序入口点。加壳一般是为了隐藏程序的真实OEP。 IAT，Import Address Table，导入地址表。由于导入函数就是被程序">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[代码分析] 加壳和脱壳">
 <meta property="og:url" content="https://s1n9l3.github.io/2023/05/20/[%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90]%20%E5%8A%A0%E5%A3%B3%E5%92%8C%E8%84%B1%E5%A3%B3/index.html">
 <meta property="og:site_name" content="S1n9l3">
-<meta property="og:description" content="加壳和脱壳加壳是针对静态调试的，反调试是针对动态分析的。 壳，英语中叫shell，是程序在运行之前，提前运行一些东西，来改变原始程序的区节段内容，使得原始代码在静态上无法正常分析。 有两种壳：压缩壳和指令壳 压缩壳">
+<meta property="og:description" content="加壳和脱壳加壳是针对静态调试的，反调试是针对动态分析的。 壳，英语中叫shell，是程序在运行之前，提前运行一些东西，来改变原始程序的区节段内容，使得原始代码在静态上无法正常分析。 有两种壳：压缩壳和指令壳 基本概念OEP，Original Entry Point，程序入口点。加壳一般是为了隐藏程序的真实OEP。 IAT，Import Address Table，导入地址表。由于导入函数就是被程序">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528095349356.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528095619553.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528095821936.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528095920709.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528100036322.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528101405032.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528101651581.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528103700976.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528103855394.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528103949710.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528104021188.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528104612837.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528104920429.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528105433948.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528105658210.png">
 <meta property="article:published_time" content="2023-05-20T08:51:48.721Z">
-<meta property="article:modified_time" content="2023-05-28T01:44:44.839Z">
+<meta property="article:modified_time" content="2023-05-28T03:03:36.501Z">
 <meta property="article:author" content="YY">
 <meta property="article:tag" content="加壳脱壳">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528095349356.png">
   
   
   
@@ -219,7 +235,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          104 字
+          1.7k 字
         
       </span>
     
@@ -230,7 +246,7 @@
         
         
         
-          1 分钟
+          15 分钟
         
       </span>
     
@@ -276,7 +292,50 @@
                 <h1 id="加壳和脱壳"><a href="#加壳和脱壳" class="headerlink" title="加壳和脱壳"></a>加壳和脱壳</h1><p>加壳是针对静态调试的，反调试是针对动态分析的。</p>
 <p>壳，英语中叫<code>shell</code>，是程序在运行之前，提前运行一些东西，来改变原始程序的区节段内容，使得原始代码在静态上无法正常分析。</p>
 <p>有两种壳：压缩壳和指令壳</p>
-<h2 id="压缩壳"><a href="#压缩壳" class="headerlink" title="压缩壳"></a>压缩壳</h2>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>OEP，Original Entry Point，程序入口点。加壳一般是为了隐藏程序的真实OEP。</p>
+<p>IAT，Import Address Table，导入地址表。由于导入函数就是被程序调用但其执行代码又不在程序中的函数，这些函数的代码位于一个或者多个 DLL 中。当 PE 文件被装入内存的时候，Windows 装载器才将 DLL 装入，并将调用导入函数的指令和函数实际所处的地址联系起来（动态连接），这操作就需要导入表完成。其中导入地址表就指示函数实际地址。 多数加壳软件在运行时会重建导入地址表，因此获取加壳程序正确的导入地址表也是手动脱壳操作中的一个关键问题。</p>
+<h2 id="加壳原理"><a href="#加壳原理" class="headerlink" title="加壳原理"></a>加壳原理</h2><p>手动处理程序，来理解加壳的过程，主要是添加区节段，修改OEP。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;windows.h&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-built_in">MessageBoxA</span>(<span class="hljs-literal">NULL</span>, <span class="hljs-string">&quot;text&quot;</span>, <span class="hljs-string">&quot;Title&quot;</span>, MB_OK);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这时一段简单的程序，运行时会出现弹窗。将程序用<code>010editor</code>打开，这个工具可以很容易的查看PE程序，方便修改，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528095349356.png" srcset="/img/loading.gif" lazyload alt="image-20230528095349356"></p>
+<p>这里可以看到现在有5个区节段，首先要添加一个区节段，在NT头的文件头中有<code>NumberOfSections</code>，记录了区节段的数量，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528095619553.png" srcset="/img/loading.gif" lazyload alt="image-20230528095619553"></p>
+<p>原本是5个，现在修改为6个，保存，然后退出应用，重新打开文件，就会发现现在有6个区节段，新增的区节段现在没有名字，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528095821936.png" srcset="/img/loading.gif" lazyload alt="image-20230528095821936"></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528095920709.png" srcset="/img/loading.gif" lazyload alt="image-20230528095920709"></p>
+<p>先定义名字，限制是8个字节，这里设置为<code>.abc</code>；</p>
+<p>然后第二个是<code>union Misc</code>，有两个选项，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528100036322.png" srcset="/img/loading.gif" lazyload alt="image-20230528100036322"></p>
+<p>第一个表示物理地址（现在已经不用这个了），第二个是虚拟大小，表示新的区节段在内存中占多大空间，这里设置为<code>200h</code>；</p>
+<p>接着是<code>VirtualAddress</code>，虚拟地址，表示的是一个偏移量，比如基址是<code>0x00400000</code>，区节段虚拟地址是<code>0x5000</code>，那么对于整个程序来说，区节段地址就是<code>0x00405000</code>；查看上一个区节段的地址是<code>5000h</code>，大小是十进制<code>348</code>，但由于这里设置对齐为<code>1000h</code>，所以下个区节段的起始地址应该是<code>6000h</code>，</p>
+<blockquote>
+<p><code>SectionAlignment</code>在NT头的可选头中</p>
+</blockquote>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528101405032.png" srcset="/img/loading.gif" lazyload alt="image-20230528101405032"></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528101651581.png" srcset="/img/loading.gif" lazyload alt="image-20230528101651581"></p>
+<p>后面是<code>SizeOfRawData</code>，表示硬盘空间大小，通常和内存空间大小相同，这里设置为<code>200h</code>；</p>
+<p>最后是<code>PointerToRawData</code>，先查看上一个区节段的设置，是<code>2200h</code>，大小是<code>200h</code>，看上图<code>FileAlignment</code>的大小是<code>200h</code>，所以下一个区节段应该是<code>2400h</code>，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528103700976.png" srcset="/img/loading.gif" lazyload alt="image-20230528103700976"></p>
+<p>最后修改完成是这样的，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528103855394.png" srcset="/img/loading.gif" lazyload alt="image-20230528103855394"></p>
+<p>然后设置这个区节段的属性，设置为可读可写可执行的，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528103949710.png" srcset="/img/loading.gif" lazyload alt="image-20230528103949710"></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528104021188.png" srcset="/img/loading.gif" lazyload alt="image-20230528104021188"></p>
+<p>设置就结束了，不过还没有给区节段分配空间，在编辑-&gt;插入&#x2F;覆盖-&gt;插入字节（ctrl+shift+i），设置开始地址是<code>2400h</code>，大小是<code>200h</code>，十六进制，就会在这里插入一段空间。保存。</p>
+<p>既然在程序中插入了内容，那么总的大小就会变化，所以需要修改可选头中的<code>SizeOfImage</code>，原本是<code>6000h</code>，插入大小是<code>200h</code>，所以是<code>6200h</code>，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528104612837.png" srcset="/img/loading.gif" lazyload alt="image-20230528104612837"></p>
+<p>最后需要修改OEP，即程序的入口点，在可选头的<code>AddressOfEntryPoint</code>，之前修改的内容中，设置了虚拟地址，<code>6000h</code>，所以需要将程序入口点设置为<code>6000h</code>，但是原来的值<code>126Ch</code>需要记住，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528104920429.png" srcset="/img/loading.gif" lazyload alt="image-20230528104920429"></p>
+<p>保存后，运行程序，是没有任何的反应的，因为现在程序的入口点是设置的新的区节段，而现在这个区节段是没有任何内容的。</p>
+<p>用OD打开程序，可以看到程序的入口在<code>0x00406000</code>，没有任何的内容，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528105433948.png" srcset="/img/loading.gif" lazyload alt="image-20230528105433948"></p>
+<p>然后可以在这里写入任何代码，不过最后一定要跳转到最初的程序入口点，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20230528105658210.png" srcset="/img/loading.gif" lazyload alt="image-20230528105658210"></p>
+<p>选择修改的代码，右键，复制到可执行程序，选择，在新窗口中选择写的代码，右键，保存文件。</p>
+<p>保存后，执行程序，就可以看到有弹窗了。</p>
+<p>通常加壳的流程，首先将原程序进行加密处理，然后在新的区节段写入解密程序，运行程序时就会先解密，然后跳转到原程序入口点，执行原程序。</p>
+
                 
               </div>
             
