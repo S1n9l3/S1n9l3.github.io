@@ -1,0 +1,753 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/Aries.ico">
+  <link rel="icon" href="/img/Aries.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="YY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="dll注入–全局钩子注入DLL注入技术，一般来讲是向一个正在运行的进程插入&#x2F;注入代码的过程。我们注入的代码以动态链接库（DLL）的形式存在。DLL文件在运行时将按需加载（类似于UNIX系统中的共享库(share object，扩展名为.so)）。然而实际上，我们可以以其他的多种形式注入代码（正如恶意软件中所常见的，任意PE文件，shellcode代码&#x2F;程序集等）。  关于几种d">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[逆向] dll注入--全局钩子注入">
+<meta property="og:url" content="https://s1n9l3.github.io/2023/12/02/[%E9%80%86%E5%90%91]%20dll%E6%B3%A8%E5%85%A5--%E5%85%A8%E5%B1%80%E9%92%A9%E5%AD%90%E6%B3%A8%E5%85%A5/index.html">
+<meta property="og:site_name" content="S1n9l3">
+<meta property="og:description" content="dll注入–全局钩子注入DLL注入技术，一般来讲是向一个正在运行的进程插入&#x2F;注入代码的过程。我们注入的代码以动态链接库（DLL）的形式存在。DLL文件在运行时将按需加载（类似于UNIX系统中的共享库(share object，扩展名为.so)）。然而实际上，我们可以以其他的多种形式注入代码（正如恶意软件中所常见的，任意PE文件，shellcode代码&#x2F;程序集等）。  关于几种d">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20231202094928382.png">
+<meta property="article:published_time" content="2023-12-02T00:50:24.084Z">
+<meta property="article:modified_time" content="2023-12-02T01:49:29.336Z">
+<meta property="article:author" content="YY">
+<meta property="article:tag" content="reverse">
+<meta property="article:tag" content="dll注入">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20231202094928382.png">
+  
+  
+  
+  <title>[逆向] dll注入--全局钩子注入 - S1n9l3</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"s1n9l3.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>WXYY</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="[逆向] dll注入--全局钩子注入"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-12-02 08:50" pubdate>
+          2023年12月2日 早上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          48 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">[逆向] dll注入--全局钩子注入</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="dll注入–全局钩子注入"><a href="#dll注入–全局钩子注入" class="headerlink" title="dll注入–全局钩子注入"></a>dll注入–全局钩子注入</h1><p>DLL注入技术，一般来讲是向一个正在运行的进程插入&#x2F;注入代码的过程。我们注入的代码以动态链接库（DLL）的形式存在。DLL文件在运行时将按需加载（类似于UNIX系统中的共享库(share object，扩展名为.so)）。然而实际上，我们可以以其他的多种形式注入代码（正如恶意软件中所常见的，任意PE文件，shellcode代码&#x2F;程序集等）。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/10318">关于几种dll注入方式的学习 - 先知社区 (aliyun.com)</a></p>
+</blockquote>
+<p>在Windows大部分应用都是基于消息机制，他们都拥有一个消息过程函数，根据不同消息完成不同功能，windows通过钩子机制来截获和监视系统中的这些消息。一般钩子分局部钩子与全局钩子，局部钩子一般用于某个线程，而全局钩子一般通过dll文件实现相应的钩子函数。</p>
+<h2 id="核心函数"><a href="#核心函数" class="headerlink" title="核心函数"></a>核心函数</h2><p>主要涉及函数：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/api/winuser/nf-winuser-setwindowshookexa">SetWindowsHookEx</a></li>
+</ul>
+<h3 id="SetWindowsHookEx"><a href="#SetWindowsHookEx" class="headerlink" title="SetWindowsHookEx"></a>SetWindowsHookEx</h3><p>将应用程序定义的挂钩过程安装到挂钩链中。 你将安装挂钩过程来监视系统的某些类型的事件。 这些事件与特定线程或与调用线程位于同一桌面中的所有线程相关联。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">HHOOK <span class="hljs-title">SetWindowsHookExA</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">  [in] <span class="hljs-type">int</span>       idHook,</span></span><br><span class="hljs-params"><span class="hljs-function">  [in] HOOKPROC  lpfn,</span></span><br><span class="hljs-params"><span class="hljs-function">  [in] HINSTANCE hmod,</span></span><br><span class="hljs-params"><span class="hljs-function">  [in] DWORD     dwThreadId</span></span><br><span class="hljs-params"><span class="hljs-function">)</span></span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><p><code>[in] idHook</code></p>
+<p>类型： <strong>int</strong></p>
+<p>要安装的挂钩过程的类型。 此参数的取值可为下列值之一：</p>
+<table>
+<thead>
+<tr>
+<th align="left">值</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>WH_CALLWNDPROC</strong>4</td>
+<td align="left">安装一个挂钩过程，用于在系统将消息发送到目标窗口过程之前监视消息。 有关详细信息，请参阅 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/api/winuser/nf-winuser-callwindowprocw">CallWindowProcW 函数</a>&#x2F;<a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/api/winuser/nf-winuser-callwindowproca">CallWindowProcA 函数</a> 挂钩过程。</td>
+</tr>
+<tr>
+<td align="left"><strong>WH_CALLWNDPROCRET</strong>12</td>
+<td align="left">安装一个挂钩过程，该过程在目标窗口过程处理消息后监视消息。 有关详细信息，请参阅 [HOOKPROC 回调函数] (nc-winuser-hookproc.md) 挂钩过程。</td>
+</tr>
+<tr>
+<td align="left"><strong>WH_CBT</strong>5</td>
+<td align="left">安装用于接收对 CBT 应用程序有用的通知的挂钩过程。 有关详细信息，请参阅 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/winmsg/cbtproc">CBTProc</a> 挂钩过程。</td>
+</tr>
+<tr>
+<td align="left"><strong>WH_DEBUG</strong>9</td>
+<td align="left">安装可用于调试其他挂钩过程的挂钩过程。 有关详细信息，请参阅 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/winmsg/debugproc"><em>DebugProc</em></a> 挂钩过程。</td>
+</tr>
+<tr>
+<td align="left"><strong>WH_FOREGROUNDIDLE</strong>11</td>
+<td align="left">安装将在应用程序的前台线程变为空闲状态时调用的挂钩过程。 此挂钩可用于在空闲时间执行低优先级任务。 有关详细信息，请参阅 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/winmsg/foregroundidleproc"><em>ForegroundIdleProc</em></a> 挂钩过程。</td>
+</tr>
+<tr>
+<td align="left"><strong>WH_GETMESSAGE</strong>3</td>
+<td align="left">安装用于监视发布到消息队列的消息的挂钩过程。 有关详细信息，请参阅 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/winmsg/getmsgproc"><em>GetMsgProc</em></a> 挂钩过程。</td>
+</tr>
+<tr>
+<td align="left"><strong>WH_JOURNALPLAYBACK</strong>1</td>
+<td align="left">警告<strong>Windows 11及更新版本</strong>：不支持日记挂钩 API。 建议改用 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/api/winuser/nf-winuser-sendinput"><strong>SendInput</strong></a> TextInput API。<br />安装一个挂钩过程，该过程发布以前由 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/desktop/winmsg/about-hooks">WH_JOURNALRECORD</a> 挂钩过程记录的消息。 有关详细信息，请参阅 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/winmsg/journalplaybackproc">JournalPlaybackProc</a> 挂钩过程。</td>
+</tr>
+<tr>
+<td align="left"><strong>WH_JOURNALRECORD</strong>0</td>
+<td align="left">警告<strong>Windows 11及更新版本</strong>：不支持日记挂钩 API。 建议改用 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/api/winuser/nf-winuser-sendinput"><strong>SendInput</strong></a> TextInput API。<br />安装一个挂钩过程，用于记录发布到系统消息队列的输入消息。 此挂钩可用于记录宏。 有关详细信息，请参阅 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/winmsg/journalrecordproc">JournalRecordProc</a> 挂钩过程。</td>
+</tr>
+<tr>
+<td align="left"><strong>WH_KEYBOARD</strong>2</td>
+<td align="left">安装用于监视击键消息的挂钩过程。 有关详细信息，请参阅 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/winmsg/keyboardproc">KeyboardProc</a> 挂钩过程。</td>
+</tr>
+<tr>
+<td align="left"><strong>WH_KEYBOARD_LL</strong>13</td>
+<td align="left">安装用于监视低级别键盘输入事件的挂钩过程。 有关详细信息，请参阅 [LowLevelKeyboardProc] (&#x2F;windows&#x2F;win32&#x2F;winmsg&#x2F;lowlevelkeyboardproc) 挂钩过程。</td>
+</tr>
+<tr>
+<td align="left"><strong>WH_MOUSE</strong>7</td>
+<td align="left">安装监视鼠标消息的挂钩过程。 有关详细信息，请参阅 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/winmsg/mouseproc">MouseProc</a> 挂钩过程。</td>
+</tr>
+<tr>
+<td align="left"><strong>WH_MOUSE_LL</strong>14</td>
+<td align="left">安装用于监视低级别鼠标输入事件的挂钩过程。 有关详细信息，请参阅 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/winmsg/lowlevelmouseproc">LowLevelMouseProc</a> 挂钩过程。</td>
+</tr>
+<tr>
+<td align="left"><strong>WH_MSGFILTER</strong>-1</td>
+<td align="left">安装挂钩过程，用于监视由于对话框、消息框、菜单或滚动条中的输入事件而生成的消息。 有关详细信息，请参阅 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/winmsg/messageproc">MessageProc</a> 挂钩过程。</td>
+</tr>
+<tr>
+<td align="left"><strong>WH_SHELL</strong>10</td>
+<td align="left">安装一个挂钩过程，用于接收对 shell 应用程序有用的通知。 有关详细信息，请参阅 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/winmsg/shellproc">ShellProc</a> 挂钩过程。</td>
+</tr>
+<tr>
+<td align="left"><strong>WH_SYSMSGFILTER</strong>6</td>
+<td align="left">安装挂钩过程，用于监视由于对话框、消息框、菜单或滚动条中的输入事件而生成的消息。 挂钩过程监视与调用线程位于同一桌面中的所有应用程序的消息。 有关详细信息，请参阅 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/winmsg/sysmsgproc">SysMsgProc</a> 挂钩过程。</td>
+</tr>
+</tbody></table>
+<p><code>[in] lpfn</code></p>
+<p>类型： <strong>HOOKPROC</strong></p>
+<p>指向挂钩过程的指针。 如果 dwThreadId 参数为零或指定由其他进程创建的线程的标识符， 则 lpfn 参数必须指向 DLL 中的挂钩过程。 否则， lpfn 可以指向与当前进程关联的代码中的挂钩过程。</p>
+<p><code>[in] hmod</code></p>
+<p>类型： <strong>HINSTANCE</strong></p>
+<p>DLL 的句柄，其中包含 lpfn 参数指向的挂钩过程。 如果 dwThreadId 参数指定当前进程创建的线程，并且挂钩过程位于与当前进程关联的代码中，则必须将 hMod 参数设置为 NULL。</p>
+<p><code>[in] dwThreadId</code></p>
+<p>类型：<strong>DWORD</strong></p>
+<p>要与挂钩过程关联的线程的标识符。 对于桌面应用，如果此参数为零，则挂钩过程与调用线程在同一桌面中运行的所有现有线程相关联。</p>
+<h4 id="返回值"><a href="#返回值" class="headerlink" title="返回值"></a>返回值</h4><p>类型： <strong>HHOOK</strong></p>
+<p>如果函数成功，则返回值是挂钩过程的句柄。</p>
+<p>如果函数失败，则返回值为 NULL。 要获得更多的错误信息，请调用 GetLastError。</p>
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>如果创建的是全局钩子，那么钩子函数必须在一个DLL中。</p>
+<p>因为进程的地址空间是独立的,发生对应事件的进程不能调用其他进程地址空间的钩子函数。如果钩子函数的实现代码在DLL中，则在对应事件发生时，系统会把这个DLL加载到发生事件的进程地址空间中，使它能够调用钩子函数进行处理。</p>
+<p>在操作系统中安装全局钩子后,只要进程接收到可以发出钩子的消息，全局钩子的DLL文件就会由操作系统自动或强行地加载到该进程中。因此，设置全局钩子可以达到DLL注入的目的。创建一个全局钩子后,在对应事件发生的时候,系统就会把 DLL加载到发生事件的进程中,这样,便实现了DLL注入。</p>
+<p>为了能够让DLL注入到所有的进程中,程序设置<code>WH_GETMESSAGE</code>消息的全局钩子。因为<code>WH_GETMESSAGE</code>类型的钩子会监视消息队列，并且 Windows系统是基于消息驱动的,所以所有进程都会有自己的一个消息队列，都会加载 <code>WH_GETMESSAGE</code>类型的全局钩子DLL。</p>
+<h2 id="实现过程"><a href="#实现过程" class="headerlink" title="实现过程"></a>实现过程</h2><p>首先需要实现DLL，然后实现加载文件来加载DLL。</p>
+<h3 id="DLL"><a href="#DLL" class="headerlink" title="DLL"></a>DLL</h3><p>pch.h</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// pch.h: 这是预编译标头文件。</span><br><span class="hljs-comment">// 下方列出的文件仅编译一次，提高了将来生成的生成性能。</span><br><span class="hljs-comment">// 这还将影响 IntelliSense 性能，包括代码完成和许多代码浏览功能。</span><br><span class="hljs-comment">// 但是，如果此处列出的文件中的任何一个在生成之间有更新，它们全部都将被重新编译。</span><br><span class="hljs-comment">// 请勿在此处添加要频繁更新的文件，这将使得性能优势无效。</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">ifndef</span> PCH_H</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> PCH_H</span><br><br><span class="hljs-comment">// 添加要在此处预编译的标头</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;framework.h&quot;</span></span><br><span class="hljs-keyword">extern</span> <span class="hljs-string">&quot;C&quot;</span> _declspec(dllexport) <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">SetHook</span><span class="hljs-params">()</span></span>;<br><span class="hljs-keyword">extern</span> <span class="hljs-string">&quot;C&quot;</span> _declspec(dllexport) <span class="hljs-function">LRESULT <span class="hljs-title">GetMsgProc</span><span class="hljs-params">(<span class="hljs-type">int</span> code, WPARAM wParam, LPARAM lParam)</span></span>;<br><span class="hljs-keyword">extern</span> <span class="hljs-string">&quot;C&quot;</span> _declspec(dllexport) <span class="hljs-function">BOOL <span class="hljs-title">UnsetHook</span><span class="hljs-params">()</span></span>;<br><span class="hljs-meta">#<span class="hljs-keyword">endif</span> <span class="hljs-comment">//PCH_H</span></span><br><br></code></pre></td></tr></table></figure>
+
+<p>pch.cpp</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// pch.cpp: 与预编译标头对应的源文件</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;pch.h&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;windows.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-comment">// 当使用预编译的头时，需要使用此源文件，编译才能成功。</span><br><br><span class="hljs-keyword">extern</span> HMODULE g_hDllModule;<br><br><span class="hljs-comment">// 共享内存</span><br><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> data_seg(<span class="hljs-string">&quot;mydata&quot;</span>)</span><br>HHOOK g_hHook = <span class="hljs-literal">NULL</span>;<br><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> data_seg()</span><br><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> comment(linker, <span class="hljs-string">&quot;/SECTION:mydata,RWS&quot;</span>)</span><br><br><span class="hljs-comment">// 钩子回调函数</span><br><span class="hljs-function">LRESULT <span class="hljs-title">GetMsgProc</span><span class="hljs-params">(<span class="hljs-type">int</span> code, WPARAM wParam, LPARAM lParam)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">return</span> ::<span class="hljs-built_in">CallNextHookEx</span>(g_hHook, code, wParam, lParam);<br>&#125;<br><br><span class="hljs-comment">// 设置钩子</span><br><span class="hljs-function">BOOL <span class="hljs-title">SetHook</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Here is HOOK...\n&quot;</span>);<br>	g_hHook = <span class="hljs-built_in">SetWindowsHookEx</span>(WH_GETMESSAGE, (HOOKPROC)GetMsgProc, g_hDllModule, <span class="hljs-number">0</span>);<br>	<span class="hljs-keyword">if</span> (<span class="hljs-literal">NULL</span> == g_hHook)<br>	&#123;<br>		<span class="hljs-keyword">return</span> FALSE;<br>	&#125;<br>	<span class="hljs-keyword">return</span> TRUE;<br>&#125;<br><br><span class="hljs-comment">// 卸载钩子</span><br><span class="hljs-function">BOOL <span class="hljs-title">UnsetHook</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Now unset HOOK...\n&quot;</span>);<br>	<span class="hljs-keyword">if</span> (g_hHook)<br>	&#123;<br>		<span class="hljs-built_in">UnhookWindowsHookEx</span>(g_hHook);<br>	&#125;<br>	<span class="hljs-keyword">return</span> TRUE;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>dllmain.cpp</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// dllmain.cpp : 定义 DLL 应用程序的入口点。</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;pch.h&quot;</span></span><br><br>HMODULE g_hDllModule = <span class="hljs-literal">NULL</span>;<br><br><span class="hljs-function">BOOL APIENTRY <span class="hljs-title">DllMain</span><span class="hljs-params">( HMODULE hModule,</span></span><br><span class="hljs-params"><span class="hljs-function">                       DWORD  ul_reason_for_call,</span></span><br><span class="hljs-params"><span class="hljs-function">                       LPVOID lpReserved</span></span><br><span class="hljs-params"><span class="hljs-function">                     )</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">switch</span> (ul_reason_for_call)<br>    &#123;<br>    <span class="hljs-keyword">case</span> DLL_PROCESS_ATTACH:<br>    &#123;<br>        g_hDllModule = hModule;<br>        <span class="hljs-keyword">break</span>;<br>    &#125;<br>    <span class="hljs-keyword">case</span> DLL_THREAD_ATTACH:<br>    <span class="hljs-keyword">case</span> DLL_THREAD_DETACH:<br>    <span class="hljs-keyword">case</span> DLL_PROCESS_DETACH:<br>        <span class="hljs-keyword">break</span>;<br>    &#125;<br>    <span class="hljs-keyword">return</span> TRUE;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="加载文件"><a href="#加载文件" class="headerlink" title="加载文件"></a>加载文件</h3><p>加载DLL。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 全局钩子注入</span><br><span class="hljs-comment">// 此文件会加载DLL</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;windows.h&gt;</span></span><br><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-function"><span class="hljs-keyword">typedef</span> <span class="hljs-title">BOOL</span><span class="hljs-params">(*typedef_SetGlobalHook)</span><span class="hljs-params">()</span></span>;<br>	<span class="hljs-function"><span class="hljs-keyword">typedef</span> <span class="hljs-title">BOOL</span><span class="hljs-params">(*typedef_UnsetGlobalHook)</span><span class="hljs-params">()</span></span>;<br>	HMODULE hDll = <span class="hljs-literal">NULL</span>;<br>	typedef_SetGlobalHook SetGlobalHook = <span class="hljs-literal">NULL</span>;<br>	typedef_UnsetGlobalHook UnsetGlobalHook = <span class="hljs-literal">NULL</span>;<br>	BOOL bRet = FALSE;<br><br>	<span class="hljs-keyword">do</span><br>	&#123;<br>		hDll = ::<span class="hljs-built_in">LoadLibraryW</span>(<span class="hljs-built_in">TEXT</span>(<span class="hljs-string">&quot;D:\\projects\\c++\\reverse\\hook\\GlobalHookDll\\Release\\GlobalHookDll.dll&quot;</span>));<br>		<span class="hljs-keyword">if</span> (<span class="hljs-literal">NULL</span> == hDll)<br>		&#123;<br>			<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;LoadLibrary Error [%d]\n&quot;</span>, ::<span class="hljs-built_in">GetLastError</span>());<br>			<span class="hljs-keyword">break</span>;<br>		&#125;<br><br>		SetGlobalHook = (typedef_SetGlobalHook)::<span class="hljs-built_in">GetProcAddress</span>(hDll, <span class="hljs-string">&quot;SetHook&quot;</span>);<br>		<span class="hljs-keyword">if</span> (<span class="hljs-literal">NULL</span> == SetGlobalHook)<br>		&#123;<br>			<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;GetProcAddress Error[%d]\n&quot;</span>, ::<span class="hljs-built_in">GetLastError</span>());<br>			<span class="hljs-keyword">break</span>;<br>		&#125;<br><br>		bRet = <span class="hljs-built_in">SetGlobalHook</span>();<br>		<span class="hljs-keyword">if</span> (bRet)<br>		&#123;<br>			<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;SetGlobalHook OK. \n&quot;</span>);<br>		&#125;<br>		<span class="hljs-keyword">else</span><br>		&#123;<br>			<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;SetGlobalHook Error. \n&quot;</span>);<br>		&#125;<br><br>		<span class="hljs-built_in">system</span>(<span class="hljs-string">&quot;pause&quot;</span>);<br><br>		UnsetGlobalHook = (typedef_UnsetGlobalHook)::<span class="hljs-built_in">GetProcAddress</span>(hDll, <span class="hljs-string">&quot;UnsetHook&quot;</span>);<br>		<span class="hljs-keyword">if</span> (<span class="hljs-literal">NULL</span> == UnsetGlobalHook)<br>		&#123;<br>			<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;GetProcAddress Error [%d]\n&quot;</span>, ::<span class="hljs-built_in">GetLastError</span>());<br>			<span class="hljs-keyword">break</span>;<br>		&#125;<br><br>		<span class="hljs-built_in">UnsetGlobalHook</span>();<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;UnsetGlobalHook OK. \n&quot;</span>);<br>	&#125; <span class="hljs-keyword">while</span> (FALSE);<br><br>	<span class="hljs-built_in">system</span>(<span class="hljs-string">&quot;pause&quot;</span>);<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p>运行加载文件后，会打印钩子函数的内容。</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20231202094928382.png" srcset="/img/loading.gif" lazyload alt="image-20231202094928382"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E9%80%86%E5%90%91/" class="category-chain-item">逆向</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/reverse/">#reverse</a>
+      
+        <a href="/tags/dll%E6%B3%A8%E5%85%A5/">#dll注入</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>[逆向] dll注入--全局钩子注入</div>
+      <div>https://s1n9l3.github.io/2023/12/02/[逆向] dll注入--全局钩子注入/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>YY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年12月2日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/05/20/%5B%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%5D%20%E5%8A%A0%E5%A3%B3%E5%92%8C%E8%84%B1%E5%A3%B3/" title="[代码分析] 加壳和脱壳">
+                        <span class="hidden-mobile">[代码分析] 加壳和脱壳</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
