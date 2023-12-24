@@ -1,0 +1,787 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/Aries.ico">
+  <link rel="icon" href="/img/Aries.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="YY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="dll注入–远程线程注入远程线程函数顾名思义，指一个进程在另一个进程中创建线程。 核心函数主要涉及函数：  createRemoteThread 函数 (processthreadsapi.h) VirtualAllocEx 函数 (memoryapi.h) WriteProcessMemory 函数 (memoryapi.h)  createRemoteThread创建在另一个进程的虚拟地址空间">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[逆向] dll注入--远程线程注入">
+<meta property="og:url" content="https://s1n9l3.github.io/2023/12/24/[%E9%80%86%E5%90%91]%20dll%E6%B3%A8%E5%85%A5--%E8%BF%9C%E7%A8%8B%E7%BA%BF%E7%A8%8B%E6%B3%A8%E5%85%A5/index.html">
+<meta property="og:site_name" content="S1n9l3">
+<meta property="og:description" content="dll注入–远程线程注入远程线程函数顾名思义，指一个进程在另一个进程中创建线程。 核心函数主要涉及函数：  createRemoteThread 函数 (processthreadsapi.h) VirtualAllocEx 函数 (memoryapi.h) WriteProcessMemory 函数 (memoryapi.h)  createRemoteThread创建在另一个进程的虚拟地址空间">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20231224111248619.png">
+<meta property="article:published_time" content="2023-12-24T01:44:35.741Z">
+<meta property="article:modified_time" content="2023-12-24T03:13:25.282Z">
+<meta property="article:author" content="YY">
+<meta property="article:tag" content="reverse">
+<meta property="article:tag" content="dll注入">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20231224111248619.png">
+  
+  
+  
+  <title>[逆向] dll注入--远程线程注入 - S1n9l3</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"s1n9l3.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>WXYY</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="[逆向] dll注入--远程线程注入"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-12-24 09:44" pubdate>
+          2023年12月24日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          65 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">[逆向] dll注入--远程线程注入</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="dll注入–远程线程注入"><a href="#dll注入–远程线程注入" class="headerlink" title="dll注入–远程线程注入"></a>dll注入–远程线程注入</h1><p>远程线程函数顾名思义，指一个进程在另一个进程中创建线程。</p>
+<h2 id="核心函数"><a href="#核心函数" class="headerlink" title="核心函数"></a>核心函数</h2><p>主要涉及函数：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/api/processthreadsapi/nf-processthreadsapi-createremotethread">createRemoteThread 函数 (processthreadsapi.h)</a></li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/api/memoryapi/nf-memoryapi-virtualallocex">VirtualAllocEx 函数 (memoryapi.h)</a></li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/api/memoryapi/nf-memoryapi-writeprocessmemory">WriteProcessMemory 函数 (memoryapi.h)</a></li>
+</ul>
+<h3 id="createRemoteThread"><a href="#createRemoteThread" class="headerlink" title="createRemoteThread"></a>createRemoteThread</h3><p>创建在另一个进程的虚拟地址空间中运行的线程。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">HANDLE <span class="hljs-title">CreateRemoteThread</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">  [in]  HANDLE                 hProcess,</span></span><br><span class="hljs-params"><span class="hljs-function">  [in]  LPSECURITY_ATTRIBUTES  lpThreadAttributes,</span></span><br><span class="hljs-params"><span class="hljs-function">  [in]  SIZE_T                 dwStackSize,</span></span><br><span class="hljs-params"><span class="hljs-function">  [in]  LPTHREAD_START_ROUTINE lpStartAddress,</span></span><br><span class="hljs-params"><span class="hljs-function">  [in]  LPVOID                 lpParameter,</span></span><br><span class="hljs-params"><span class="hljs-function">  [in]  DWORD                  dwCreationFlags,</span></span><br><span class="hljs-params"><span class="hljs-function">  [out] LPDWORD                lpThreadId</span></span><br><span class="hljs-params"><span class="hljs-function">)</span></span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><p><code>[in] hProcess</code></p>
+<p>要在其中创建线程的进程句柄。 句柄必须具有 <strong>PROCESS_CREATE_THREAD</strong>、 <strong>PROCESS_QUERY_INFORMATION</strong>、 <strong>PROCESS_VM_OPERATION</strong>、 <strong>PROCESS_VM_WRITE</strong>和 <strong>PROCESS_VM_READ</strong> 访问权限，并且在某些平台上没有这些权限可能会失败。有关详细信息，请参阅 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/desktop/ProcThread/process-security-and-access-rights">进程安全和访问权限</a>。</p>
+<p><code>[in] lpThreadAttributes</code></p>
+<p>指向 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/previous-versions/windows/desktop/legacy/aa379560(v=vs.85)">SECURITY_ATTRIBUTES</a> 结构的指针，该结构指定新线程的安全描述符，并确定子进程是否可以继承返回的句柄。 如果 <em>lpThreadAttributes</em> 为 NULL，则线程将获取默认安全描述符，并且无法继承句柄。 访问控制在来自创建者主令牌的线程的默认安全描述符中列出 (ACL) 。</p>
+<p><code>[in] dwStackSize</code></p>
+<p>堆栈的初始大小（以字节为单位）。 系统将此值舍入到最近的页。 如果此参数为 0 (零) ，则新线程将使用可执行文件的默认大小。 有关详细信息，请参阅 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/desktop/ProcThread/thread-stack-size">线程堆栈大小</a>。</p>
+<p><code>[in] lpStartAddress</code></p>
+<p>指向 <strong>LPTHREAD_START_ROUTINE要由</strong> 线程执行的应用程序定义函数的指针，表示远程进程中线程的起始地址。 函数必须存在于远程进程中。 有关详细信息，请参阅 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/previous-versions/windows/desktop/legacy/ms686736(v=vs.85)">ThreadProc</a>。</p>
+<p><code>[in] lpParameter</code></p>
+<p>指向要传递给线程函数的变量的指针。</p>
+<p><code>[in] dwCreationFlags</code></p>
+<p>控制线程创建的标志。</p>
+<table>
+<thead>
+<tr>
+<th align="left">值</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">0</td>
+<td align="left">线程在创建后立即运行。</td>
+</tr>
+<tr>
+<td align="left"><strong>CREATE_SUSPENDED</strong>0x00000004</td>
+<td align="left">线程以挂起状态创建，在调用 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/desktop/api/processthreadsapi/nf-processthreadsapi-resumethread">ResumeThread</a> 函数之前不会运行。</td>
+</tr>
+<tr>
+<td align="left"><strong>STACK_SIZE_PARAM_IS_A_RESERVATION</strong>0x00010000</td>
+<td align="left"><em>dwStackSize</em> 参数指定堆栈的初始保留大小。 如果未指定此标志， <em>dwStackSize</em> 将指定提交大小。</td>
+</tr>
+</tbody></table>
+<p><code>[out] lpThreadId</code></p>
+<p>指向接收线程标识符的变量的指针。</p>
+<p>如果此参数为 NULL，则不返回线程标识符。</p>
+<h4 id="返回值"><a href="#返回值" class="headerlink" title="返回值"></a>返回值</h4><p>如果函数成功，则返回值是新线程的句柄。</p>
+<p>如果函数失败，则返回值为 NULL。 要获得更多的错误信息，请调用 GetLastError。</p>
+<p>请注意，即使 <em>lpStartAddress</em> 指向数据、代码或不可访问，<strong>CreateRemoteThread</strong> 也可能成功。 如果启动地址在线程运行时无效，则会发生异常，并且线程终止。 由于启动地址无效而导致的线程终止作为线程进程的错误退出进行处理。 此行为类似于 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/desktop/api/processthreadsapi/nf-processthreadsapi-createprocessa">CreateProcess</a> 的异步性质，即即使进程引用无效或缺少动态链接库，也会创建 (DLL) 。</p>
+<h3 id="VirtualAllocEx"><a href="#VirtualAllocEx" class="headerlink" title="VirtualAllocEx"></a>VirtualAllocEx</h3><p>在指定进程的虚拟地址空间中保留、提交或更改内存区域的状态。 函数将它分配的内存初始化为零。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">LPVOID <span class="hljs-title">VirtualAllocEx</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">  [in]           HANDLE hProcess,</span></span><br><span class="hljs-params"><span class="hljs-function">  [in, optional] LPVOID lpAddress,</span></span><br><span class="hljs-params"><span class="hljs-function">  [in]           SIZE_T dwSize,</span></span><br><span class="hljs-params"><span class="hljs-function">  [in]           DWORD  flAllocationType,</span></span><br><span class="hljs-params"><span class="hljs-function">  [in]           DWORD  flProtect</span></span><br><span class="hljs-params"><span class="hljs-function">)</span></span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="参数-1"><a href="#参数-1" class="headerlink" title="参数"></a>参数</h4><p><code>[in] hProcess</code></p>
+<p>进程的句柄。 函数在此进程的虚拟地址空间内分配内存。</p>
+<p>句柄必须具有 <strong>PROCESS_VM_OPERATION</strong> 访问权限。 有关详细信息，请参阅 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/desktop/ProcThread/process-security-and-access-rights">进程安全性和访问权限</a>。</p>
+<p><code>[in, optional] lpAddress</code></p>
+<p>为要分配的页面区域指定所需起始地址的指针。</p>
+<p>如果要保留内存，函数会将此地址向下舍入到分配粒度的最近倍数。</p>
+<p>如果提交已保留的内存，函数会将此地址向下舍入到最近的页边界。 若要确定页面的大小和主计算机上的分配粒度，请使用 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/desktop/api/sysinfoapi/nf-sysinfoapi-getsysteminfo">GetSystemInfo</a> 函数。</p>
+<p>如果 <em>lpAddress</em> 为 <strong>NULL</strong>，则该函数确定分配区域的位置。</p>
+<p>如果此地址位于尚未通过调用 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/desktop/api/enclaveapi/nf-enclaveapi-initializeenclave">InitializeEnclave 进行初始化的 enclave</a> 内， <strong>VirtualAllocEx</strong> 会为该地址的 enclave 分配一页零。 页面必须以前未提交，并且不会使用 Intel Software Guard 扩展编程模型的 EEXTEND 指令进行测量。</p>
+<p>如果中的地址位于已初始化的 enclave 内，则分配操作会失败并 <strong>出现ERROR_INVALID_ADDRESS</strong> 错误。 对于不支持动态内存管理的 enclave (（即 SGX1) ）也是如此。 SGX2 enclave 将允许分配，并且该页必须在分配后被 enclave 接受。</p>
+<p><code>[in] dwSize</code></p>
+<p>要分配的内存区域的大小（以字节为单位）。</p>
+<p>如果 <em>lpAddress</em> 为 <strong>NULL</strong>，则该函数会将 <em>dwSize</em> 向上舍入到下一页边界。</p>
+<p>如果 <em>lpAddress</em> 不为 <strong>NULL</strong>，则该函数将分配包含一个或多个字节的所有页面，范围从 <em>lpAddress</em> 到 <em>lpAddress</em>+<em>dwSize</em>。 例如，这意味着跨页边界的 2 字节范围会导致函数分配这两个页面。</p>
+<p><code>[in] flAllocationType</code></p>
+<p>内存分配的类型。 此参数必须包含以下值之一。</p>
+<table>
+<thead>
+<tr>
+<th align="left">值</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>MEM_COMMIT</strong>0x00001000</td>
+<td align="left">从指定保留内存页的磁盘) 的总内存大小和分页文件 (分配内存费用。 函数还保证当调用方稍后最初访问内存时，内容将为零。 除非实际访问虚拟地址，否则不会分配实际物理页面。若要在一个步骤中保留和提交页面，请使用 &#96;MEM_COMMIT</td>
+</tr>
+<tr>
+<td align="left"><strong>MEM_RESERVE</strong>0x00002000</td>
+<td align="left">保留进程的虚拟地址空间范围，而无需在内存或磁盘上的分页文件中分配任何实际物理存储。使用 <strong>MEM_COMMIT</strong> 再次调用 <strong>VirtualAllocEx</strong> 来提交保留页。 若要在一个步骤中保留和提交页面，请使用 &#96;MEM_COMMIT</td>
+</tr>
+<tr>
+<td align="left"><strong>MEM_RESET</strong>0x00080000</td>
+<td align="left">指示 <em>lpAddress</em> 和 <em>dwSize</em> 指定的内存范围中的数据不再感兴趣。 不应从分页文件读取或写入页面。 但是，内存块稍后将再次使用，因此不应取消提交。 此值不能与任何其他值一起使用。使用此值并不能保证使用 <strong>MEM_RESET</strong> 操作的范围将包含零。 如果希望范围包含零，请取消提交内存，然后重新提交。使用 <strong>MEM_RESET</strong> 时， <strong>VirtualAllocEx</strong> 函数会忽略 <em>fProtect</em> 的值。 但是，仍必须将 <em>fProtect</em> 设置为有效的保护值，例如 <strong>PAGE_NOACCESS</strong>。如果使用 <strong>MEM_RESET</strong>并且内存范围映射到文件，<strong>VirtualAllocEx</strong> 将返回错误。 仅当共享视图映射到分页文件时，才可接受该视图。</td>
+</tr>
+<tr>
+<td align="left"><strong>MEM_RESET_UNDO</strong>0x1000000</td>
+<td align="left"><strong>应</strong> 仅对之前成功应用MEM_RESET的地址范围调用 <strong>MEM_RESET_UNDO</strong> 。 它指示调用方对 <em>lpAddress</em> 和 <em>dwSize</em> 指定的指定内存范围中的数据感兴趣，并尝试反转 <strong>MEM_RESET</strong>的影响。 如果该函数成功，则表示指定地址范围中的所有数据都保持不变。 如果函数失败，则至少将地址范围中的某些数据替换为零。此值不能与任何其他值一起使用。 如果在之前未<strong>MEM_RESET</strong>的地址范围上调用<strong>MEM_RESET_UNDO</strong>，则行为未定义。 指定 <strong>MEM_RESET</strong>时， <strong>VirtualAllocEx</strong> 函数将忽略 <em>flProtect</em> 的值。 但是，仍必须将 <em>flProtect</em> 设置为有效的保护值，例如 <strong>PAGE_NOACCESS</strong>。<strong>Windows Server 2008 R2、Windows 7、Windows Server 2008、Windows Vista、Windows Server 2003 和 Windows XP：</strong> 在 Windows 8 和 Windows Server 2012 之前，不支持 <strong>MEM_RESET_UNDO</strong> 标志。</td>
+</tr>
+</tbody></table>
+<p>此参数还可以按指示指定以下值。</p>
+<table>
+<thead>
+<tr>
+<th align="left">值</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>MEM_LARGE_PAGES</strong>0x20000000</td>
+<td align="left">使用 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/desktop/Memory/large-page-support">大页支持</a>分配内存。大小和对齐方式必须是大页最小值的倍数。 若要获取此值，请使用 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/desktop/api/memoryapi/nf-memoryapi-getlargepageminimum">GetLargePageMinimum</a> 函数。如果指定此值，还必须指定 <strong>MEM_RESERVE</strong> 和 <strong>MEM_COMMIT</strong>。</td>
+</tr>
+<tr>
+<td align="left"><strong>MEM_PHYSICAL</strong>0x00400000</td>
+<td align="left">保留可用于将 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/desktop/Memory/address-windowing-extensions">地址窗口扩展</a> (AWE) 页映射的地址范围。此值必须与 <strong>MEM_RESERVE</strong> 一起使用，不能与其他值一起使用。</td>
+</tr>
+<tr>
+<td align="left"><strong>MEM_TOP_DOWN</strong>0x00100000</td>
+<td align="left">在可能的最高地址分配内存。 这可能比常规分配慢，尤其是在有许多分配时。</td>
+</tr>
+</tbody></table>
+<p><code>[in] flProtect</code></p>
+<p>要分配的页区域的内存保护。 如果正在提交页面，则可以指定任何一个 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/Memory/memory-protection-constants">内存保护常量</a>。</p>
+<p>如果 <em>lpAddress</em> 指定 enclave 中的地址， <em>则 flProtect</em> 不能为以下任何值：</p>
+<ul>
+<li>PAGE_NOACCESS</li>
+<li>PAGE_GUARD</li>
+<li>PAGE_NOCACHE</li>
+<li>PAGE_WRITECOMBINE</li>
+</ul>
+<p>为 enclave 分配动态内存时， <em>flProtect</em> 参数必须 <strong>PAGE_READWRITE</strong> 或 <strong>PAGE_EXECUTE_READWRITE</strong>。</p>
+<h4 id="返回值-1"><a href="#返回值-1" class="headerlink" title="返回值"></a>返回值</h4><p>如果函数成功，则返回值是已分配页区域的基址。</p>
+<p>如果函数失败，则返回值为 NULL。 要获得更多的错误信息，请调用 <code>GetLastError</code>。</p>
+<h3 id="WriteProcessMemory"><a href="#WriteProcessMemory" class="headerlink" title="WriteProcessMemory"></a>WriteProcessMemory</h3><p>将数据写入到指定进程中的内存区域。 要写入的整个区域必须可访问，否则操作将失败。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">BOOL <span class="hljs-title">WriteProcessMemory</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">  [in]  HANDLE  hProcess,</span></span><br><span class="hljs-params"><span class="hljs-function">  [in]  LPVOID  lpBaseAddress,</span></span><br><span class="hljs-params"><span class="hljs-function">  [in]  LPCVOID lpBuffer,</span></span><br><span class="hljs-params"><span class="hljs-function">  [in]  SIZE_T  nSize,</span></span><br><span class="hljs-params"><span class="hljs-function">  [out] SIZE_T  *lpNumberOfBytesWritten</span></span><br><span class="hljs-params"><span class="hljs-function">)</span></span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="参数-2"><a href="#参数-2" class="headerlink" title="参数"></a>参数</h4><p><code>[in] hProcess</code></p>
+<p>要修改的进程内存的句柄。 句柄必须具有对进程的PROCESS_VM_WRITE和PROCESS_VM_OPERATION访问权限。</p>
+<p><code>[in] lpBaseAddress</code></p>
+<p>指向将数据写入到的指定进程中基址的指针。 在进行数据传输之前，系统会验证指定大小的基址和内存中的所有数据是否可供写入访问，如果无法访问，则函数将失败。</p>
+<p><code>[in] lpBuffer</code></p>
+<p>指向缓冲区的指针，该缓冲区包含要写入指定进程的地址空间中的数据。</p>
+<p><code>[in] nSize</code></p>
+<p>要写入指定进程的字节数。</p>
+<p><code>[out] lpNumberOfBytesWritten</code></p>
+<p>指向变量的指针，该变量接收传输到指定进程的字节数。 此参数是可选的。 如果 <em>lpNumberOfBytesWritten</em> 为 <strong>NULL</strong>，则忽略参数。</p>
+<h4 id="返回值-2"><a href="#返回值-2" class="headerlink" title="返回值"></a>返回值</h4><p>如果该函数成功，则返回值为非零值。</p>
+<p>如果函数失败，则返回值为 0（零）。 要获得更多的错误信息，请调用 GetLastError。 如果请求的写入操作交叉到无法访问的进程区域，函数将失败。</p>
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>使用<code>CreateRemoteThread</code>这个API，首先使用<code>CreateToolhelp32Snapshot</code>拍摄快照获取pid，然后使用<code>Openprocess</code>打开进程，使用<code>VirtualAllocEx</code>远程申请空间，使用<code>WriteProcessMemory</code>写入数据，再用<code>GetProcAddress</code>获取<code>LoadLibraryW</code>的地址（由于Windows引入了基址随机化ASLR安全机制,所以导致每次开机启动时系统DLL加载基址都不一样,有些系统dll(kernel,ntdll)的加载地址,允许每次启动基址可以改变,但是启动之后必须固定,也就是说两个不同进程在相互的虚拟内存中,这样的系统dll地址总是一样的），在注入进程中创建线程(<code>CreateRemoteThread</code>)</p>
+<h2 id="实现过程"><a href="#实现过程" class="headerlink" title="实现过程"></a>实现过程</h2><h3 id="DLL"><a href="#DLL" class="headerlink" title="DLL"></a>DLL</h3><p>dllmain.cpp</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// dllmain.cpp : 定义 DLL 应用程序的入口点。</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;pch.h&quot;</span></span><br><br><span class="hljs-function">BOOL APIENTRY <span class="hljs-title">DllMain</span><span class="hljs-params">( HMODULE hModule,</span></span><br><span class="hljs-params"><span class="hljs-function">                       DWORD  ul_reason_for_call,</span></span><br><span class="hljs-params"><span class="hljs-function">                       LPVOID lpReserved</span></span><br><span class="hljs-params"><span class="hljs-function">                     )</span></span><br><span class="hljs-function"></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">switch</span> (ul_reason_for_call)<br>    &#123;<br>    <span class="hljs-keyword">case</span> DLL_PROCESS_ATTACH:<br>        <span class="hljs-built_in">MessageBox</span>(<span class="hljs-literal">NULL</span>, <span class="hljs-string">L&quot;success!&quot;</span>, <span class="hljs-string">L&quot;Congratulation&quot;</span>, MB_OK);<br>    <span class="hljs-keyword">case</span> DLL_THREAD_ATTACH:<br>        <span class="hljs-built_in">MessageBox</span>(<span class="hljs-literal">NULL</span>, <span class="hljs-string">L&quot;success!&quot;</span>, <span class="hljs-string">L&quot;Congratulation&quot;</span>, MB_OK);<br>    <span class="hljs-keyword">case</span> DLL_THREAD_DETACH:<br>    <span class="hljs-keyword">case</span> DLL_PROCESS_DETACH:<br>        <span class="hljs-keyword">break</span>;<br>    &#125;<br>    <span class="hljs-keyword">return</span> TRUE;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="注入程序"><a href="#注入程序" class="headerlink" title="注入程序"></a>注入程序</h3><p>main.cpp</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;Windows.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;TlHelp32.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;tchar.h&quot;</span></span><br><br><br><span class="hljs-comment">//通过进程快照获取PID</span><br>DWORD _GetProcessPID(LPCTSTR lpProcessName)<br>&#123;<br>    DWORD Ret = <span class="hljs-number">0</span>;<br>    PROCESSENTRY32 p32;<br><br>    HANDLE lpSnapshot = ::<span class="hljs-built_in">CreateToolhelp32Snapshot</span>(TH32CS_SNAPPROCESS, <span class="hljs-number">0</span>);<br><br>    <span class="hljs-keyword">if</span> (lpSnapshot == INVALID_HANDLE_VALUE)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;获取进程快照失败,请重试! Error:%d&quot;</span>, ::<span class="hljs-built_in">GetLastError</span>());<br><br>        <span class="hljs-keyword">return</span> Ret;<br>    &#125;<br><br>    p32.dwSize = <span class="hljs-built_in">sizeof</span>(PROCESSENTRY32);<br>    ::<span class="hljs-built_in">Process32First</span>(lpSnapshot, &amp;p32);<br><br>    <span class="hljs-keyword">do</span> &#123;<br>        <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">lstrcmp</span>(p32.szExeFile, lpProcessName))<br>        &#123;<br>            Ret = p32.th32ProcessID;<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125; <span class="hljs-keyword">while</span> (::<span class="hljs-built_in">Process32Next</span>(lpSnapshot, &amp;p32));<br><br>    ::<span class="hljs-built_in">CloseHandle</span>(lpSnapshot);<br>    <span class="hljs-keyword">return</span> Ret;<br>&#125;<br><br><br><span class="hljs-comment">//打开一个进程并为其创建一个线程</span><br>DWORD _RemoteThreadInject(DWORD _Pid, LPCWSTR DllName)<br>&#123;<br>    <span class="hljs-comment">//打开进程</span><br>    HANDLE hprocess;<br>    HANDLE hThread;<br>    DWORD _Size = <span class="hljs-number">0</span>;<br>    BOOL Write = <span class="hljs-number">0</span>;<br>    LPVOID pAllocMemory = <span class="hljs-literal">NULL</span>;<br>    DWORD DllAddr = <span class="hljs-number">0</span>;<br>    FARPROC pThread;<br><br>    hprocess = ::<span class="hljs-built_in">OpenProcess</span>(PROCESS_ALL_ACCESS, FALSE, _Pid);<br>    <span class="hljs-comment">//Size = sizeof(string_inject);</span><br>    _Size = (_tcslen(DllName) + <span class="hljs-number">1</span>) * <span class="hljs-built_in">sizeof</span>(TCHAR);<br><br>    <span class="hljs-comment">//远程申请空间</span><br>    pAllocMemory = ::<span class="hljs-built_in">VirtualAllocEx</span>(hprocess, <span class="hljs-literal">NULL</span>, _Size, MEM_COMMIT, PAGE_READWRITE);<br><br>    <span class="hljs-keyword">if</span> (pAllocMemory == <span class="hljs-literal">NULL</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;VirtualAllocEx - Error!&quot;</span>);<br>        <span class="hljs-keyword">return</span> FALSE;<br>    &#125;<br><br>    <span class="hljs-comment">// 写入内存</span><br>    Write = ::<span class="hljs-built_in">WriteProcessMemory</span>(hprocess, pAllocMemory, DllName, _Size, <span class="hljs-literal">NULL</span>);<br><br>    <span class="hljs-keyword">if</span> (Write == FALSE)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;WriteProcessMemory - Error!&quot;</span>);<br>        <span class="hljs-keyword">return</span> FALSE;<br>    &#125;<br><br><br>    <span class="hljs-comment">//获取LoadLibrary的地址</span><br>    pThread = ::<span class="hljs-built_in">GetProcAddress</span>(::<span class="hljs-built_in">GetModuleHandle</span>(<span class="hljs-string">L&quot;kernel32.dll&quot;</span>), <span class="hljs-string">&quot;LoadLibraryW&quot;</span>);<br>    LPTHREAD_START_ROUTINE addr = (LPTHREAD_START_ROUTINE)pThread;<br><br>    <span class="hljs-comment">//在另一个进程中创建线程</span><br>    hThread = ::<span class="hljs-built_in">CreateRemoteThread</span>(hprocess, <span class="hljs-literal">NULL</span>, <span class="hljs-number">0</span>, addr, pAllocMemory, <span class="hljs-number">0</span>, <span class="hljs-literal">NULL</span>);<br><br>    <span class="hljs-keyword">if</span> (hThread == <span class="hljs-literal">NULL</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;CreateRemoteThread - Error!&quot;</span>);<br>        <span class="hljs-keyword">return</span> FALSE; <br>    &#125;<br><br>    <span class="hljs-comment">//等待线程函数结束，获得退出码</span><br>    <span class="hljs-built_in">WaitForSingleObject</span>(hThread, <span class="hljs-number">-1</span>);<br>    <span class="hljs-built_in">GetExitCodeThread</span>(hThread, &amp;DllAddr);<br><br>    <span class="hljs-comment">//释放DLL空间</span><br>    <span class="hljs-built_in">VirtualFreeEx</span>(hprocess, pAllocMemory, _Size, MEM_DECOMMIT);<br><br>    <span class="hljs-comment">//关闭线程句柄</span><br>    ::<span class="hljs-built_in">CloseHandle</span>(hprocess);<br>    <span class="hljs-keyword">return</span> TRUE;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-comment">// 目标程序名称</span><br>	DWORD PID = _GetProcessPID(<span class="hljs-string">L&quot;hello.exe&quot;</span>);<br>	_RemoteThreadInject(PID, <span class="hljs-string">L&quot;D:\\projects\\c++\\reverse\\hook\\RemoteHookDll\\Release\\RemoteHookDll.dll&quot;</span>);<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br><br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p>首先运行目标程序<code>hello.exe</code>，保持程序不要退出；然后运行注入程序； </p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20231224111248619.png" srcset="/img/loading.gif" lazyload alt="image-20231224111248619"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E9%80%86%E5%90%91/" class="category-chain-item">逆向</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/reverse/">#reverse</a>
+      
+        <a href="/tags/dll%E6%B3%A8%E5%85%A5/">#dll注入</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>[逆向] dll注入--远程线程注入</div>
+      <div>https://s1n9l3.github.io/2023/12/24/[逆向] dll注入--远程线程注入/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>YY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年12月24日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/12/02/%5B%E9%80%86%E5%90%91%5D%20dll%E6%B3%A8%E5%85%A5--%E5%85%A8%E5%B1%80%E9%92%A9%E5%AD%90%E6%B3%A8%E5%85%A5/" title="[逆向] dll注入--全局钩子注入">
+                        <span class="hidden-mobile">[逆向] dll注入--全局钩子注入</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
