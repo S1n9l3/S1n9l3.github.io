@@ -1,0 +1,679 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/Aries.ico">
+  <link rel="icon" href="/img/Aries.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="YY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="pwn工具集合一些pwn相关工具的集合。 checksec–识别文件安全属性在pwn或逆向之前，查看文件的安全属性有助于分析。 1checksec 文件名  一个例子：  Arch：基本信息； RELRO（Relocation Read-Onl）：主要针对GOT改写攻击，分为Partial RELRO和FULL RELRO。Partial RELRO，表示GOT表可写，这时可以通过覆盖GOT表攻击">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[pwn] pwn工具集合">
+<meta property="og:url" content="https://s1n9l3.github.io/2024/01/21/[pwn]%20pwn%E5%B7%A5%E5%85%B7%E9%9B%86%E5%90%88/index.html">
+<meta property="og:site_name" content="S1n9l3">
+<meta property="og:description" content="pwn工具集合一些pwn相关工具的集合。 checksec–识别文件安全属性在pwn或逆向之前，查看文件的安全属性有助于分析。 1checksec 文件名  一个例子：  Arch：基本信息； RELRO（Relocation Read-Onl）：主要针对GOT改写攻击，分为Partial RELRO和FULL RELRO。Partial RELRO，表示GOT表可写，这时可以通过覆盖GOT表攻击">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20240121173210535.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20240121172524112.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20240121172626685.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20240121172723783.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20240121172833938.png">
+<meta property="article:published_time" content="2024-01-21T09:18:21.134Z">
+<meta property="article:modified_time" content="2024-01-22T12:36:15.386Z">
+<meta property="article:author" content="YY">
+<meta property="article:tag" content="pwn">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20240121173210535.png">
+  
+  
+  
+  <title>[pwn] pwn工具集合 - S1n9l3</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"s1n9l3.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>WXYY</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="[pwn] pwn工具集合"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-01-21 17:18" pubdate>
+          2024年1月21日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          14 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">[pwn] pwn工具集合</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="pwn工具集合"><a href="#pwn工具集合" class="headerlink" title="pwn工具集合"></a>pwn工具集合</h1><p>一些pwn相关工具的集合。</p>
+<h2 id="checksec–识别文件安全属性"><a href="#checksec–识别文件安全属性" class="headerlink" title="checksec–识别文件安全属性"></a>checksec–识别文件安全属性</h2><p>在pwn或逆向之前，查看文件的安全属性有助于分析。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">checksec 文件名<br></code></pre></td></tr></table></figure>
+
+<p>一个例子：</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20240121173210535.png" srcset="/img/loading.gif" lazyload alt="image-20240121173210535"></p>
+<p><strong>Arch</strong>：基本信息；</p>
+<p><strong>RELRO（Relocation Read-Onl）</strong>：主要针对GOT改写攻击，分为<strong>Partial RELRO</strong>和<strong>FULL RELRO</strong>。<strong>Partial RELRO</strong>，表示GOT表可写，这时可以通过覆盖GOT表攻击；<strong>FULL RELRO</strong>表示GOT表只读，无法覆盖，但是程序启动较慢。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c">gcc -o hello test.c <span class="hljs-comment">//默认情况下，是Partial RELRO</span><br>gcc -z norelro -o hello test.c <span class="hljs-comment">// 关闭，即No RELRO</span><br>gcc -z lazy -o hello test.c <span class="hljs-comment">// 部分开启，即Partial RELRO</span><br>gcc -z now -o hello test.c <span class="hljs-comment">// 全部开启，即Full RELRO</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>Stack</strong>：栈溢出保护是一种缓冲区溢出攻击缓解手段，当函数存在缓冲区溢出攻击漏洞是，攻击者可以覆盖栈上的返回地址来让shellcode能够得到执行，当启用栈保护后，函数开始执行的时候先会往栈里插入类似cookie信息，当函数真正返回的时候会验证cookie信息是否合法，如果不合法就停止程序运行，攻击者在覆盖返回地址的时候往往会将cookie信息给覆盖掉，导致栈保护检测失败而阻止shellcode的执行，在linux中将cookie信息称为canary。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c">gcc -fno-<span class="hljs-built_in">stack</span>-protector -o hello test.c   <span class="hljs-comment">//禁用栈保护</span><br>gcc -fstack-protector -o hello test.c    <span class="hljs-comment">//启用堆栈保护，不过只为局部变量中含有 char 数组的函数插入保护代码</span><br>gcc -fstack-protector-all -o hello test.c  <span class="hljs-comment">//启用堆栈保护，为所有函数插入保护代码</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>NX</strong>：果这个保护开启就是意味着栈中数据没有执行权限，如此一来，当攻击者在堆栈上部署自己的shellcode并触发时，会直接造成程序的崩溃，但是可以利用rop这种方法绕过。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c">gcc -o  hello test.c <span class="hljs-comment">// 默认情况下，开启NX保护</span><br>gcc -z execstack -o  hello test.c <span class="hljs-comment">// 禁用NX保护</span><br>gcc -z noexecstack -o  hello test.c <span class="hljs-comment">// 开启NX保护</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>PIE（Position-Independent Executable）</strong>：与<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Address_space_layout_randomization">ASLR</a>技术类似，ASLR将程序运行时的堆栈以及共享库的加载地址随机化，而PIE及时则在编译时将程序编译为位置无关，即程序运行时各个段（如代码段等）加载的虚拟地址也是在装载时才确定，这就意味着。在PIE和ASLR同时开启的情况下，攻击者将对程序的内存布局一无所知，传统改写GOT表项也难以进行，因为攻击者不能获得程序的.got段的虚地址。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c">gcc -o hello test.c  <span class="hljs-comment">// 默认情况下，不开启PIE</span><br>gcc -fpie -pie -o hello test.c  <span class="hljs-comment">// 开启PIE，此时强度为1</span><br>gcc -fPIE -pie -o hello test.c  <span class="hljs-comment">// 开启PIE，此时为最高强度2</span><br>(还与运行时系统ALSR设置有关）<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="cyclic–查看缓冲区溢出长度"><a href="#cyclic–查看缓冲区溢出长度" class="headerlink" title="cyclic–查看缓冲区溢出长度"></a>cyclic–查看缓冲区溢出长度</h2><p>一些函数（read、gets等）如果对输入没有限制，会导致缓冲区溢出漏洞。这时就可以使用<code>cyclic</code>工具来查看溢出的长度。<code>pwndbg</code>中应该带有，安装<code>pwndbg</code>这里就不介绍了。</p>
+<p>以<code>ROP Emporium</code>第一题<code>ret2win</code>为例，首先生成一段字符串，</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">cyclic <span class="hljs-number">100</span><br></code></pre></td></tr></table></figure>
+
+<p>这里生成了长度为<code>100</code>的字符串，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20240121172524112.png" srcset="/img/loading.gif" lazyload alt="image-20240121172524112"></p>
+<p>复制这段字符串，然后运行程序，直到需要输入的位置，将这段字符串粘贴在这里，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20240121172626685.png" srcset="/img/loading.gif" lazyload alt="image-20240121172626685"></p>
+<p>继续运行程序，这时会出错，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20240121172723783.png" srcset="/img/loading.gif" lazyload alt="image-20240121172723783"></p>
+<p>然后复制这个地址，就可以知道溢出长度了，</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">cyclic -l <span class="hljs-number">0x6161616c</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20240121172833938.png" srcset="/img/loading.gif" lazyload alt="image-20240121172833938"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/pwn/" class="category-chain-item">pwn</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/pwn/">#pwn</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>[pwn] pwn工具集合</div>
+      <div>https://s1n9l3.github.io/2024/01/21/[pwn] pwn工具集合/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>YY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年1月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/01/22/%5Bpwn%5D%20ROPEmporium/" title="[pwn] ROPEmporium">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">[pwn] ROPEmporium</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/12/25/%5B%E9%80%86%E5%90%91%5D%20dll%E6%B3%A8%E5%85%A5--apc%E6%B3%A8%E5%85%A5/" title="[逆向] dll注入--apc注入">
+                        <span class="hidden-mobile">[逆向] dll注入--apc注入</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
